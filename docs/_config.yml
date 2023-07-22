@@ -1,0 +1,21 @@
+# In _config.yml
+title: Image data science with Python and Napari @EPFL
+author: Marcelo Zoccoler, Johannes Müller, Till Korten, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
+logo: biapol_logo.png
+execute:
+  execute_notebooks: off
+
+# Add a bibtex file so that we can create citations
+bibtex_bibfiles:
+  - references.bib
+
+  # Information about where the book exists on the web
+repository:
+  url: https://github.com/BiAPoL/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis # Online location of your book
+  branch: main # Which branch of the repository should be used when creating links (optional)
+
+# Add GitHub buttons to your book
+# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+html:
+  use_issues_button: true
+  use_repository_button: true

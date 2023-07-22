@@ -1,0 +1,18 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+
+options: # The options key will be applied to all chapters, but not sub-sections
+  numbered: False
+
+chapters:
+  - file: 10_Clesperanto/readme
+  - file: 20_Cupy/readme
+  - file: 30_Deconvolution/readme
+  - file: 40_HPC_Intro/readme
+  - file: 50_Clesperanto_on_HPC/readme
+  - file: 60_Pytorch/readme
+  - file: 70_AI_Segmentation_Denoising/readme
+  - file: 80_Dask/readme
