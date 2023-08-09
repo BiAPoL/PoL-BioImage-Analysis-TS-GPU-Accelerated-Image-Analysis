@@ -1,18 +1,19 @@
 # Assuming you've installed the required libraries: lib1 and lib2
 try:
     import tnia.plotting.projections as tnia_proj
-
     is_tnia_available = True
-    print('no error')
+    print('tnia available')
 except ImportError:
-    print('error')
+    print('error importing tnia')
     is_tnia_available = False
 
 try:
     import stackview
     is_stackview_available = True
+    print('stackview available')
 except ImportError:
     is_stackview_available = False
+    print('error importing stackview')
 
 use_stackview = True
 use_tnia = False
