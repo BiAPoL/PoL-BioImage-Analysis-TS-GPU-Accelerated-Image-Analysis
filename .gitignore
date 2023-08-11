@@ -9,6 +9,11 @@ __pycache__/
 # C extensions
 *.so
 
+# Data that should not be downloaded
+docs/06_pytorch/data/
+docs/06_pytorch/data.zip
+**/lightning_outputs/
+
 # Distribution / packaging
 .Python
 build/
