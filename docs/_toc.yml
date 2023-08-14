@@ -13,6 +13,10 @@ chapters:
   - file: 30_Deconvolution/readme
   - file: 40_HPC_Intro/readme
   - file: 50_Clesperanto_on_HPC/readme
+    sections:
+    - file: 50_Clesperanto_on_HPC/login_taurus
+    - file: 50_Clesperanto_on_HPC/modified_generated_notebook
+
   - file: 60_Pytorch/readme
   - file: 70_AI_Segmentation_Denoising/readme
   - file: 80_Dask/readme
