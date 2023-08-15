@@ -1,0 +1,11 @@
+jupyter
+matplotlib
+monai
+numpy
+pytorch_lightning
+scipy
+tensorboard
+tensorboardX
+tifffile
+torch
+torchvision
