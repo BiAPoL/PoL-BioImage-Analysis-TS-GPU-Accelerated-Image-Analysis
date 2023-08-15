@@ -12,7 +12,7 @@ The instrutions are taken and adapted from [here](https://gitlab.vgiscience.de/a
 2. Add your ZIH-Login to the HPC project, using the pre-shared link
     - this needs to be done only once
     - it may take up to two hours before your login is available
-3. Click [this link](https://taurus.hrsk.tu-dresden.de/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FcodingS3b%2Fpytorch_intro&urlpath=lab%2Ftree%2Fpytorch_intro%2Fnotebooks%2Fsegmentation%2F00_versions.ipynb&branch=biapol) to spawn a JupyterLab instance on the TUD ZIH Jupyter Hub.
+3. Click [this link](https://taurus.hrsk.tu-dresden.de/jupyter/hub/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FBiAPoL%2FPoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis&urlpath=lab%2Ftree%2FPoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis%2Fdocs%2F60_Pytorch%2F00_versions.ipynb&branch=main#/~(partition~'alpha)) to spawn a JupyterLab instance on the TUD ZIH Jupyter Hub.
     - You'll be requested to login using your TUD Account
 
 
