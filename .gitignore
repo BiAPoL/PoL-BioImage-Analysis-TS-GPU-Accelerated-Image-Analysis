@@ -10,8 +10,8 @@ __pycache__/
 *.so
 
 # Data that should not be downloaded
-docs/06_pytorch/data/
-docs/06_pytorch/data.zip
+docs/06_segmentation_denoising/data/
+docs/06_segmentation_denoising/data.zip
 **/lightning_outputs/
 
 # Distribution / packaging
