@@ -1,0 +1,823 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Edge handling &#8212; Image data science with Python and Napari @EPFL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '30_Deconvolution/5_edges';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/biapol_logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/biapol_logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis
+                </a>
+            </li>
+        </ul>
+        
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis/issues/new?title=Issue%20on%20page%20%2F30_Deconvolution/5_edges.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/30_Deconvolution/5_edges.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Edge handling</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Edge handling</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#edge-handling-math-background">Edge handling math background</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#define-functions-for-psf-forward-model-and-richardson-lucy">Define functions for PSF, forward model and RIchardson Lucy</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#define-richardson-lucy-with-an-optional-normalization-factor">Define Richardson Lucy with an optional normalization factor</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#define-forward-psf-pad-and-imshow-functions">Define forward, psf, pad and imshow functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-ground-truth">Create ground truth</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-psf">Create the PSF</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-image">Create the image</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-normalization-factor">Create the normalization factor</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve">Deconvolve</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-result-in-napari">Inspect result in Napari</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="edge-handling">
+<h1>Edge handling<a class="headerlink" href="#edge-handling" title="Permalink to this heading">#</a></h1>
+<p>Edge handling is a very important aspect of deconvolution.  If edges are not handled properly severe artifacts can occur when deconvolving.  If edges are handled properly these artifacts are minimized, and in fact, as this example shows it may even be possible to reconstruct signal slightly beyond the acquired field of view (though keep in mind this example assumes no noise, so in real conditions it is harder to reconstruct signal outside the boundaries).</p>
+<p>This example has been designed to work in a conda environment that has numpy, matplotlib, scipy and skimage, and shouldn’t need complicated dependencies.</p>
+</section>
+<section id="edge-handling-math-background">
+<h1>Edge handling math background<a class="headerlink" href="#edge-handling-math-background" title="Permalink to this heading">#</a></h1>
+<p>I had a great conversation with <a class="reference external" href="https://andrewgyork.github.io/">Andrew York</a> recently about framing Richardson Lucy as a <a class="reference external" href="https://pubmed.ncbi.nlm.nih.gov/24436314/">general tool</a> that can be used to solve different types of problems by normalizing the RL equation by a factor <span class="math notranslate nohighlight">\(H^T ones\)</span> where <span class="math notranslate nohighlight">\(H\)</span> is the forward model of the system.</p>
+<p>I have been doing something similar for edge handling since 2013, based on technical notes from the <a class="reference external" href="http://bigwww.epfl.ch/deconvolution/challenge2013/index.html?p=doc_math_rl">2014 deconvolution grand challenge</a>.</p>
+<p>Below is a justificaton for a simple modification to the Richardson Lucy algorithm which can be used to handle edges and also reconstruct a small amount of structure outside the imaging window.  In this case I assume no noise, let <span class="math notranslate nohighlight">\(o_k\)</span> be the object estimate at iteration <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(i\)</span> be the observed image, <span class="math notranslate nohighlight">\(h\)</span> the point spread function. and <span class="math notranslate nohighlight">\(n\)</span> be an unknown normalization factor.</p>
+<div class="math notranslate nohighlight">
+\[
+    {o}_{k+1} = \frac{{o}_{k}\left[\frac{i}{o_{k}*h}*h^*\right]}{n}
+\]</div>
+<p>In practice we only image a window <span class="math notranslate nohighlight">\(w\)</span> of a larger solution space.</p>
+<div class="math notranslate nohighlight">
+\[
+    {o}_{k+1} = \frac{o_{k}\left[\frac{wi}{o_{k}*h}*h^*\right]}{n}
+\]</div>
+<p>Now let’s assume we have estimated the object <span class="math notranslate nohighlight">\(o\)</span> perfectly, in that case the term <span class="math notranslate nohighlight">\(o_{k}*h=i^`\)</span> will be <span class="math notranslate nohighlight">\(i\)</span> within the window (remember we are assuming no noise).  And if we have a perfect estimate, we no nonger want to change it, so the update term of the Richardson Lucy equation should be 1 everywhere.</p>
+<div class="math notranslate nohighlight">
+\[
+    \frac{\left[\frac{wi}{i^`}*h^*\right]}{n}=1
+\]</div>
+<p>Solving the above equation gives us an expression for the normalization factor <span class="math notranslate nohighlight">\(n\)</span> which will lead to an update term of all 1s when the true solution is found.  In practical cases I have found this normalization factor is needed for proper edge handling.</p>
+<div class="math notranslate nohighlight">
+\[
+    n=\frac{wi}{i^`}*h^*=w*h^*
+\]</div>
+</section>
+<section id="define-functions-for-psf-forward-model-and-richardson-lucy">
+<h1>Define functions for PSF, forward model and RIchardson Lucy<a class="headerlink" href="#define-functions-for-psf-forward-model-and-richardson-lucy" title="Permalink to this heading">#</a></h1>
+<p>This example has been designed to work in a conda environment that has numpy, matplotlib and skimage, and doesn’t need complicated dependencies.  To make this example relatively independent of the experimental modules, In the next few blocks we define functions for</p>
+<ol class="arabic simple">
+<li><p>A forward model -&gt; Convolution + Poisson Noise</p></li>
+<li><p>A paraxial PSF</p></li>
+<li><p>2D Richardson Lucy (on the CPU) using Numpy</p></li>
+<li><p>A 2d image plotting helper</p></li>
+</ol>
+<p>The paraxial PSF function and forward model function were inspired by Matlab code by James Maton that can be found <a class="reference external" href="https://github.com/jdmanton/rl_positivity_sim">here</a></p>
+</section>
+<section id="define-richardson-lucy-with-an-optional-normalization-factor">
+<h1>Define Richardson Lucy with an optional normalization factor<a class="headerlink" href="#define-richardson-lucy-with-an-optional-normalization-factor" title="Permalink to this heading">#</a></h1>
+<p>Below we define a modified version of Richardson Lucy which takes in an optional normalization factor and a first guess.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">numpy.fft</span> <span class="kn">import</span> <span class="n">rfftn</span><span class="p">,</span> <span class="n">irfftn</span><span class="p">,</span> <span class="n">fftshift</span><span class="p">,</span> <span class="n">ifftshift</span><span class="p">,</span> <span class="n">ifftn</span><span class="p">,</span> <span class="n">fftn</span>
+<span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">poisson</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<span class="k">def</span> <span class="nf">richardson_lucy_np</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="n">num_iters</span><span class="p">,</span> <span class="n">normal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">first_guess</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">psf</span><span class="o">=</span><span class="n">psf</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    
+    <span class="n">delta</span> <span class="o">=</span> <span class="mf">0.00001</span>
+    <span class="n">otf</span> <span class="o">=</span> <span class="n">rfftn</span><span class="p">(</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">psf</span><span class="p">))</span>
+    <span class="n">otf_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">otf</span><span class="p">)</span>    
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">first_guess</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">normal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">estimate</span><span class="o">=</span><span class="n">normal</span>
+            <span class="n">estimate</span><span class="o">=</span><span class="n">estimate</span><span class="o">*</span><span class="n">image</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="n">estimate</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">estimate</span><span class="p">[</span><span class="n">normal</span><span class="o">&lt;</span><span class="mf">0.01</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">estimate</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">estimate</span><span class="o">=</span><span class="n">first_guess</span>
+        
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_iters</span><span class="p">):</span>
+        <span class="n">reblurred</span> <span class="o">=</span> <span class="n">irfftn</span><span class="p">(</span><span class="n">rfftn</span><span class="p">(</span><span class="n">estimate</span><span class="p">)</span> <span class="o">*</span> <span class="n">otf</span><span class="p">)</span>
+        <span class="n">ratio</span> <span class="o">=</span> <span class="n">image</span> <span class="o">/</span> <span class="p">(</span><span class="n">reblurred</span> <span class="o">+</span> <span class="mf">1e-10</span><span class="p">)</span>
+        <span class="n">estimate</span> <span class="o">=</span> <span class="n">estimate</span> <span class="o">*</span> <span class="p">(</span><span class="n">irfftn</span><span class="p">(</span><span class="n">rfftn</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span> <span class="o">*</span> <span class="n">otf_</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">normal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">estimate</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">estimate</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">normal</span><span class="o">&gt;</span><span class="n">delta</span><span class="p">)</span>
+            <span class="n">estimate</span><span class="p">[</span><span class="n">normal</span><span class="o">&lt;</span><span class="n">delta</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+        
+    <span class="k">return</span> <span class="n">estimate</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-forward-psf-pad-and-imshow-functions">
+<h1>Define forward, psf, pad and imshow functions<a class="headerlink" href="#define-forward-psf-pad-and-imshow-functions" title="Permalink to this heading">#</a></h1>
+<p>Note in this example the forward model includes windowing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Note this function inspired by code from https://github.com/jdmanton/rl_positivity_sim by James Manton</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">otf</span> <span class="o">=</span> <span class="n">fftn</span><span class="p">(</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">psf</span><span class="p">))</span>
+    <span class="n">field_imaged</span> <span class="o">=</span> <span class="n">ifftn</span><span class="p">(</span><span class="n">fftn</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">*</span><span class="n">otf</span><span class="p">)</span>
+    <span class="n">field_imaged</span> <span class="o">=</span> <span class="n">field_imaged</span>
+
+    <span class="k">if</span> <span class="n">window</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span>
+        <span class="n">field_imaged</span><span class="o">=</span><span class="n">field_imaged</span><span class="p">[</span><span class="n">window</span><span class="p">]</span>
+        
+    <span class="k">return</span> <span class="n">field_imaged</span>
+    
+
+<span class="k">def</span> <span class="nf">paraxial_otf</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">numerical_aperture</span><span class="p">,</span> <span class="n">pixel_size</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Note this function inspired by code from https://github.com/jdmanton/rl_positivity_sim by James Manton</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="n">resolution</span>  <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">wavelength</span> <span class="o">/</span> <span class="n">numerical_aperture</span>
+
+    <span class="n">image_centre_x</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">image_centre_y</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="p">)</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">ny</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">ny</span><span class="p">)</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="o">-</span><span class="n">image_centre_x</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="o">-</span><span class="n">image_centre_y</span>
+
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">filter_radius</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pixel_size</span> <span class="o">/</span> <span class="n">resolution</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">X</span><span class="o">*</span><span class="n">X</span><span class="o">+</span><span class="n">Y</span><span class="o">*</span><span class="n">Y</span><span class="p">)</span>
+    <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="o">/</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">v</span><span class="o">=</span><span class="n">r</span><span class="o">/</span><span class="n">filter_radius</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span><span class="o">&lt;=</span><span class="n">filter_radius</span><span class="p">)</span>
+    <span class="n">otf</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">&lt;=</span><span class="n">filter_radius</span><span class="p">);</span>
+    
+    <span class="k">return</span> <span class="n">otf</span>
+
+<span class="k">def</span> <span class="nf">paraxial_psf</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">numerical_aperture</span><span class="p">,</span> <span class="n">pixel_size</span><span class="p">):</span>
+    <span class="n">otf</span> <span class="o">=</span> <span class="n">paraxial_otf</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">numerical_aperture</span><span class="p">,</span> <span class="n">pixel_size</span><span class="p">)</span>
+    <span class="n">psf</span> <span class="o">=</span> <span class="n">fftshift</span><span class="p">(</span><span class="n">ifftn</span><span class="p">(</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">otf</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">psf</span><span class="o">/</span><span class="n">psf</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">imshow2d</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="n">height</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span>
+
+<span class="k">def</span> <span class="nf">pad</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">paddedsize</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; pad image to paddedsize</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        img ([type]): image to pad </span>
+<span class="sd">        paddedsize ([type]): size to pad to </span>
+<span class="sd">        mode ([type]): one of the np.pad modes</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        [nd array]: padded image</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">padding</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">:</span> <span class="p">(</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="p">),</span><span class="n">paddedsize</span><span class="p">,</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="create-ground-truth">
+<h1>Create ground truth<a class="headerlink" href="#create-ground-truth" title="Permalink to this heading">#</a></h1>
+<p>Below we have 2 options, the first is a ground truth with 2 points, the second is the star resolution test.  Feel free to experiment with additional types of ground truth.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">truth_type</span> <span class="o">=</span><span class="mi">0</span> 
+
+<span class="k">if</span> <span class="n">truth_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">n</span><span class="o">=</span><span class="mi">200</span>
+    <span class="n">truth</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+
+    <span class="n">truth</span><span class="p">[</span><span class="n">n</span><span class="o">//</span><span class="mi">4</span><span class="p">,</span><span class="n">n</span><span class="o">//</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="mi">1000</span>
+    <span class="n">truth</span><span class="p">[</span><span class="n">n</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="n">n</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">1000</span>
+<span class="k">if</span> <span class="n">truth_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span>
+    <span class="n">im_path</span><span class="o">=</span><span class="s1">&#39;D:/images/i2k2022/deconvolution/&#39;</span>
+    <span class="n">truth_name</span><span class="o">=</span><span class="s1">&#39;star.tif&#39;</span>
+
+    <span class="n">truth</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">im_path</span><span class="o">+</span><span class="n">truth_name</span><span class="p">)</span>
+    <span class="n">truth</span><span class="o">=</span><span class="n">truth</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">n</span><span class="o">=</span><span class="n">truth</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+<span class="n">fig</span><span class="o">=</span><span class="n">imshow2d</span><span class="p">(</span><span class="n">truth</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Truth&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;Truth&#39;)
+</pre></div>
+</div>
+<img alt="../_images/fd666fd774c8cf61a172af971c91f95aaea0aaa6a3db9588f9cac2a884c6d61f.png" src="../_images/fd666fd774c8cf61a172af971c91f95aaea0aaa6a3db9588f9cac2a884c6d61f.png" />
+</div>
+</div>
+</section>
+<section id="create-the-psf">
+<h1>Create the PSF<a class="headerlink" href="#create-the-psf" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">=</span><span class="mi">101</span>
+<span class="n">wavelength</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">na</span><span class="o">=</span><span class="mf">1.4</span>
+<span class="n">pixel_size</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">psf</span><span class="o">=</span><span class="n">paraxial_psf</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">na</span><span class="p">,</span> <span class="n">pixel_size</span><span class="p">)</span>
+<span class="n">psf</span><span class="o">=</span><span class="n">psf</span><span class="o">-</span><span class="n">psf</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="n">psf</span><span class="o">=</span><span class="n">psf</span><span class="o">/</span><span class="n">psf</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">psf</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">psf</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">imshow2d</span><span class="p">(</span><span class="n">psf</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;PSF&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0 0.0060154707
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_14570/2834657628.py:44: ComplexWarning: Casting complex values to real discards the imaginary part
+  psf = fftshift(ifftn(ifftshift(otf)).astype(np.float32))
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;PSF&#39;)
+</pre></div>
+</div>
+<img alt="../_images/e99cde3a5687c76be9b1d5ccbf9071eaef79b5629a146e3c0e4ad179a5869de8.png" src="../_images/e99cde3a5687c76be9b1d5ccbf9071eaef79b5629a146e3c0e4ad179a5869de8.png" />
+</div>
+</div>
+</section>
+<section id="create-the-image">
+<h1>Create the image<a class="headerlink" href="#create-the-image" title="Permalink to this heading">#</a></h1>
+<p>Note in this case we apply a window to the image, thus in the final image we only clearly see one emitter.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">psf</span><span class="o">=</span><span class="n">pad</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span> <span class="n">truth</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s1">&#39;constant&#39;</span><span class="p">)</span>
+
+<span class="n">ws</span><span class="o">=</span><span class="mi">7</span>
+
+<span class="n">window_index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">s_</span><span class="p">[</span><span class="n">n</span><span class="o">//</span><span class="mi">4</span><span class="o">+</span><span class="n">ws</span><span class="p">:</span><span class="mi">3</span><span class="o">*</span><span class="n">n</span><span class="o">//</span><span class="mi">4</span><span class="o">-</span><span class="n">ws</span><span class="p">,</span><span class="n">n</span><span class="o">//</span><span class="mi">4</span><span class="o">+</span><span class="n">ws</span><span class="p">:</span><span class="mi">3</span><span class="o">*</span><span class="n">n</span><span class="o">//</span><span class="mi">4</span><span class="o">-</span><span class="n">ws</span><span class="p">]</span>
+<span class="n">window</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">truth</span><span class="p">)</span>
+<span class="n">window</span><span class="p">[</span><span class="n">window_index</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">imshow2d</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">truth</span><span class="p">,</span> <span class="n">psf</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">imshow2d</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;image before window&#39;</span><span class="p">)</span>
+<span class="n">im</span><span class="o">=</span><span class="n">im</span><span class="o">*</span><span class="n">window</span>
+<span class="c1">#im = pad(im, truth.shape, &#39;constant&#39;)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">imshow2d</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;image after window&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_14570/4177033410.py:10: ComplexWarning: Casting complex values to real discards the imaginary part
+  im = forward(truth, psf).astype(&#39;float32&#39;)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;image after window&#39;)
+</pre></div>
+</div>
+<img alt="../_images/aae056fddf0687153ca175d79df76eed04f5dca1f6ac187fe4762c334fee6d39.png" src="../_images/aae056fddf0687153ca175d79df76eed04f5dca1f6ac187fe4762c334fee6d39.png" />
+<img alt="../_images/ed06c69b552126b963c05257c9e7fe85c8de412356d15bcd29205d53be05dd70.png" src="../_images/ed06c69b552126b963c05257c9e7fe85c8de412356d15bcd29205d53be05dd70.png" />
+<img alt="../_images/e19e46cdf48e44db1cc7e7f8f9496c8081afa786f65f662d97e344edebd2745b.png" src="../_images/e19e46cdf48e44db1cc7e7f8f9496c8081afa786f65f662d97e344edebd2745b.png" />
+</div>
+</div>
+</section>
+<section id="create-the-normalization-factor">
+<h1>Create the normalization factor<a class="headerlink" href="#create-the-normalization-factor" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">flat</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+<span class="n">flat</span><span class="o">=</span><span class="n">flat</span><span class="p">[</span><span class="n">window_index</span><span class="p">]</span>
+<span class="n">flat</span><span class="o">=</span><span class="n">pad</span><span class="p">(</span><span class="n">flat</span><span class="p">,</span><span class="n">truth</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="s1">&#39;constant&#39;</span><span class="p">)</span>
+
+<span class="n">otf</span> <span class="o">=</span> <span class="n">fftn</span><span class="p">(</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">psf</span><span class="p">))</span>
+<span class="n">otf_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">otf</span><span class="p">)</span>    
+<span class="n">normal</span><span class="o">=</span><span class="p">(</span><span class="n">ifftn</span><span class="p">(</span><span class="n">fftn</span><span class="p">(</span><span class="n">flat</span><span class="p">)</span> <span class="o">*</span> <span class="n">otf_</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="n">delta</span><span class="o">=</span><span class="mf">.00001</span>
+<span class="n">normal</span><span class="p">[</span><span class="n">normal</span><span class="o">&lt;</span><span class="n">delta</span><span class="p">]</span><span class="o">=</span><span class="n">delta</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">imshow2d</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Normalization factor&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_14570/1798348474.py:7: ComplexWarning: Casting complex values to real discards the imaginary part
+  normal=(ifftn(fftn(flat) * otf_)).astype(float)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;Normalization factor&#39;)
+</pre></div>
+</div>
+<img alt="../_images/386ddffd3ec1cb94bd8e4100a9e35df2ebc32f28e91ced2c5dca7f91cd09c890.png" src="../_images/386ddffd3ec1cb94bd8e4100a9e35df2ebc32f28e91ced2c5dca7f91cd09c890.png" />
+</div>
+</div>
+</section>
+<section id="deconvolve">
+<h1>Deconvolve<a class="headerlink" href="#deconvolve" title="Permalink to this heading">#</a></h1>
+<p>We call richardson lucy passing the normalization factor</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">decon</span><span class="o">=</span><span class="n">richardson_lucy_np</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">normal</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">imshow2d</span><span class="p">(</span><span class="n">decon</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;deconvolved&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;deconvolved&#39;)
+</pre></div>
+</div>
+<img alt="../_images/8e8d986493c1449cc09cf53df192ac9738adcc34a551c78bb3f033093698fb0d.png" src="../_images/8e8d986493c1449cc09cf53df192ac9738adcc34a551c78bb3f033093698fb0d.png" />
+</div>
+</div>
+</section>
+<section id="inspect-result-in-napari">
+<h1>Inspect result in Napari<a class="headerlink" href="#inspect-result-in-napari" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">napari</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">decon</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;im&#39; at 0x7f4b99c9eb50&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./30_Deconvolution"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Edge handling</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#edge-handling-math-background">Edge handling math background</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#define-functions-for-psf-forward-model-and-richardson-lucy">Define functions for PSF, forward model and RIchardson Lucy</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#define-richardson-lucy-with-an-optional-normalization-factor">Define Richardson Lucy with an optional normalization factor</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#define-forward-psf-pad-and-imshow-functions">Define forward, psf, pad and imshow functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-ground-truth">Create ground truth</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-psf">Create the PSF</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-image">Create the image</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-normalization-factor">Create the normalization factor</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve">Deconvolve</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-result-in-napari">Inspect result in Napari</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Marcelo Zoccoler, Johannes Müller, Till Korten, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

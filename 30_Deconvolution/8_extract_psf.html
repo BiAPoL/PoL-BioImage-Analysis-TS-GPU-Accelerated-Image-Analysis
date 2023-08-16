@@ -1,0 +1,906 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling &#8212; Image data science with Python and Napari @EPFL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '30_Deconvolution/8_extract_psf';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/biapol_logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/biapol_logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis
+                </a>
+            </li>
+        </ul>
+        
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis/issues/new?title=Issue%20on%20page%20%2F30_Deconvolution/8_extract_psf.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/30_Deconvolution/8_extract_psf.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flaws-and-approximations">Flaws and approximations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies-create-a-decon-conda-environment">Dependencies (create a decon conda environment)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-image-set-and-some-parameters">Define image set and some parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-image">Load Image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important-cavaet">Important Cavaet</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#background-subtraction">background subtraction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#median-filter">median filter</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-bead-image">Visualize the bead image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threshold-the-beads">Threshold the beads</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#find-bead-centroids">Find bead centroids</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aproximate-psf-using-reverse-deconvolution-a-k-a-psf-distilling">Aproximate PSF using ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-psf-image">Inspect PSF Image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#post-processing-of-psf">Post-processing of PSF</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-psf-by-deconvolving-beads">Test PSF by deconvolving beads</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#view-in-3d">View in 3D</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="a-notebook-showing-reverse-deconvolution-a-k-a-psf-distilling">
+<h1>A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling<a class="headerlink" href="#a-notebook-showing-reverse-deconvolution-a-k-a-psf-distilling" title="Permalink to this heading">#</a></h1>
+<p>The Point Spread Function (PSF) is a fundmental parameter for characterizing an imaging system and a required parameter for deconvolution and super-resolution imaging.  It describes how a point source is imaged.  Extracting a PSF from a single bead is sometimes not reliable because of the beads small signal level and intererence from other nearby beads.  Further the PSF can be spatially varying.  Even if using a non-varying deconvolution model it can be advantageous to use an average PSF from a field of beads instead of a single bead.  Extracting a PSF from a field of beads can be done with Fourier-based methods,  MLE methods (fitting parameters of a theoretical PSF to the bead image), or performing a reverse deconvolution (sometimes called PSF distilling).</p>
+<p>This notebook has been developed in part to answer the below imagesc questions…</p>
+<p><a class="reference external" href="https://forum.image.sc/t/apply-astigmatism-to-a-model-psf/9768">https://forum.image.sc/t/apply-astigmatism-to-a-model-psf/9768</a></p>
+<p><a class="reference external" href="https://forum.image.sc/t/pyme-psfextraction-creates-psfs-with-higher-than-expected-intensity-in-outer-rings/62973">https://forum.image.sc/t/pyme-psfextraction-creates-psfs-with-higher-than-expected-intensity-in-outer-rings/62973</a></p>
+<p>In this notebook we perform a reverse deconvolution to solve for the PSF.  The acquired image is the convolution of a PSF and a ‘true object’.  The ‘true object’ is the deconvolution of the image using the PSF.  However if we know the true object (in this case a field of sub-resolution beads) we can reverse the role of object and PSF, and solve for the PSF</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="o">=</span><span class="n">convolution</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span><span class="n">psf</span><span class="p">)</span>
+
+<span class="nb">object</span><span class="o">=</span><span class="n">deconvolution</span><span class="p">(</span><span class="n">image</span><span class="p">,</span><span class="n">psf</span><span class="p">)</span>
+
+<span class="n">psf</span><span class="o">=</span><span class="n">deconvolution</span><span class="p">(</span><span class="n">image</span><span class="p">,</span><span class="nb">object</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The notebook shows how to create a ‘true object’ from a field of sub-resolution beads using the prior knowledge of the shape of the beads (a sub-resolution point).  Then use the ‘true object’ to find an aproximation of the PSF using a reverse deconvolution</p>
+<section id="flaws-and-approximations">
+<h2>Flaws and approximations<a class="headerlink" href="#flaws-and-approximations" title="Permalink to this heading">#</a></h2>
+<p>The notebook has a couple of flaws.  One being it does not account for the fact that the sub-resolution beads are not necessarilly at the center of pixels.</p>
+<p>Secondly, the PSF distilling method has a disadvantage when compared to MLE parameter fitting, as the spatial extent of the extracted PSF may be limited by signal level.  The PSF distilling method has the advantage that it can capture PSFs for which a theoretical model is not available and/or accurate.</p>
+<p>Thirdly if the beads are all not the same size, or if the beads are not sub-resolution, or multiple beads stick together to form beads of different sizes, the resulting PSF will be less accurate.</p>
+<p>In addition in this notebook some preprocessing of the beads is done (such as background subtraction and filtering), which in turn effects the extracted PSF.  Extracted PSFs using reverse deconvoltuion are only an approximation which are useful for using with deconvolution to obtain better contrast in images.</p>
+</section>
+<section id="dependencies-create-a-decon-conda-environment">
+<h2>Dependencies (create a decon conda environment)<a class="headerlink" href="#dependencies-create-a-decon-conda-environment" title="Permalink to this heading">#</a></h2>
+<p>In this environment we will install some tools we need for decon, this includes Jupyter noteook, opencl, fftw, clij2fft for non-circulant Richardson Lucy, devbio version of Napari for visualization, sdeconv for theoretical PSF, tnia-python XYZ projected figures in the notebook.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda create --name decon-env python=3.9
+conda activate decon-env
+pip install devbio-napari
+pip install napari-sdeconv
+pip install git+https://github.com/True-North-Intelligent-Algorithms/tnia-python
+pip install --index-url https://test.pypi.org/simple/ --no-deps clij2-fft
+</pre></div>
+</div>
+<p>Mac-users may also need to install this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge ocl_icd_wrapper_apple
+</pre></div>
+</div>
+<p>Linux users may also need to install this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge ocl-icd-system
+</pre></div>
+</div>
+</section>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xyz_max</span>
+<span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="kn">import</span> <span class="n">threshold_otsu</span><span class="p">,</span> <span class="n">threshold_local</span>
+<span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">label</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-image-set-and-some-parameters">
+<h2>Define image set and some parameters<a class="headerlink" href="#define-image-set-and-some-parameters" title="Permalink to this heading">#</a></h2>
+<p>The data used in this notebook can be found <a class="reference external" href="https://www.dropbox.com/sh/kyu7te2a8gsu64d/AAAXWPaf1LihgmpPg_brDm4Ga?dl=0">here</a></p>
+<p>‘beads in agarose stack crop.tif’ is courtesy of Lorenze Cangiano</p>
+<p>‘SP8_175nm_LaurentBeads_Montage_left.tif’ is courtesy of Claire Mitchell</p>
+<p>‘Haase_Bead_Image1_crop.tif is courtesy of Robert Haase</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">im_path</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;../../../images/deconvolution/&#39;</span>
+
+<span class="c1"># dataset = &#39;agarose&#39;</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;LaurentBeads&#39;</span>
+<span class="c1"># dataset = &#39;Haase&#39;</span>
+
+<span class="k">if</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s1">&#39;agarose&#39;</span><span class="p">:</span>
+    <span class="n">beads_name</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;beads\beads in agarose stack crop.tif&quot;</span>
+    <span class="n">axial_stretch</span><span class="o">=</span><span class="mi">1</span>
+<span class="k">elif</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s1">&#39;LaurentBeads&#39;</span><span class="p">:</span>
+    <span class="n">beads_name</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;beads\SP8_175nm_LaurentBeads_Montage_left.tif&quot;</span>
+    <span class="n">axial_stretch</span><span class="o">=</span><span class="mi">10</span>
+<span class="k">elif</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s1">&#39;Haase&#39;</span><span class="p">:</span>
+    <span class="n">beads_name</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;beads\Haase_Bead_Image1_crop.tif&quot;</span>
+    <span class="n">axial_stretch</span><span class="o">=</span><span class="mi">1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading </span><span class="si">{</span><span class="n">beads_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;axial stretch </span><span class="si">{</span><span class="n">axial_stretch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading deconvolution\beads\SP8_175nm_LaurentBeads_Montage_left.tif
+axial stretch 10
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-image">
+<h2>Load Image<a class="headerlink" href="#load-image" title="Permalink to this heading">#</a></h2>
+<p>Here I load a test image that is obviously local to my machine.  Change the path to point to a bead image on your machine.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
+
+<span class="n">im</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">im_path</span><span class="p">,</span><span class="n">beads_name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image shape </span><span class="si">{</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Image shape (50, 2048, 2048)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="preprocessing">
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading">#</a></h2>
+<p>Preprocessing may need to be tweaked for bead images of different characteristics.  In this case we perform a crude background subtraction by subtracting <code class="docutils literal notranslate"><span class="pre">1.25*mean</span></code> from the image and apply a median filter.</p>
+<section id="important-cavaet">
+<h3>Important Cavaet<a class="headerlink" href="#important-cavaet" title="Permalink to this heading">#</a></h3>
+<p>Since the preprocessing aften has to be different between different bead input images, all preprocessing steps should be tracked in a script or notebook.</p>
+</section>
+<section id="background-subtraction">
+<h3>background subtraction<a class="headerlink" href="#background-subtraction" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">im</span><span class="o">=</span><span class="n">im</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">im</span><span class="o">=</span><span class="n">im</span><span class="o">-</span><span class="mf">1.25</span><span class="o">*</span><span class="n">im</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">im</span><span class="p">[</span><span class="n">im</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mf">.1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">im</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">im</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.7590055
+0.1 4090.3013 3.4638512
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="median-filter">
+<h3>median filter<a class="headerlink" href="#median-filter" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="kn">import</span> <span class="n">median</span>
+<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">cube</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">median</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cube</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="visualize-the-bead-image">
+<h2>Visualize the bead image<a class="headerlink" href="#visualize-the-bead-image" title="Permalink to this heading">#</a></h2>
+<p>In this case we use an XYZ max projection utility to take a look at the image.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">=</span><span class="n">show_xyz_max</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/afb62f266e81900fcb2e587d10cd462280a63ee2739c042ae064f71e6ce3b362.png" src="../_images/afb62f266e81900fcb2e587d10cd462280a63ee2739c042ae064f71e6ce3b362.png" />
+</div>
+</div>
+</section>
+<section id="threshold-the-beads">
+<h2>Threshold the beads<a class="headerlink" href="#threshold-the-beads" title="Permalink to this heading">#</a></h2>
+<p>In this case a simple global Otsu does an alright job at thresholding the beads.  This step may need to be tweaked for images with different characteristics.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">thresholded</span> <span class="o">=</span> <span class="n">im</span><span class="o">&gt;</span><span class="n">threshold_otsu</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xyz_max</span><span class="p">(</span><span class="n">thresholded</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8b79853e584fc2daec5a4057b524b28bac67aee1f3176f61c095152b8f073b0f.png" src="../_images/8b79853e584fc2daec5a4057b524b28bac67aee1f3176f61c095152b8f073b0f.png" />
+</div>
+</div>
+</section>
+<section id="find-bead-centroids">
+<h2>Find bead centroids<a class="headerlink" href="#find-bead-centroids" title="Permalink to this heading">#</a></h2>
+<p>In this step we create a label image, create region properties for each label so we can get the centroid of each bead.  We create an empty image and draw a point at each centroid.  This aproximates the ‘true object’ of the field of sub-resolution beads</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span><span class="o">=</span><span class="n">label</span><span class="p">(</span><span class="n">thresholded</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">regionprops</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">centroids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="n">objects</span> <span class="o">=</span> <span class="n">regionprops</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+    <span class="n">centroids</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">centroid</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">centroid</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">centroid</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span><span class="o">=</span><span class="n">im</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">centroid</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">centroid</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">centroid</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xyz_max</span><span class="p">(</span><span class="n">centroids</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">centroids</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Note drawing centroids is wrapped in the below convenience method</span>
+<span class="c1"># from tnia.segmentation.rendering import draw_centroids</span>
+<span class="c1"># centroids = draw_centroids(thresholded)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6772e99e3898b5b343a0dd2581fcb1d9766b4f83c6f4eaba6912f2031d1dc27d.png" src="../_images/6772e99e3898b5b343a0dd2581fcb1d9766b4f83c6f4eaba6912f2031d1dc27d.png" />
+</div>
+</div>
+</section>
+<section id="aproximate-psf-using-reverse-deconvolution-a-k-a-psf-distilling">
+<h2>Aproximate PSF using ‘reverse Deconvolution’ a.k.a. PSF Distilling<a class="headerlink" href="#aproximate-psf-using-reverse-deconvolution-a-k-a-psf-distilling" title="Permalink to this heading">#</a></h2>
+<p>In this step we perform a reverse deconvolution to solve for the PSF.  The acquired image is the convolution of a PSF and a ‘true object’.  The ‘true object’ is the deconvolution of the image using the PSF.  However if we know the true object (in this case a field of sub-resolution beads) we can reverse the role of object and PSF, and solve for the PSF</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="o">=</span><span class="n">convolution</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span><span class="n">psf</span><span class="p">)</span>
+
+<span class="nb">object</span><span class="o">=</span><span class="n">deconvolution</span><span class="p">(</span><span class="n">image</span><span class="p">,</span><span class="n">psf</span><span class="p">)</span>
+
+<span class="n">psf</span><span class="o">=</span><span class="n">deconvolution</span><span class="p">(</span><span class="n">image</span><span class="p">,</span><span class="nb">object</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We use clij to perform the Richardson Lucy deconvolution however any implementation of Richardson Lucy deconvolution could be used at this step</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">clij2fft.richardson_lucy</span> <span class="kn">import</span> <span class="n">richardson_lucy</span>
+<span class="n">im_32</span><span class="o">=</span><span class="n">im</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+<span class="n">centroids_32</span><span class="o">=</span><span class="n">centroids</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+<span class="n">first_guess</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">im_32</span><span class="p">)</span>
+<span class="n">psf</span><span class="o">=</span><span class="n">richardson_lucy</span><span class="p">(</span><span class="n">im_32</span><span class="p">,</span> <span class="n">centroids_32</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span><span class="c1">#, first_guess=first_guess)</span>
+<span class="n">psf_cropped</span><span class="o">=</span><span class="n">psf</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>get lib
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inspect-psf-image">
+<h2>Inspect PSF Image<a class="headerlink" href="#inspect-psf-image" title="Permalink to this heading">#</a></h2>
+<p>Below we visualize the PSF image and the intensity enhanced PSF image.  In the intensity enhanced PSF Image artifacts are apparent.  Note the dim reflections of the PSF, and also note the limited spatial extent of the intensities.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_max</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;PSF&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_max</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">psf</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;PSF intensity enhanced&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;PSF intensity enhanced&#39;)
+</pre></div>
+</div>
+<img alt="../_images/5e37e071b2e08e96e12d406dd1e04db6297d184dea10bdd22f9b9d933e369f3a.png" src="../_images/5e37e071b2e08e96e12d406dd1e04db6297d184dea10bdd22f9b9d933e369f3a.png" />
+<img alt="../_images/718a19ba0dfb9301cfb342b5c2b840d909493763652e7213529d033ee8dff820.png" src="../_images/718a19ba0dfb9301cfb342b5c2b840d909493763652e7213529d033ee8dff820.png" />
+</div>
+</div>
+</section>
+<section id="post-processing-of-psf">
+<h2>Post-processing of PSF<a class="headerlink" href="#post-processing-of-psf" title="Permalink to this heading">#</a></h2>
+<p>Low intensity values and values far away from the center of the PSF may not contain useful information about the PSF, so crop the PSF and set low intensities to zero via subtraction and setting negative values to zero.  Note this results in a spatially truncated PSF.  We did not reliably reconstruct low intensity values far away from the center.</p>
+<p>Also note the background level is a simple and somewhat arbitrary estimate (psf max divided by 500).  More sophisticated background subtraction approaches could be better.</p>
+<p>This PSF, when used with deconvolution will still produce images with enhanced contrast and less blur, however we should be aware of the limitation especially for images with large bright objects that cause blur with large spatial extent.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.nd.ndutil</span> <span class="kn">import</span> <span class="n">centercrop</span>
+<span class="n">psf_</span><span class="o">=</span> <span class="n">centercrop</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">65</span><span class="p">,</span><span class="mi">65</span><span class="p">))</span>
+
+<span class="c1"># note after cropping we change the axial stretch back to 3 as the xy dimensions are smaller so we don&#39;t need as much stretch to visualize the axial dimension</span>
+<span class="c1"># (note the axial stretch does not correpsond to the actual xy to z ratio, it is just a visualization parameter)</span>
+<span class="n">axial_stretch</span><span class="o">=</span><span class="mi">3</span>
+
+<span class="n">background</span> <span class="o">=</span> <span class="n">psf_</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="mi">500</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_max</span><span class="p">(</span><span class="n">psf_</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">)</span>
+<span class="c1"># set title</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;PSF&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_max</span><span class="p">(</span><span class="n">psf_</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">background</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;PSF intensity enhanced to show background&#39;</span><span class="p">)</span>
+<span class="n">psf_</span> <span class="o">=</span> <span class="n">psf_</span><span class="o">-</span><span class="n">background</span>
+<span class="n">psf_</span><span class="p">[</span><span class="n">psf_</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">psf_</span> <span class="o">=</span> <span class="n">psf_</span><span class="o">/</span><span class="n">psf_</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_max</span><span class="p">(</span><span class="n">psf_</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;PSF background subtracted and normalized&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;PSF background subtracted and normalized&#39;)
+</pre></div>
+</div>
+<img alt="../_images/16fb31ceb28d161ef55fa53072520092ee0ffbda90a1c945d661fab4b895dc7a.png" src="../_images/16fb31ceb28d161ef55fa53072520092ee0ffbda90a1c945d661fab4b895dc7a.png" />
+<img alt="../_images/dd350767481ea9a9aeb9698cd20ce7cb093ebd9398fb101b15426f7dd8f26370.png" src="../_images/dd350767481ea9a9aeb9698cd20ce7cb093ebd9398fb101b15426f7dd8f26370.png" />
+<img alt="../_images/fc221a5bfb94e9716b7b47abbe7c2f1b2bba190c500fc1f92b40b86de4c4cd90.png" src="../_images/fc221a5bfb94e9716b7b47abbe7c2f1b2bba190c500fc1f92b40b86de4c4cd90.png" />
+</div>
+</div>
+</section>
+<section id="test-psf-by-deconvolving-beads">
+<h2>Test PSF by deconvolving beads<a class="headerlink" href="#test-psf-by-deconvolving-beads" title="Permalink to this heading">#</a></h2>
+<p>The end goal is to be to use the PSF with deconvolution, to produce images with better contrast and intensities closer to the true intensity values of the structure in the image.</p>
+<p>Test deconvolving the beads (this is a so-called self-prediction test, but still useful).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">psf_</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((50, 2048, 2048), (50, 65, 65))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">clij2fft.richardson_lucy</span> <span class="kn">import</span> <span class="n">richardson_lucy_nc</span>
+
+<span class="n">deconvolved</span> <span class="o">=</span> <span class="n">richardson_lucy_nc</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">psf_</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_max</span><span class="p">(</span><span class="n">deconvolved</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Deconvolved&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_max</span><span class="p">(</span><span class="n">deconvolved</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">deconvolved</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Deconvolved gamma=0.2, vmax=deconvolved.max()/20&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>get lib
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;Deconvolved gamma=0.2, vmax=deconvolved.max()/20&#39;)
+</pre></div>
+</div>
+<img alt="../_images/31867a62bdc0e183c2b4fc897183013379d9c1fbd7bc00bac088099fdf27368f.png" src="../_images/31867a62bdc0e183c2b4fc897183013379d9c1fbd7bc00bac088099fdf27368f.png" />
+<img alt="../_images/5388a6531d398aa27adb6f0ceca11c4772e5a3d8e71a8e7453a3fc874567ed9e.png" src="../_images/5388a6531d398aa27adb6f0ceca11c4772e5a3d8e71a8e7453a3fc874567ed9e.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xy_zy_max</span>
+
+<span class="n">roi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">s_</span><span class="p">[:,</span><span class="mi">950</span><span class="p">:</span><span class="mi">1150</span><span class="p">,</span><span class="mi">250</span><span class="p">:</span><span class="mi">450</span><span class="p">]</span>
+<span class="n">test</span><span class="o">=</span><span class="n">im</span><span class="p">[</span><span class="n">roi</span><span class="p">]</span>
+<span class="n">test_deconvolved</span><span class="o">=</span><span class="n">deconvolved</span><span class="p">[</span><span class="n">roi</span><span class="p">]</span>
+<span class="n">axial_stretch</span><span class="o">=</span><span class="mi">3</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">psf_</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;PSF&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">test</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mf">4.5</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Beads&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">test_deconvolved</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axial_stretch</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mf">4.5</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Deconvolved beads&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;Deconvolved beads&#39;)
+</pre></div>
+</div>
+<img alt="../_images/572e990c80c94e5f8d64b53700456385e3438c889edac07733a953173b3aa024.png" src="../_images/572e990c80c94e5f8d64b53700456385e3438c889edac07733a953173b3aa024.png" />
+<img alt="../_images/5d579db3bc8ed44aeb6b0ff0940b5940a6a895c7260e5b71e06c10e14c07d94c.png" src="../_images/5d579db3bc8ed44aeb6b0ff0940b5940a6a895c7260e5b71e06c10e14c07d94c.png" />
+<img alt="../_images/bfee58747e27cb7718cc31d9b242dc2d934ba5505666c97724b307719e641f9d.png" src="../_images/bfee58747e27cb7718cc31d9b242dc2d934ba5505666c97724b307719e641f9d.png" />
+</div>
+</div>
+</section>
+<section id="view-in-3d">
+<h2>View in 3D<a class="headerlink" href="#view-in-3d" title="Permalink to this heading">#</a></h2>
+<p>If we have napari installed we can view our PSF in 3D</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># start napari</span>
+<span class="kn">import</span> <span class="nn">napari</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
+
+<span class="c1"># show images</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1">#viewer.add_image(psf.astype(&#39;uint16&#39;), scale = [3,1,1])</span>
+<span class="c1">#viewer.add_image(thresholded, scale = [3,1,1])</span>
+<span class="c1">#deconvolved2=deconvolved.astype(&#39;uint16&#39;)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">deconvolved</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># note that the above steps can be accessed from a convenience function as follows</span>
+<span class="kn">from</span> <span class="nn">tnia.deconvolution.psfs</span> <span class="kn">import</span> <span class="n">psf_from_beads</span>
+<span class="n">psf</span><span class="p">,</span> <span class="n">im_preprocessed</span><span class="p">,</span> <span class="n">centroids</span><span class="o">=</span><span class="n">psf_from_beads</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_max</span><span class="p">(</span><span class="n">psf</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">psf_from_beads</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./30_Deconvolution"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flaws-and-approximations">Flaws and approximations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies-create-a-decon-conda-environment">Dependencies (create a decon conda environment)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-image-set-and-some-parameters">Define image set and some parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-image">Load Image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important-cavaet">Important Cavaet</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#background-subtraction">background subtraction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#median-filter">median filter</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-bead-image">Visualize the bead image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threshold-the-beads">Threshold the beads</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#find-bead-centroids">Find bead centroids</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aproximate-psf-using-reverse-deconvolution-a-k-a-psf-distilling">Aproximate PSF using ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-psf-image">Inspect PSF Image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#post-processing-of-psf">Post-processing of PSF</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-psf-by-deconvolving-beads">Test PSF by deconvolving beads</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#view-in-3d">View in 3D</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Marcelo Zoccoler, Johannes Müller, Till Korten, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

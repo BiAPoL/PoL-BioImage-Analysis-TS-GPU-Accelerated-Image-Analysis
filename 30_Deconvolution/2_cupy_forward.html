@@ -1,0 +1,863 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Implementing the forward model (Convolution) with cupy &#8212; Image data science with Python and Napari @EPFL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '30_Deconvolution/2_cupy_forward';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/biapol_logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/biapol_logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis
+                </a>
+            </li>
+        </ul>
+        
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis/issues/new?title=Issue%20on%20page%20%2F30_Deconvolution/2_cupy_forward.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/30_Deconvolution/2_cupy_forward.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Implementing the forward model (Convolution) with cupy</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Implementing the forward model (Convolution) with cupy</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-memory-define-array-size-and-memory-management-strategy">Inspect memory, define array size and memory management strategy</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-point-spread-function">Load the Point Spread Function</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-simulated-image">Create a simulated image</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#pad-the-psf-to-be-the-same-size-as-the-image">Pad the PSF to be the same size as the image</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-convolution-in-fourier-domain-on-the-gpu">Perform Convolution in Fourier domain on the GPU</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#check-memory-use">Check memory use</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#delete-memory">Delete memory</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#delete-fft-cache">Delete FFT cache</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="implementing-the-forward-model-convolution-with-cupy">
+<h1>Implementing the forward model (Convolution) with cupy<a class="headerlink" href="#implementing-the-forward-model-convolution-with-cupy" title="Permalink to this heading">#</a></h1>
+<p>In this notebook we will perform convolution in the FFT domain <a class="reference external" href="https://en.wikipedia.org/wiki/Convolution_theorem">see convolution theorem</a>.</p>
+<p>The convolution theorem states that the convolution of two signals is the pointwise multiplication of the Fourier transform of the signals.  This is important because for large Kernel sizes it is much faster to take 2 fourier transforms, mulitply them, and take the inverse transform then it is to perform convolution in the spatial domain.  Many deconvolution algorithms, including the Richardson Lucy algorithm consist of a series of convolutions, thus the convolution theorem is important for both convolution and deconvolution.</p>
+<ol class="arabic simple">
+<li><p>Learn how to implement convolution using FFTs</p></li>
+<li><p>Learn how to manage FFT memory with cupy</p></li>
+<li><p>Purposely run out of memory and think through strategies to deal with high memory use</p></li>
+</ol>
+</section>
+<section id="inspect-memory-define-array-size-and-memory-management-strategy">
+<h1>Inspect memory, define array size and memory management strategy<a class="headerlink" href="#inspect-memory-define-array-size-and-memory-management-strategy" title="Permalink to this heading">#</a></h1>
+<p>In this example we will be generating a simulated image.  So in this block we define the size of our image.</p>
+<p>To perform a convolution in the FFT domain we need arrays for an image, a PSF, a shifted PSF, FFTs of the image and PSF, the product FFT, the inverse FFT (the result).  In addition each FFT uses a temporary buffer apr. the size of the image.  Thus 9 copies of the array are needed for FFT convolution.</p>
+<p>We check how much memory is on our GPU, then compute the problem size (9 times the image size).</p>
+<p>Adjust the image size to reduce or increase the problem size.  Try running the notebook</p>
+<p>1,  With a problem size less than the total GPU memory
+2.  With a problem size greater than the total GPU memory.</p>
+<p>For the larger problem size try running with <code class="docutils literal notranslate"><span class="pre">manage_memory</span></code> False and True</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span>
+<span class="kn">import</span> <span class="nn">decon_helper</span>
+<span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xy_zy_max</span>
+<span class="kn">from</span> <span class="nn">tnia.deconvolution.pad</span> <span class="kn">import</span> <span class="n">pad</span><span class="p">,</span> <span class="n">unpad</span>
+
+<span class="n">mempool</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">get_default_memory_pool</span><span class="p">()</span>
+
+<span class="n">total_gpu_memory</span> <span class="o">=</span> <span class="n">mempool</span>
+
+<span class="n">bpg</span><span class="o">=</span><span class="p">(</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">available_gpu_memory</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mem_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">total_gpu_memory</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mem_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total GPU memory = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total_gpu_memory</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Available GPU memory = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">available_gpu_memory</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;At beginning, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+
+<span class="n">xdim</span><span class="o">=</span><span class="mi">1024</span>
+<span class="n">ydim</span><span class="o">=</span><span class="mi">1024</span>
+<span class="n">zdim</span><span class="o">=</span><span class="mi">128</span>
+<span class="n">bytes_per_pixel</span><span class="o">=</span><span class="mi">4</span>
+
+<span class="n">array_size</span> <span class="o">=</span> <span class="n">xdim</span><span class="o">*</span><span class="n">ydim</span><span class="o">*</span><span class="n">zdim</span><span class="o">*</span><span class="n">bytes_per_pixel</span><span class="o">/</span><span class="n">bpg</span>
+
+<span class="n">manage_memory</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Array size = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">array_size</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Problem size = </span><span class="si">{}</span><span class="s2"> GB&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">array_size</span><span class="o">*</span><span class="mi">9</span><span class="p">))</span>
+
+    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tnia available
+stackview available
+Total GPU memory = 7.7540283203125
+Available GPU memory = 7.5972900390625
+At beginning, used = 0.0
+Array size = 0.5
+Problem size = 4.5 GB
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-the-point-spread-function">
+<h1>Load the Point Spread Function<a class="headerlink" href="#load-the-point-spread-function" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
+
+<span class="n">im_path</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;../../../images/deconvolution/&#39;</span>
+<span class="n">im_name</span><span class="o">=</span><span class="s1">&#39;Bars-G10-P30-stack.tif&#39;</span>
+<span class="n">psf_name</span><span class="o">=</span><span class="s1">&#39;PSF-Bars-stack.tif&#39;</span>
+
+<span class="n">psf</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">im_path</span><span class="p">,</span> <span class="n">psf_name</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">psf</span><span class="o">=</span><span class="n">psf</span><span class="o">/</span><span class="n">psf</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">psf</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">psf</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">psf</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>float32 (128, 256, 256)
+</pre></div>
+</div>
+<img alt="../_images/fef8c91c2e83d0e5c85e3424c833dbee9ef8adb6c05aae538a7ddc18579b7389.png" src="../_images/fef8c91c2e83d0e5c85e3424c833dbee9ef8adb6c05aae538a7ddc18579b7389.png" />
+</div>
+</div>
+</section>
+<section id="create-a-simulated-image">
+<h1>Create a simulated image<a class="headerlink" href="#create-a-simulated-image" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">raster_geometry</span> <span class="k">as</span> <span class="nn">rg</span>
+<span class="kn">from</span> <span class="nn">tnia.simulation.phantoms</span> <span class="kn">import</span> <span class="n">add_small_to_large</span>
+
+<span class="n">phantom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">zdim</span><span class="p">,</span><span class="n">ydim</span><span class="p">,</span><span class="n">xdim</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="n">r</span><span class="o">=</span><span class="mi">50</span>
+<span class="n">size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="p">]</span>
+<span class="n">sphere</span> <span class="o">=</span> <span class="n">rg</span><span class="o">.</span><span class="n">sphere</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="n">x</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">y</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">z</span><span class="o">=</span><span class="mi">50</span>
+
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">sphere</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">sphere</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">sphere</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">phantom</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/23b511a003c8c7a813d32ff45b4efdb27c7ec0999a26430baa9cc828f01b461a.png" src="../_images/23b511a003c8c7a813d32ff45b4efdb27c7ec0999a26430baa9cc828f01b461a.png" />
+</div>
+</div>
+</section>
+<section id="pad-the-psf-to-be-the-same-size-as-the-image">
+<h1>Pad the PSF to be the same size as the image<a class="headerlink" href="#pad-the-psf-to-be-the-same-size-as-the-image" title="Permalink to this heading">#</a></h1>
+<p>In order to do the point wise multiplication in the frequency domain, the PSF needs to be padded to the same size as the image.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before padding&#39;</span><span class="p">,</span><span class="n">phantom</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">psf</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">psf</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">psf</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pad</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s1">&#39;constant&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after padding&#39;</span><span class="p">,</span><span class="n">phantom</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">psf</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">psf</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>before padding float32 float32 (128, 1024, 1024) (128, 256, 256)
+after padding float32 float32 (128, 1024, 1024) (128, 1024, 1024)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="perform-convolution-in-fourier-domain-on-the-gpu">
+<h1>Perform Convolution in Fourier domain on the GPU<a class="headerlink" href="#perform-convolution-in-fourier-domain-on-the-gpu" title="Permalink to this heading">#</a></h1>
+<p>Convolution in the Fourier domain involves</p>
+<ol class="arabic simple">
+<li><p>Moving image and PSF to the GPU</p></li>
+<li><p>Shifting the PSF so the center pixel is at the origin</p></li>
+<li><p>Performing FFT of the image and PSF</p></li>
+<li><p>Multiplying the FFT of the image with the FFT of the PSF</p></li>
+<li><p>Performing the inverse FFT of the result of step 4.</p></li>
+</ol>
+<p>In the below cell, when <code class="docutils literal notranslate"><span class="pre">manage_memory</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> we delete GPU memory after it is no longer needed</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">manage_memory</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;convolution without memory management&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;At beginning, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+    <span class="n">phantom_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phantom</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After moving phantom to GPU, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+    <span class="n">psf_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">psf</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After moving psf to GPU, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+    <span class="n">psf_cp_shift</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">psf_cp</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating psf_shift, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+    <span class="n">otf_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfftn</span><span class="p">(</span><span class="n">psf_cp_shift</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating otf, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+    <span class="n">phantom_cp_fft</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfftn</span><span class="p">(</span><span class="n">phantom_cp</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating phantom_fft, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">phantom_cp_fft</span> <span class="o">*</span> <span class="n">otf_cp</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating temp, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+    <span class="n">convolved_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfftn</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating convolved_cp, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+    <span class="n">convolved</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">convolved_cp</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;convolution with memory management&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;At beginning, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">phantom_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phantom</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After moving phantom to GPU, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+    <span class="n">psf_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">psf</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After moving psf to GPU, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+    <span class="n">psf_cp_shift</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">psf_cp</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating psf_shift, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">otf_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfftn</span><span class="p">(</span><span class="n">psf_cp_shift</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating otf, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+    <span class="k">del</span> <span class="n">psf_cp</span>
+    <span class="k">del</span> <span class="n">psf_cp_shift</span>
+    <span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After deleting psf and shifted PSF, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+
+
+    <span class="n">phantom_cp_fft</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfftn</span><span class="p">(</span><span class="n">phantom_cp</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating phantom_fft, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">phantom_cp_fft</span> <span class="o">*</span> <span class="n">otf_cp</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating temp, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+    <span class="k">del</span> <span class="n">phantom_cp</span>
+    <span class="k">del</span> <span class="n">phantom_cp_fft</span>
+    <span class="k">del</span> <span class="n">otf_cp</span>
+    <span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After deleting phantom_cp_fft and otf_cp = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">convolved_cp</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfftn</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating convolved_cp, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">convolved</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">convolved_cp</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After creating convolved, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">phantom</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">convolved</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>convolution without memory management
+At beginning, used = 0.0
+After moving phantom to GPU, used = 0.5
+After moving psf to GPU, used = 1.0
+After creating psf_shift, used = 1.5
+After creating otf, used = 2.501953125
+After creating phantom_fft, used = 3.0029296875
+After creating temp, used = 3.50390625
+After creating convolved_cp, used = 4.5048828125
+</pre></div>
+</div>
+<img alt="../_images/23b511a003c8c7a813d32ff45b4efdb27c7ec0999a26430baa9cc828f01b461a.png" src="../_images/23b511a003c8c7a813d32ff45b4efdb27c7ec0999a26430baa9cc828f01b461a.png" />
+<img alt="../_images/f0ce042557ed1c70a011ff25af11517a94810febded8165e2759b42286c8564d.png" src="../_images/f0ce042557ed1c70a011ff25af11517a94810febded8165e2759b42286c8564d.png" />
+</div>
+</div>
+</section>
+<section id="check-memory-use">
+<h1>Check memory use<a class="headerlink" href="#check-memory-use" title="Permalink to this heading">#</a></h1>
+<p>Here we check on the memory use both before and after attempting to free blocks.  We should not see any difference since all the buffers we created are in scope</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After free_all_blocks, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+<span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After free_all_blocks, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>After free_all_blocks, used = 4.5048828125
+After free_all_blocks, used = 4.5048828125
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="delete-memory">
+<h1>Delete memory<a class="headerlink" href="#delete-memory" title="Permalink to this heading">#</a></h1>
+<p>In this block we delete memory, but we need to be careful.  Remember when we performed convolution we had a flag indicating whether we wanted to delete memory during the convolution process.  Thus some s may no longer exist.  In addition if our convolution failed we have no way of knowing how far along it got.  So before deleting memory check if the variable is still in scope.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="c1"># if phantom_cp defined, delete it</span>
+    <span class="k">if</span> <span class="s1">&#39;psf_cp&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;before psf_cp deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;psf_cp exists, deleting it&#39;</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">psf_cp</span>
+        <span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;psf_cp deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;phantom_cp&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;before phantom_cp deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;phantom_cp exists, deleting it&#39;</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">phantom_cp</span>
+        <span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;phantom_cp deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;psf_cp_shift&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;before psf_cp_shift deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;psf_cp_shift exists, deleting it&#39;</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">psf_cp_shift</span>
+        <span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;psf_cp_shift deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;otf_cp&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;before otf_cp deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;otf_cp exists, deleting it&#39;</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">otf_cp</span>
+        <span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;otf_cp deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;phantom_cp_fft&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;before phantom_cp_fft deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;phantom_cp_fft exists, deleting it&#39;</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">phantom_cp_fft</span>
+        <span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;phantom_cp_fft deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;temp&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;before temp deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;temp exists, deleting it&#39;</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">temp</span>
+        <span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;temp deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;convolved_cp&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;before convolved_cp deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;convolved_cp exists, deleting it&#39;</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">convolved_cp</span>
+        <span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;convolved_cp deleted, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>before psf_cp deleted, used = 4.5048828125
+psf_cp exists, deleting it
+psf_cp deleted, used = 4.0048828125
+
+before phantom_cp deleted, used = 4.0048828125
+phantom_cp exists, deleting it
+phantom_cp deleted, used = 3.5048828125
+
+before psf_cp_shift deleted, used = 3.5048828125
+psf_cp_shift exists, deleting it
+psf_cp_shift deleted, used = 3.0048828125
+
+before otf_cp deleted, used = 3.0048828125
+otf_cp exists, deleting it
+otf_cp deleted, used = 2.50390625
+
+before phantom_cp_fft deleted, used = 2.50390625
+phantom_cp_fft exists, deleting it
+phantom_cp_fft deleted, used = 2.0029296875
+
+before temp deleted, used = 2.0029296875
+temp exists, deleting it
+temp deleted, used = 1.501953125
+
+before convolved_cp deleted, used = 1.501953125
+convolved_cp exists, deleting it
+convolved_cp deleted, used = 1.001953125
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="delete-fft-cache">
+<h1>Delete FFT cache<a class="headerlink" href="#delete-fft-cache" title="Permalink to this heading">#</a></h1>
+<p>Finally to make sure we clear all our memory (in a real program we would want to the GPU memory to be cleared completely so it can be used for something else) we need to delete the GPU cache (tempory memorory used by the FFTs)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Before clearing fft cache, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+
+ <span class="c1"># explicitly clear the plan cache to avoid memory leak</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_plan_cache</span><span class="p">()</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<span class="n">cp</span><span class="o">.</span><span class="n">get_default_memory_pool</span><span class="p">()</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+<span class="n">mempool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After clearing fft cache, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Before clearing fft cache, used = 1.001953125
+After clearing fft cache, used = 0.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">convolved</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f0ce042557ed1c70a011ff25af11517a94810febded8165e2759b42286c8564d.png" src="../_images/f0ce042557ed1c70a011ff25af11517a94810febded8165e2759b42286c8564d.png" />
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./30_Deconvolution"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Implementing the forward model (Convolution) with cupy</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-memory-define-array-size-and-memory-management-strategy">Inspect memory, define array size and memory management strategy</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-point-spread-function">Load the Point Spread Function</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-simulated-image">Create a simulated image</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#pad-the-psf-to-be-the-same-size-as-the-image">Pad the PSF to be the same size as the image</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-convolution-in-fourier-domain-on-the-gpu">Perform Convolution in Fourier domain on the GPU</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#check-memory-use">Check memory use</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#delete-memory">Delete memory</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#delete-fft-cache">Delete FFT cache</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Marcelo Zoccoler, Johannes Müller, Till Korten, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

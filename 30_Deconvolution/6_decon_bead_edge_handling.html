@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Edge handling experiments &#8212; Image data science with Python and Napari @EPFL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '30_Deconvolution/6_decon_bead_edge_handling';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/biapol_logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/biapol_logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis
+                </a>
+            </li>
+        </ul>
+        
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis/issues/new?title=Issue%20on%20page%20%2F30_Deconvolution/6_decon_bead_edge_handling.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/30_Deconvolution/6_decon_bead_edge_handling.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Edge handling experiments</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Edge handling experiments</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-test-image">Load the test image</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-psf">Create the PSF</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#set-deconvolution-parameters">Set deconvolution parameters</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-deconvolution-with-redlionfish-clij-non-circulant-and-clij-circulant">Perform deconvolution with RedLionFish, CLIJ Non-circulant, and CLiJ Circulant</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-the-same-tests-using-a-half-bead">Perform the same tests using a half bead</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="edge-handling-experiments">
+<h1>Edge handling experiments<a class="headerlink" href="#edge-handling-experiments" title="Permalink to this heading">#</a></h1>
+<p>In this example we look closer at edge handling, this time in 3D.</p>
+<p>For background on the derivation of the Richardson Lucy equation for non-circulant boundaries see <a class="reference external" href="http://bigwww.epfl.ch/deconvolution/challenge2013/index.html?p=doc_math_rl">this Application note</a></p>
+<p>When image is extended we can think of it being equivalent to extending our ‘solution space’.  Then the acquired image has been multiplied by a window w in the larger space.  And the RL equation becomes.</p>
+<div class="math notranslate nohighlight">
+\[
+    {o}_{k+1} = \frac{o_{k}\left[\frac{wi}{o_{k}*h}*h^*\right]}{n}
+\]</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">n</span></code> is a normalization factor calculated as <code class="docutils literal notranslate"><span class="pre">HTones</span></code>.  The <code class="docutils literal notranslate"><span class="pre">H</span></code> operator on the image is convolution followed by multiplication by a window</p>
+<div class="math notranslate nohighlight">
+\[
+measuredimage=w(h*reality)
+\]</div>
+<p>So <code class="docutils literal notranslate"><span class="pre">HTones</span></code> would be window applied to the <code class="docutils literal notranslate"><span class="pre">ones</span></code> matrix followed by convolution by the conjugate of the PSF.</p>
+<div class="math notranslate nohighlight">
+\[
+(w(ones))*h^*
+\]</div>
+</section>
+<section id="load-the-test-image">
+<h1>Load the test image<a class="headerlink" href="#load-the-test-image" title="Permalink to this heading">#</a></h1>
+<p>Load the test image and crop the image a bit as to speed up testing.  We also reverse the z axis of the stack so that it is consistent with positive ‘depth’ being below the coverslip.  We have cropped the test image to better demonstrate the performance of different edge handling approaches the cropped version of the image can be found <a class="reference external" href="https://www.dropbox.com/scl/fo/mlxw2lp4vaaveuikkqqe8/h?dl=0&amp;rlkey=wznzj1kb6g3yx5wo6lqyz5je8">here</a> and the original image can be found <a class="reference external" href="http://bigwww.epfl.ch/deconvolution/bead/">here</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xy_zy_slice</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
+
+<span class="n">im_path</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;../../../images/deconvolution&#39;</span>
+<span class="n">bead</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">im_path</span><span class="p">,</span><span class="s2">&quot;bead-2.5um.tif&quot;</span><span class="p">))</span>
+
+<span class="n">z_to_view</span><span class="o">=</span><span class="n">bead</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span>
+
+<span class="n">xy_spacing</span> <span class="o">=</span> <span class="mf">0.0645</span>
+<span class="n">z_spacing</span><span class="o">=</span><span class="mf">.16</span>
+
+<span class="n">ratio</span> <span class="o">=</span> <span class="n">z_spacing</span><span class="o">/</span><span class="n">xy_spacing</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">bead</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_slice</span><span class="p">(</span><span class="n">bead</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="n">z_to_view</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(50, 256, 256)
+</pre></div>
+</div>
+<img alt="../_images/a4749603f6e8a1eeb0a1121d1ca49fb80bb557ea5e61fee0c8e6ecbb1d70607f.png" src="../_images/a4749603f6e8a1eeb0a1121d1ca49fb80bb557ea5e61fee0c8e6ecbb1d70607f.png" />
+</div>
+</div>
+</section>
+<section id="create-the-psf">
+<h1>Create the PSF<a class="headerlink" href="#create-the-psf" title="Permalink to this heading">#</a></h1>
+<p>Here we generate the PSF.  The meta data does not include the refractive index of the medium the bead is embedded in.  It is likely close to, but not exactly the refractive index of the lens immersion media, in a previous experiment we dtermined the RI of the embedding media to be apr. 1.49.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.nd.ndutil</span> <span class="kn">import</span> <span class="n">centercrop</span>
+<span class="kn">from</span> <span class="nn">tnia.deconvolution.psfs</span> <span class="kn">import</span> <span class="n">gibson_lanni_3D</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xy_zy_max</span>
+<span class="kn">from</span> <span class="nn">tnia.deconvolution.psfs</span> <span class="kn">import</span> <span class="n">recenter_psf_axial</span>
+<span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imsave</span>
+
+<span class="n">ni</span><span class="o">=</span><span class="mf">1.518</span>
+<span class="n">ns</span>  <span class="o">=</span> <span class="mf">1.49</span>
+<span class="n">NA</span><span class="o">=</span><span class="mf">1.4</span>
+<span class="n">w</span><span class="o">=</span><span class="mf">0.530</span>
+
+<span class="n">xy_spacing</span> <span class="o">=</span> <span class="mf">0.0645</span>
+<span class="n">z_spacing</span><span class="o">=</span><span class="mf">.16</span>
+
+<span class="n">xy_psf_dim</span><span class="o">=</span><span class="mi">255</span>
+<span class="n">z_compute_psf_dim</span><span class="o">=</span><span class="mi">101</span>
+<span class="c1">#z_crop_psf_dim=101</span>
+
+<span class="c1">#depth to compute PSF at</span>
+<span class="n">d</span><span class="o">=</span><span class="mi">128</span><span class="o">*</span><span class="n">z_spacing</span>
+
+<span class="n">psf</span>  <span class="o">=</span> <span class="n">gibson_lanni_3D</span><span class="p">(</span><span class="n">NA</span><span class="p">,</span> <span class="n">ni</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">xy_spacing</span><span class="p">,</span> <span class="n">z_spacing</span><span class="p">,</span> <span class="n">xy_psf_dim</span><span class="p">,</span> <span class="n">z_compute_psf_dim</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">psf</span> <span class="o">=</span> <span class="n">psf</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+<span class="n">psf</span> <span class="o">=</span> <span class="n">psf</span><span class="o">/</span><span class="n">psf</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="c1">#psf=recenter_psf_axial(psf, 255)</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">psf</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a2e48123d310d93e512c2d436af0a2a646eb429f975d4947b7e50e652b8e434f.png" src="../_images/a2e48123d310d93e512c2d436af0a2a646eb429f975d4947b7e50e652b8e434f.png" />
+</div>
+</div>
+</section>
+<section id="set-deconvolution-parameters">
+<h1>Set deconvolution parameters<a class="headerlink" href="#set-deconvolution-parameters" title="Permalink to this heading">#</a></h1>
+<p>For the first experiment we deconvolve a centered bead for 2000 iterations.  Even though the bead is centered we still see artifacts when proper edge handling is not used.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">clij2fft.richardson_lucy</span> <span class="kn">import</span> <span class="n">richardson_lucy_nc</span><span class="p">,</span> <span class="n">richardson_lucy</span>
+<span class="kn">import</span> <span class="nn">RedLionfishDeconv</span> <span class="k">as</span> <span class="nn">rl</span>
+
+<span class="n">bead</span> <span class="o">=</span> <span class="n">bead</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+<span class="n">regularization_factor</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">iterations</span><span class="o">=</span><span class="mi">1000</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="perform-deconvolution-with-redlionfish-clij-non-circulant-and-clij-circulant">
+<h1>Perform deconvolution with RedLionFish, CLIJ Non-circulant, and CLiJ Circulant<a class="headerlink" href="#perform-deconvolution-with-redlionfish-clij-non-circulant-and-clij-circulant" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">RedLionfishDeconv</span> <span class="k">as</span> <span class="nn">rl</span>
+<span class="n">decon_rl</span><span class="o">=</span><span class="n">rl</span><span class="o">.</span><span class="n">doRLDeconvolutionFromNpArrays</span><span class="p">(</span><span class="n">bead</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="n">resAsUint8</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">regularization_factor</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">im_decon_clij_nc</span> <span class="o">=</span> <span class="n">richardson_lucy_nc</span><span class="p">(</span><span class="n">bead</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="n">iterations</span> <span class="p">,</span> <span class="n">regularization_factor</span><span class="p">)</span>
+<span class="n">im_decon_clij</span><span class="o">=</span> <span class="n">richardson_lucy</span><span class="p">(</span><span class="n">bead</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="n">iterations</span> <span class="p">,</span> <span class="n">regularization_factor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>get lib
+get lib
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_slice</span><span class="p">(</span><span class="n">decon_rl</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="n">z_to_view</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;decon Red Lionfish&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_slice</span><span class="p">(</span><span class="n">im_decon_clij</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="n">z_to_view</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;decon CLIJ&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_slice</span><span class="p">(</span><span class="n">im_decon_clij_nc</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="n">z_to_view</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;decon CLIJ non-circulant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;decon CLIJ non-circulant&#39;)
+</pre></div>
+</div>
+<img alt="../_images/168d5c86112730f7edbe2d4b239a4e0011faa4fd407abc618796e0c35469163f.png" src="../_images/168d5c86112730f7edbe2d4b239a4e0011faa4fd407abc618796e0c35469163f.png" />
+<img alt="../_images/694933f6c7373ee2f5cafb3ab206c3a62672dd8da6ee8b4e87299e3ab4923151.png" src="../_images/694933f6c7373ee2f5cafb3ab206c3a62672dd8da6ee8b4e87299e3ab4923151.png" />
+<img alt="../_images/65a2ba1b53648c455d84918508941e0f33c1c58263a169f6f6c17f14bf57abb8.png" src="../_images/65a2ba1b53648c455d84918508941e0f33c1c58263a169f6f6c17f14bf57abb8.png" />
+</div>
+</div>
+</section>
+<section id="perform-the-same-tests-using-a-half-bead">
+<h1>Perform the same tests using a half bead<a class="headerlink" href="#perform-the-same-tests-using-a-half-bead" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">half_bead</span><span class="o">=</span><span class="n">bead</span><span class="p">[:</span><span class="n">bead</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,:,:]</span>
+<span class="n">z_to_view</span><span class="o">=</span><span class="n">half_bead</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_slice</span><span class="p">(</span><span class="n">half_bead</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="n">z_to_view</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;half bead&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;half bead&#39;)
+</pre></div>
+</div>
+<img alt="../_images/723160d7eed9a8c6eb950225fdc5bcc7bd5d73fce05e6a1236b470fd692d839c.png" src="../_images/723160d7eed9a8c6eb950225fdc5bcc7bd5d73fce05e6a1236b470fd692d839c.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">psf_crop</span><span class="o">=</span><span class="n">centercrop</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span> <span class="p">(</span><span class="n">half_bead</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">psf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">psf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">decon_rl</span><span class="o">=</span><span class="n">rl</span><span class="o">.</span><span class="n">doRLDeconvolutionFromNpArrays</span><span class="p">(</span><span class="n">half_bead</span><span class="p">,</span> <span class="n">psf_crop</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="n">resAsUint8</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">im_decon_clij_nc</span> <span class="o">=</span> <span class="n">richardson_lucy_nc</span><span class="p">(</span><span class="n">half_bead</span><span class="p">,</span> <span class="n">psf_crop</span><span class="p">,</span> <span class="n">iterations</span> <span class="p">,</span> <span class="n">regularization_factor</span><span class="p">)</span>
+<span class="n">im_decon_clij</span> <span class="o">=</span> <span class="n">richardson_lucy</span><span class="p">(</span><span class="n">half_bead</span><span class="p">,</span> <span class="n">psf_crop</span><span class="p">,</span> <span class="n">iterations</span> <span class="p">,</span> <span class="n">regularization_factor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>get lib
+get lib
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_slice</span><span class="p">(</span><span class="n">half_bead</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="n">z_to_view</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;half bead&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_slice</span><span class="p">(</span><span class="n">decon_rl</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="n">z_to_view</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;decon rlf&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_slice</span><span class="p">(</span><span class="n">im_decon_clij</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="n">z_to_view</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;decon clij circulant&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_slice</span><span class="p">(</span><span class="n">im_decon_clij_nc</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="n">z_to_view</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;decon clij non-circulant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;decon clij non-circulan&#39;)
+</pre></div>
+</div>
+<img alt="../_images/723160d7eed9a8c6eb950225fdc5bcc7bd5d73fce05e6a1236b470fd692d839c.png" src="../_images/723160d7eed9a8c6eb950225fdc5bcc7bd5d73fce05e6a1236b470fd692d839c.png" />
+<img alt="../_images/5e277841e7567eb13b209074887cb9c5a0237f0fef6df756450ade7d062c7bb1.png" src="../_images/5e277841e7567eb13b209074887cb9c5a0237f0fef6df756450ade7d062c7bb1.png" />
+<img alt="../_images/0cbbbb8dfe50cf040a6a54789e871b71eaa76a8f980848114e2a991e5baa41a9.png" src="../_images/0cbbbb8dfe50cf040a6a54789e871b71eaa76a8f980848114e2a991e5baa41a9.png" />
+<img alt="../_images/0375f26ea2de1c6a9bf1b1fc6560cd90df7109faa14ada0d8de676d095ed07d2.png" src="../_images/0375f26ea2de1c6a9bf1b1fc6560cd90df7109faa14ada0d8de676d095ed07d2.png" />
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./30_Deconvolution"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Edge handling experiments</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-test-image">Load the test image</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-psf">Create the PSF</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#set-deconvolution-parameters">Set deconvolution parameters</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-deconvolution-with-redlionfish-clij-non-circulant-and-clij-circulant">Perform deconvolution with RedLionFish, CLIJ Non-circulant, and CLiJ Circulant</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-the-same-tests-using-a-half-bead">Perform the same tests using a half bead</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Marcelo Zoccoler, Johannes Müller, Till Korten, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
