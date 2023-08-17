@@ -26,15 +26,8 @@ pip install pyclesperanto-prototype
 
 ### Troubleshooting
 
-#### Windows
-lorem ipsum
+- see [pyclesperanto_prototype repository](https://github.com/clEsperanto/pyclesperanto_prototype/tree/master) readme for more information.
 
-#### Linux
-lorem ipsum
+### No Device available
 
-#### Mac
-lorem ipsum
-
-### More Information
-
-- see [pyclesperanto_prototype repository]()
+- see [enable OpenCL on google colab](https://github.com/clEsperanto/pyclesperanto_prototype/issues/300#issuecomment-1682266653).
