@@ -8,6 +8,7 @@ options: # The options key will be applied to all chapters, but not sub-sections
   numbered: False
 
 chapters:
+  - file: 00_course_preparation/readme
   - file: 10_Clesperanto/readme
   - file: 20_Cupy/readme
   - file: 30_Deconvolution/readme
