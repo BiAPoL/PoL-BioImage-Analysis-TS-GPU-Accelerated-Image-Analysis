@@ -439,20 +439,20 @@ pip install --index-url https://test.pypi.org/simple/ --no-deps clij2-fft
 <p>‘Haase_Bead_Image1_crop.tif is courtesy of Robert Haase</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">im_path</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;../../../images/deconvolution/&#39;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">decon_helper</span> <span class="kn">import</span> <span class="n">image_path</span>
 
 <span class="c1"># dataset = &#39;agarose&#39;</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;LaurentBeads&#39;</span>
 <span class="c1"># dataset = &#39;Haase&#39;</span>
 
 <span class="k">if</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s1">&#39;agarose&#39;</span><span class="p">:</span>
-    <span class="n">beads_name</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;beads\beads in agarose stack crop.tif&quot;</span>
+    <span class="n">beads_name</span> <span class="o">=</span> <span class="n">image_path</span> <span class="o">/</span> <span class="s2">&quot;beads&quot;</span> <span class="o">/</span> <span class="s2">&quot;beads in agarose stack crop.tif&quot;</span>
     <span class="n">axial_stretch</span><span class="o">=</span><span class="mi">1</span>
 <span class="k">elif</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s1">&#39;LaurentBeads&#39;</span><span class="p">:</span>
-    <span class="n">beads_name</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;beads\SP8_175nm_LaurentBeads_Montage_left.tif&quot;</span>
+    <span class="n">beads_name</span> <span class="o">=</span> <span class="n">image_path</span> <span class="o">/</span> <span class="s2">&quot;beads&quot;</span> <span class="o">/</span> <span class="s2">&quot;SP8_175nm_LaurentBeads_Montage_left.tif&quot;</span>
     <span class="n">axial_stretch</span><span class="o">=</span><span class="mi">10</span>
 <span class="k">elif</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s1">&#39;Haase&#39;</span><span class="p">:</span>
-    <span class="n">beads_name</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;beads\Haase_Bead_Image1_crop.tif&quot;</span>
+    <span class="n">beads_name</span> <span class="o">=</span> <span class="n">image_path</span> <span class="o">/</span> <span class="s2">&quot;beads&quot;</span> <span class="o">/</span> <span class="s2">&quot;Haase_Bead_Image1_crop.tif&quot;</span>
     <span class="n">axial_stretch</span><span class="o">=</span><span class="mi">1</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading </span><span class="si">{</span><span class="n">beads_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -475,7 +475,7 @@ axial stretch 10
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
 
-<span class="n">im</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">im_path</span><span class="p">,</span><span class="n">beads_name</span><span class="p">))</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">beads_name</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image shape </span><span class="si">{</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>

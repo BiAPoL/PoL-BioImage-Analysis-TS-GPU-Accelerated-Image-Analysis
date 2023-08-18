@@ -419,15 +419,13 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
+<span class="kn">from</span> <span class="nn">decon_helper</span> <span class="kn">import</span> <span class="n">image_path</span>
 
-<span class="n">im_path</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;../../../images/deconvolution/&#39;</span>
-
-<span class="n">im_name</span><span class="o">=</span><span class="s1">&#39;nuclei4_out_c90_dr10_image.tif&#39;</span>
+<span class="n">image_name</span><span class="o">=</span><span class="s1">&#39;nuclei4_out_c90_dr10_image.tif&#39;</span>
 <span class="n">truth_name</span><span class="o">=</span><span class="s1">&#39;out_c90_dr10_label.tif&#39;</span>
 
-<span class="n">im</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">im_path</span><span class="p">,</span><span class="n">im_name</span><span class="p">))</span>
-<span class="n">truth</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">im_path</span><span class="p">,</span><span class="n">truth_name</span><span class="p">))</span>
+<span class="n">im</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span> <span class="o">/</span> <span class="n">image_name</span><span class="p">)</span>
+<span class="n">truth</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span> <span class="o">/</span> <span class="n">truth_name</span><span class="p">)</span>
 <span class="n">im</span><span class="o">=</span><span class="n">im</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">truth</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>

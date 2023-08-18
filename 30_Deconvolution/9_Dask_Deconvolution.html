@@ -383,16 +383,15 @@ document.write(`
 
 
 <span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">decon_helper</span> <span class="kn">import</span> <span class="n">image_path</span>
 
-<span class="n">im_path</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;../../../images/deconvolution/&#39;</span>
-<span class="n">im_name</span><span class="o">=</span><span class="s1">&#39;Bars-G10-P30-stack.tif&#39;</span>
+<span class="n">image_name</span><span class="o">=</span><span class="s1">&#39;Bars-G10-P30-stack.tif&#39;</span>
 <span class="n">psf_name</span><span class="o">=</span><span class="s1">&#39;PSF-Bars-stack.tif&#39;</span>
 <span class="n">truth_name</span><span class="o">=</span><span class="s1">&#39;Bars-stack.tif&#39;</span>
 
-<span class="n">im</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">im_path</span><span class="p">,</span><span class="n">im_name</span><span class="p">))</span>
-<span class="n">psf</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">im_path</span><span class="p">,</span><span class="n">psf_name</span><span class="p">))</span>
-<span class="n">truth</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">im_path</span><span class="p">,</span><span class="n">truth_name</span><span class="p">))</span>
+<span class="n">im</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span> <span class="o">/</span> <span class="n">image_name</span><span class="p">)</span>
+<span class="n">psf</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span> <span class="o">/</span> <span class="n">psf_name</span><span class="p">)</span>
+<span class="n">truth</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span> <span class="o">/</span> <span class="n">truth_name</span><span class="p">)</span>
 <span class="n">im</span><span class="o">=</span><span class="n">im</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
 <span class="n">psf</span><span class="o">=</span><span class="n">psf</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
 <span class="n">psf</span><span class="o">=</span><span class="n">psf</span><span class="o">/</span><span class="n">psf</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
