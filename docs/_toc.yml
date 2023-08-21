@@ -17,5 +17,5 @@ chapters:
   - file: 60_Pytorch/readme
   - file: 70_AI_Segmentation_Denoising/readme
     - sections:
-      - file: 71_AI_Segmentation_Denoising/02_2D_unet_training.ipynb
+      - file: 70_AI_Segmentation_Denoising/02_2D_unet_training.ipynb
   - file: 80_Dask/readme
