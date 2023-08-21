@@ -16,4 +16,6 @@ chapters:
   - file: 50_Clesperanto_on_HPC/readme
   - file: 60_Pytorch/readme
   - file: 70_AI_Segmentation_Denoising/readme
+    - sections:
+      - file: 70_AI_Segmentation_Denoising/01_2D_unet_training.ipynb
   - file: 80_Dask/readme
