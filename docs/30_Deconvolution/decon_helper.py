@@ -1,3 +1,11 @@
+from pathlib import Path
+
+# local path to the data folder
+image_path = Path('../../data/deconvolution/')
+
+# Path to the data folder on the cluster
+# image_path = Path('/beegfs/ws/0/tkorten-cache/deconvolution/')
+
 # Assuming you've installed the required libraries: lib1 and lib2
 try:
     import tnia.plotting.projections as tnia_proj
