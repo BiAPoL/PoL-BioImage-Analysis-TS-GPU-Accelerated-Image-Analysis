@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>AI segmentation and denoising &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>Using Clesperanto on Taurus &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -61,9 +61,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '70_AI_Segmentation_Denoising/Readme';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '50_Clesperanto_on_HPC/readme';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Executing clesperanto on the TU Dresden HPC" href="login_taurus.html" />
+    <link rel="prev" title="Dask deconvolution" href="../30_Deconvolution/9_Dask_Deconvolution.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -154,7 +156,7 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../00_course_preparation/Readme.html">Course preparation</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../30_Deconvolution/0_intro_to_decon.html">Intro to Deconvolution and Restoration</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/1_test_libs.html">Setup environment</a></li>
@@ -201,9 +203,9 @@ const thebe_selector_output = ".output, .cell_output"
 
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../50_Clesperanto_on_HPC/readme.html">Using Clesperanto on Taurus</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/login_taurus.html">Executing clesperanto on the TU Dresden HPC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/modified_generated_notebook.html">Loading ‘blobs’</a></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Using Clesperanto on Taurus</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="login_taurus.html">Executing clesperanto on the TU Dresden HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modified_generated_notebook.html">Loading ‘blobs’</a></li>
 
 
 
@@ -280,7 +282,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues/new?title=Issue%20on%20page%20%2F70_AI_Segmentation_Denoising/Readme.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues/new?title=Issue%20on%20page%20%2F50_Clesperanto_on_HPC/readme.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -310,7 +312,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/70_AI_Segmentation_Denoising/Readme.md" target="_blank"
+      <li><a href="../_sources/50_Clesperanto_on_HPC/readme.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -390,7 +392,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>AI segmentation and denoising</h1>
+    <h1>Using Clesperanto on Taurus</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -404,8 +406,21 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="ai-segmentation-and-denoising">
-<h1>AI segmentation and denoising<a class="headerlink" href="#ai-segmentation-and-denoising" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="using-clesperanto-on-taurus">
+<h1>Using Clesperanto on Taurus<a class="headerlink" href="#using-clesperanto-on-taurus" title="Permalink to this heading">#</a></h1>
+<p>In this session we will make use of <a class="reference external" href="https://github.com/clEsperanto/pyclesperanto_prototype">clesperanto</a> on TU Dresden’s HPC infrastructure.</p>
+<p>Therefore, we need to install a singularity container on the HPC cluster as explained <a class="reference external" href="https://gitlab.mn.tu-dresden.de/bia-pol/singularity-devbio-napari#quick-start">in detail here</a>. In very short: <a class="reference external" href="https://taurus.hrsk.tu-dresden.de/jupyter/hub/home">Login to taurus</a> and execute the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.mn.tu-dresden.de/bia-pol/singularity-devbio-napari.git
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>singularity-devbio-napari
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./install.sh<span class="w"> </span>&lt;version&gt;
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -421,7 +436,7 @@ document.write(`
         },
         kernelOptions: {
             name: "python3",
-            path: "./70_AI_Segmentation_Denoising"
+            path: "./50_Clesperanto_on_HPC"
         },
         predefinedOutput: true
     }
@@ -439,6 +454,24 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="../30_Deconvolution/9_Dask_Deconvolution.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Dask deconvolution</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="login_taurus.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Executing clesperanto on the TU Dresden HPC</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
