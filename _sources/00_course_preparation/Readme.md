@@ -33,12 +33,14 @@ Please, configure the VPN access as follows:
 ● [Windows users](https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/windows)
 ● [MacOS](https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/macos)
 
-Please use the credentials that have been provided to you, esp. the concrete login name.
+Please use the credentials that have been provided to you, esp. the concrete username.
 
 ### ssh connection (Linux, MacOS)
 Linux and MacOS users: Please check whether you can access the ZIH HPC system. Make sure you have established a VPN connection!
 1) Open a console and type in the following (change scadsXXX to your username)
+```
 ssh scadsXXX@taurus.hrsk.tu-dresden.de
+```
 
 ### ssh connection (Windows)
 Windows users need an ssh client for connecting to the ZIH HPC system.
