@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Course preparation &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>cupy &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -61,11 +61,9 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '00_course_preparation/Readme';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '25_cupy/readme';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Intro to Deconvolution and Restoration" href="../30_Deconvolution/0_intro_to_decon.html" />
-    <link rel="prev" title="PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis" href="../intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -156,8 +154,8 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Course preparation</a></li>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_course_preparation/Readme.html">Course preparation</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../30_Deconvolution/0_intro_to_decon.html">Intro to Deconvolution and Restoration</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/1_test_libs.html">Setup environment</a></li>
 
@@ -282,7 +280,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues/new?title=Issue%20on%20page%20%2F00_course_preparation/Readme.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues/new?title=Issue%20on%20page%20%2F25_cupy/readme.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -312,7 +310,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/00_course_preparation/Readme.md" target="_blank"
+      <li><a href="../_sources/25_cupy/readme.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -381,9 +379,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -394,28 +390,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Course preparation</h1>
+    <h1>cupy</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nvidia-graphics-cards">NVidia graphics cards</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#access-to-the-zih-hpc-system">Access to the ZIH HPC System</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vpn-for-all-users-linux-win-macos">VPN - for all users (Linux, Win, MacOS)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-connection-linux-macos">ssh connection (Linux, MacOS)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-connection-windows">ssh connection (Windows)</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting-dll-load-failed">Troubleshooting: DLL load failed</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting-graphics-cards-drivers">Troubleshooting: Graphics cards drivers</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#online-support">Online support</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -425,107 +404,15 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="course-preparation">
-<h1>Course preparation<a class="headerlink" href="#course-preparation" title="Permalink to this heading">#</a></h1>
-<p>Before attending the course, please install mambaforge on your computer as explained in this <a class="reference external" href="https://biapol.github.io/blog/mara_lampert/getting_started_with_mambaforge_and_python/readme.html">blog post</a>.</p>
-<p>If you already have some conda or anaconda installation on your computer, <em><strong>please install mambaforge</strong></em> anyway as explained in the blog post linked above.</p>
-<p>Furthermore, please install <a class="reference external" href="https://github.com/haesleinhuepf/devbio-napari#installation">devbio-napari</a> into a fresh conda environment, e.g. using this command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">create</span> <span class="o">--</span><span class="n">name</span> <span class="n">devbio</span><span class="o">-</span><span class="n">napari</span><span class="o">-</span><span class="n">env</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span> <span class="n">devbio</span><span class="o">-</span><span class="n">napari</span> <span class="n">pyqt</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
-</pre></div>
-</div>
-<p>When you are done, you can test your setup by executing these commands from the command line:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">devbio</span><span class="o">-</span><span class="n">napari</span><span class="o">-</span><span class="n">env</span>
-
-<span class="n">naparia</span>
-</pre></div>
-</div>
-<p>After Napari opens, click the menu <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open</span> <span class="pre">Samples</span> <span class="pre">&gt;</span> <span class="pre">clEsperanto</span> <span class="pre">&gt;</span> <span class="pre">blobs</span> <span class="pre">(from</span> <span class="pre">ImageJ)</span></code>. In the Panel on the right click on the <code class="docutils literal notranslate"><span class="pre">Label</span></code> button. If Napari then looks like this, you are ready to go:</p>
-<p><img alt="img.png" src="../_images/img.png" /></p>
-<section id="nvidia-graphics-cards">
-<h2>NVidia graphics cards<a class="headerlink" href="#nvidia-graphics-cards" title="Permalink to this heading">#</a></h2>
-<p>If you have access to an NVidia graphics card, please also set up this conda environment:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="cupy">
+<h1>cupy<a class="headerlink" href="#cupy" title="Permalink to this heading">#</a></h1>
+<p>In this session we will focus on image processing using <a class="reference external" href="https://docs.cupy.dev/">cupy</a> a library that makes processing of images on <a class="reference external" href="https://developer.nvidia.com/cuda-toolkit">CUDA</a>-compatible NVidia graphics cards available from Python.</p>
+<p>To get started, we need to install cupy, e.g. like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">create</span> <span class="o">--</span><span class="n">name</span> <span class="n">cupy39</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span> <span class="n">devbio</span><span class="o">-</span><span class="n">napari</span> <span class="n">pyqt</span> <span class="n">cupy</span> <span class="n">cudatoolkit</span> <span class="n">napari</span><span class="o">-</span><span class="n">cupy</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">processing</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
 </pre></div>
 </div>
-</section>
-<section id="access-to-the-zih-hpc-system">
-<h2>Access to the ZIH HPC System<a class="headerlink" href="#access-to-the-zih-hpc-system" title="Permalink to this heading">#</a></h2>
-<p>Please follow the instructions outlined here to set up your access to the ZIH HPC System in advance of the training.</p>
-<section id="vpn-for-all-users-linux-win-macos">
-<h3>VPN - for all users (Linux, Win, MacOS)<a class="headerlink" href="#vpn-for-all-users-linux-win-macos" title="Permalink to this heading">#</a></h3>
-<p>The ZIH HPC system can be accessed only via VPN (or within the campus data net).</p>
-<p>Please, configure the VPN access as follows:
-● <a class="reference external" href="https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/linux">Linux users</a>
-● <a class="reference external" href="https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/windows">Windows users</a>
-● <a class="reference external" href="https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/macos">MacOS</a></p>
-<p>Please use the credentials that have been provided to you, esp. the concrete username.</p>
-</section>
-<section id="ssh-connection-linux-macos">
-<h3>ssh connection (Linux, MacOS)<a class="headerlink" href="#ssh-connection-linux-macos" title="Permalink to this heading">#</a></h3>
-<p>Linux and MacOS users: Please check whether you can access the ZIH HPC system. Make sure you have established a VPN connection!</p>
-<ol class="arabic simple">
-<li><p>Open a console and type in the following (change scadsXXX to your username)</p></li>
-</ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="n">scadsXXX</span><span class="nd">@taurus</span><span class="o">.</span><span class="n">hrsk</span><span class="o">.</span><span class="n">tu</span><span class="o">-</span><span class="n">dresden</span><span class="o">.</span><span class="n">de</span>
-</pre></div>
-</div>
-</section>
-<section id="ssh-connection-windows">
-<h3>ssh connection (Windows)<a class="headerlink" href="#ssh-connection-windows" title="Permalink to this heading">#</a></h3>
-<p>Windows users need an ssh client for connecting to the ZIH HPC system.
-0) we recommend using MobaXterm</p>
-<ol class="arabic simple">
-<li><p>download the home edition (free) of <a class="reference external" href="https://mobaxterm.mobatek.net/download.html">MobaXterm here</a></p></li>
-<li><p>Install the client to your machine. A short demo on MobaXterm can be found <a class="reference external" href="https://mobaxterm.mobatek.net/demo.html">here</a></p></li>
-<li><p>After starting MobXterm an ssh connection to the ZIH HPC system can be established using the credentials as for VPN (for connection
-use remote host: <a class="reference external" href="http://taurus.hrsk.tu-dresden.de">taurus.hrsk.tu-dresden.de</a>):</p></li>
-</ol>
-<p>Hint: make sure to have the VPN connection established!</p>
-</section>
-</section>
-<section id="troubleshooting-dll-load-failed">
-<h2>Troubleshooting: DLL load failed<a class="headerlink" href="#troubleshooting-dll-load-failed" title="Permalink to this heading">#</a></h2>
-<p>In case of error messages such as this one:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="n">_get_win_folder_with_pywin32</span>
-<span class="kn">from</span> <span class="nn">win32com.shell</span> <span class="kn">import</span> <span class="n">shellcon</span><span class="p">,</span> <span class="n">shell</span>
-<span class="ne">ImportError</span><span class="p">:</span> <span class="n">DLL</span> <span class="n">load</span> <span class="n">failed</span> <span class="k">while</span> <span class="n">importing</span> <span class="n">shell</span><span class="p">:</span> <span class="n">The</span> <span class="n">specified</span> <span class="n">procedure</span> <span class="n">could</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">found</span><span class="o">.</span>
-</pre></div>
-</div>
-<p>Try this command, within the base environment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">base</span>
-
-<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywin32</span><span class="o">==</span><span class="mi">228</span>
-</pre></div>
-</div>
-<p><a class="reference external" href="https://github.com/conda/conda/issues/11503">Source</a></p>
-</section>
-<section id="troubleshooting-graphics-cards-drivers">
-<h2>Troubleshooting: Graphics cards drivers<a class="headerlink" href="#troubleshooting-graphics-cards-drivers" title="Permalink to this heading">#</a></h2>
-<p>In case error messages contains “ImportError: DLL load failed while importing cl: The specified procedure could not be found” <a class="reference external" href="https://github.com/clEsperanto/pyclesperanto_prototype/issues/55">see also</a> or “”clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR”, please install recent drivers for your graphics card and/or OpenCL device. Select the right driver source depending on your hardware from this list:</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://www.amd.com/en/support">AMD drivers</a></p></li>
-<li><p><a class="reference external" href="https://www.nvidia.com/download/index.aspx">NVidia drivers</a></p></li>
-<li><p><span class="xref myst">Intel GPU drivers</span>(<a class="reference external" href="https://www.intel.com/content/www/us/en/download/726609/intel-arc-graphics-windows-dch-driver.html">https://www.intel.com/content/www/us/en/download/726609/intel-arc-graphics-windows-dch-driver.html</a>)</p></li>
-<li><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/articles/tool/opencl-drivers.html#latest_CPU_runtime">Intel CPU OpenCL drivers</a></p></li>
-<li><p><a class="reference external" href="https://www.microsoft.com/en-us/p/opencl-and-opengl-compatibility-pack/9nqpsl29bfff">Microsoft Windows OpenCL support</a></p></li>
-</ul>
-<p>Sometimes, mac-users need to install this:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mamba install -c conda-forge ocl_icd_wrapper_apple
-</pre></div>
-</div>
-<p>Sometimes, linux users need to install this:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mamba install -c conda-forge ocl-icd-system
-</pre></div>
-</div>
-<p>In case installation didn’t work in the first attempt, you may have to call this command line to reset the napari configuration:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">napari</span> <span class="o">--</span><span class="n">reset</span>
-</pre></div>
-</div>
-</section>
-<section id="online-support">
-<h2>Online support<a class="headerlink" href="#online-support" title="Permalink to this heading">#</a></h2>
-<p>In case you run into any trouble while installing software, please create a thread on <a class="reference external" href="https://image.sc">https://image.sc</a> and tag &#64;haesleinhuepf</p>
-</section>
+<p>In case your computer does not have an NVidia graphics card, you can follow the exercises on <a class="reference external" href="https://colab.research.google.com/?utm_source=scs-index">Google colab</a>, where cupy is commonly installed. Make sure to select a GPU-runtime from the menu <code class="docutils literal notranslate"><span class="pre">Runtime</span> <span class="pre">&gt;</span> <span class="pre">Change</span> <span class="pre">runtime</span> <span class="pre">type</span></code> (<a class="reference external" href="https://biapol.github.io/blog/robert_haase/cupy_cucim/readme.html">read more</a>)</p>
+<p><img alt="" src="../_images/colab_runtime.png" /></p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -541,7 +428,7 @@ use remote host: <a class="reference external" href="http://taurus.hrsk.tu-dresd
         },
         kernelOptions: {
             name: "python3",
-            path: "./00_course_preparation"
+            path: "./25_cupy"
         },
         predefinedOutput: true
     }
@@ -559,24 +446,6 @@ use remote host: <a class="reference external" href="http://taurus.hrsk.tu-dresd
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../intro.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="../30_Deconvolution/0_intro_to_decon.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Intro to Deconvolution and Restoration</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div></div>
   
 </div>
@@ -586,29 +455,6 @@ use remote host: <a class="reference external" href="http://taurus.hrsk.tu-dresd
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nvidia-graphics-cards">NVidia graphics cards</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#access-to-the-zih-hpc-system">Access to the ZIH HPC System</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vpn-for-all-users-linux-win-macos">VPN - for all users (Linux, Win, MacOS)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-connection-linux-macos">ssh connection (Linux, MacOS)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-connection-windows">ssh connection (Windows)</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting-dll-load-failed">Troubleshooting: DLL load failed</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting-graphics-cards-drivers">Troubleshooting: Graphics cards drivers</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#online-support">Online support</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
