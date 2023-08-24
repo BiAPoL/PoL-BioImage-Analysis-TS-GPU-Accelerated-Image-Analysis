@@ -20,6 +20,36 @@ After Napari opens, click the menu `File > Open Samples > clEsperanto > blobs (f
 
 ![img.png](img.png)
 
+
+## Access to the ZIH HPC System
+
+Please follow the instructions outlined here to set up your access to the ZIH HPC System in advance of the training. 
+
+### VPN - for all users (Linux, Win, MacOS)
+The ZIH HPC system can be accessed only via VPN (or within the campus data net).
+
+Please, configure the VPN access as follows:
+● [Linux users](https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/linux)
+● [Windows users](https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/windows)
+● [MacOS](https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/macos)
+
+Please use the credentials that have been provided to you, esp. the concrete login name.
+
+### ssh connection (Linux, MacOS)
+Linux and MacOS users: Please check whether you can access the ZIH HPC system. Make sure you have established a VPN connection!
+1) Open a console and type the follwing (change XXX to the login name)
+ssh XXX@taurus.hrsk.tu-dresden.de
+
+### ssh connection (Windows)
+Windows users need an ssh client for connecting to the ZIH HPC system.
+0) we recommend using MobaXterm
+1) download the home edition (free) of [MobaXterm here](https://mobaxterm.mobatek.net/download.html)
+2) Install the client to your machine. A short demo on MobaXterm can be found [here](https://mobaxterm.mobatek.net/demo.html)
+3) After starting MobXterm an ssh connection to the ZIH HPC system can be established using the credentials as for VPN (for connection
+use remote host: taurus.hrsk.tu-dresden.de):
+
+Hint: make sure to have the VPN connection established!
+
 ## Troubleshooting: DLL load failed
 
 In case of error messages such as this one:

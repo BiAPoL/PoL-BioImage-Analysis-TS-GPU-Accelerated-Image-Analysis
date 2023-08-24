@@ -346,6 +346,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#access-to-the-zih-hpc-system">Access to the ZIH HPC System</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vpn-for-all-users-linux-win-macos">VPN - for all users (Linux, Win, MacOS)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-connection-linux-macos">ssh connection (Linux, MacOS)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-connection-windows">ssh connection (Windows)</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting-dll-load-failed">Troubleshooting: DLL load failed</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting-graphics-cards-drivers">Troubleshooting: Graphics cards drivers</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#online-support">Online support</a></li>
@@ -376,6 +382,39 @@ document.write(`
 </div>
 <p>After Napari opens, click the menu <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open</span> <span class="pre">Samples</span> <span class="pre">&gt;</span> <span class="pre">clEsperanto</span> <span class="pre">&gt;</span> <span class="pre">blobs</span> <span class="pre">(from</span> <span class="pre">ImageJ)</span></code>. In the Panel on the right click on the <code class="docutils literal notranslate"><span class="pre">Label</span></code> button. If Napari then looks like this, you are ready to go:</p>
 <p><img alt="img.png" src="../_images/img.png" /></p>
+<section id="access-to-the-zih-hpc-system">
+<h2>Access to the ZIH HPC System<a class="headerlink" href="#access-to-the-zih-hpc-system" title="Permalink to this heading">#</a></h2>
+<p>Please follow the instructions outlined here to set up your access to the ZIH HPC System in advance of the training.</p>
+<section id="vpn-for-all-users-linux-win-macos">
+<h3>VPN - for all users (Linux, Win, MacOS)<a class="headerlink" href="#vpn-for-all-users-linux-win-macos" title="Permalink to this heading">#</a></h3>
+<p>The ZIH HPC system can be accessed only via VPN (or within the campus data net).</p>
+<p>Please, configure the VPN access as follows:
+● <a class="reference external" href="https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/linux">Linux users</a>
+● <a class="reference external" href="https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/windows">Windows users</a>
+● <a class="reference external" href="https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn/openvpn/macos">MacOS</a></p>
+<p>Please use the credentials that have been provided to you, esp. the concrete login name.</p>
+</section>
+<section id="ssh-connection-linux-macos">
+<h3>ssh connection (Linux, MacOS)<a class="headerlink" href="#ssh-connection-linux-macos" title="Permalink to this heading">#</a></h3>
+<p>Linux and MacOS users: Please check whether you can access the ZIH HPC system. Make sure you have established a VPN connection!</p>
+<ol class="arabic simple">
+<li><p>Open a console and type the follwing (change XXX to the login name)
+ssh <a class="reference external" href="mailto:XXX&#37;&#52;&#48;taurus&#46;hrsk&#46;tu-dresden&#46;de">XXX<span>&#64;</span>taurus<span>&#46;</span>hrsk<span>&#46;</span>tu-dresden<span>&#46;</span>de</a></p></li>
+</ol>
+</section>
+<section id="ssh-connection-windows">
+<h3>ssh connection (Windows)<a class="headerlink" href="#ssh-connection-windows" title="Permalink to this heading">#</a></h3>
+<p>Windows users need an ssh client for connecting to the ZIH HPC system.
+0) we recommend using MobaXterm</p>
+<ol class="arabic simple">
+<li><p>download the home edition (free) of <a class="reference external" href="https://mobaxterm.mobatek.net/download.html">MobaXterm here</a></p></li>
+<li><p>Install the client to your machine. A short demo on MobaXterm can be found <a class="reference external" href="https://mobaxterm.mobatek.net/demo.html">here</a></p></li>
+<li><p>After starting MobXterm an ssh connection to the ZIH HPC system can be established using the credentials as for VPN (for connection
+use remote host: <a class="reference external" href="http://taurus.hrsk.tu-dresden.de">taurus.hrsk.tu-dresden.de</a>):</p></li>
+</ol>
+<p>Hint: make sure to have the VPN connection established!</p>
+</section>
+</section>
 <section id="troubleshooting-dll-load-failed">
 <h2>Troubleshooting: DLL load failed<a class="headerlink" href="#troubleshooting-dll-load-failed" title="Permalink to this heading">#</a></h2>
 <p>In case of error messages such as this one:</p>
@@ -470,6 +509,12 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#access-to-the-zih-hpc-system">Access to the ZIH HPC System</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vpn-for-all-users-linux-win-macos">VPN - for all users (Linux, Win, MacOS)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-connection-linux-macos">ssh connection (Linux, MacOS)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-connection-windows">ssh connection (Windows)</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting-dll-load-failed">Troubleshooting: DLL load failed</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting-graphics-cards-drivers">Troubleshooting: Graphics cards drivers</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#online-support">Online support</a></li>
