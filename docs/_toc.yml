@@ -9,6 +9,15 @@ options: # The options key will be applied to all chapters, but not sub-sections
 
 chapters:
   - file: 10_Clesperanto/readme
+    sections:
+    - file: docs/10_Clesperanto/10_select_devices.ipynb
+    - file: docs/10_Clesperanto/20_gpu_arrays_and_memory_managment.ipynb
+    - file: docs/10_Clesperanto/30_apply_operations_on_data.ipynb
+    - file: docs/10_Clesperanto/40_nuclei_segmentation.ipynb
+    - file: docs/10_Clesperanto/50_measurement_and_quantifications.ipynb
+    - file: docs/10_Clesperanto/60_custom_kernel_execution.ipynb
+    - file: docs/10_Clesperanto/70_benchmarking.ipynb
+
   - file: 20_Cupy/readme
   - file: 30_Deconvolution/readme
   - file: 40_HPC_Intro/readme
