@@ -17,10 +17,22 @@ chapters:
     - file: 25_cupy/30_filtering
     - file: 25_cupy/40_custom_kernels
     - file: 25_cupy/50_napari-cupy-image-processing
-    
-  - file: 30_Deconvolution/readme
+
+  - file: 30_Deconvolution/0_intro_to_decon
+    sections:
+      - file: 30_Deconvolution/1_test_libs
+      - file: 30_Deconvolution/2_cupy_forward
+      - file: 30_Deconvolution/3_Nuclei_Deconvolution_Compare_to_Truth
+      - file: 30_Deconvolution/4_Nuclei_Deconvolution_Segmentation
+      - file: 30_Deconvolution/5_edges
+      - file: 30_Deconvolution/6_decon_bead_edge_handling
+      - file: 30_Deconvolution/7_decon_regularization
+      - file: 30_Deconvolution/8_extract_psf
+      - file: 30_Deconvolution/9_Dask_Deconvolution
   - file: 40_HPC_Intro/readme
   - file: 50_Clesperanto_on_HPC/readme
   - file: 60_Pytorch/readme
   - file: 70_AI_Segmentation_Denoising/readme
+    sections:
+    - file: 70_AI_Segmentation_Denoising/01_2D_unet_training
   - file: 80_Dask/readme
