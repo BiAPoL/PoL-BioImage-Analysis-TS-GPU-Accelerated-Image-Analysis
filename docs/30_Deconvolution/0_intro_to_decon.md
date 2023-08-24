@@ -20,8 +20,9 @@ The problem is ill-poised (information is lost thus cannot restore original comp
 
 <div>
   <!-- Your HTML code goes here -->
-  <img src="images/PSF_xy.jpg" alt="Image">
-  <img src="images/PSF_xz.jpg" alt="Image">
+  <img src="images/PSF_xy.jpg" alt="Image" />
+  <img src="images/5_open_terminal.png" width="500" />
+  <img src="images/PSF_xz.jpg" alt="Image" />
 </div>
 
 ## Imaging Process
@@ -35,15 +36,15 @@ Having a means to run a forward imaging model is important for
 
 <div>
   <!-- Your HTML code goes here -->
-  <img src="images/sphere_xy.jpg" alt="Image">
-  <img src="images/sphere_convolved_xy.jpg" alt="Image">
-  <img src="images/sphere_convolved_noise_xy.jpg" alt="Image">
+  <img src="images/sphere_xy.jpg" alt="Image" />
+  <img src="images/sphere_convolved_xy.jpg" alt="Image" />
+  <img src="images/sphere_convolved_noise_xy.jpg" alt="Image" />
 </div>
 <div>
   <!-- Your HTML code goes here -->
-  <img src="images/sphere_xz.jpg" alt="Image">
-  <img src="images/sphere_convolved_xz.jpg" alt="Image">
-  <img src="images/sphere_convolved_noise_xz.jpg" alt="Image">
+  <img src="images/sphere_xz.jpg" alt="Image" />
+  <img src="images/sphere_convolved_xz.jpg" alt="Image" />
+  <img src="images/sphere_convolved_noise_xz.jpg" alt="Image" />
 </div>
 
 ## Deconvolution
@@ -65,17 +66,17 @@ The images below show left to right the blurred sphere and the result of 10, 20 
 
 <div>
   <!-- Your HTML code goes here -->
-  <img src="images/rl_iterations/xy.jpg" alt="Image">
-  <img src="images/rl_iterations/rl10xy.jpg" alt="Image">
-  <img src="images/rl_iterations/rl20xy.jpg" alt="Image">
-  <img src="images/rl_iterations/rl30xy.jpg" alt="Image">
+  <img src="images/rl_iterations/xy.jpg" alt="Image" />
+  <img src="images/rl_iterations/rl10xy.jpg" alt="Image" />
+  <img src="images/rl_iterations/rl20xy.jpg" alt="Image" />
+  <img src="images/rl_iterations/rl30xy.jpg" alt="Image" />
 </div>
 <div>
   <!-- Your HTML code goes here -->
-  <img src="images/rl_iterations/xz.jpg" alt="Image">
-  <img src="images/rl_iterations/rl10xz.jpg" alt="Image">
-  <img src="images/rl_iterations/rl20xz.jpg" alt="Image">
-  <img src="images/rl_iterations/rl30xz.jpg" alt="Image">
+  <img src="images/rl_iterations/xz.jpg" alt="Image" />
+  <img src="images/rl_iterations/rl10xz.jpg" alt="Image" />
+  <img src="images/rl_iterations/rl20xz.jpg" alt="Image" />
+  <img src="images/rl_iterations/rl30xz.jpg" alt="Image" />
 </div>
 
 ## Richardson Lucy with Total Variation regularization (Noisy Image)
@@ -84,14 +85,14 @@ Richardson Lucy Deconvolution can amplify noise, so regularization is used to li
 
 <div>
   <!-- Your HTML code goes here -->
-  <img src="images/rl_rltv/sphere_deconvolved_rla50_xy.jpg" alt="Image">
-  <img src="images/rl_rltv/sphere_deconvolved_rltv0.002_a50_xy.jpg" alt="Image">
+  <img src="images/rl_rltv/sphere_deconvolved_rla50_xy.jpg" alt="Image" />
+  <img src="images/rl_rltv/sphere_deconvolved_rltv0.002_a50_xy.jpg" alt="Image" />
 </div>
 
 <div>
   <!-- Your HTML code goes here -->
-  <img src="images/rl_rltv/sphere_deconvolved_rla50_xz.jpg" alt="Image">
-  <img src="images/rl_rltv/sphere_deconvolved_rltv0.002_a50_xz.jpg" alt="Image">
+  <img src="images/rl_rltv/sphere_deconvolved_rla50_xz.jpg" alt="Image" />
+  <img src="images/rl_rltv/sphere_deconvolved_rltv0.002_a50_xz.jpg" alt="Image" />
 </div>
 
 ## Edge Handling
