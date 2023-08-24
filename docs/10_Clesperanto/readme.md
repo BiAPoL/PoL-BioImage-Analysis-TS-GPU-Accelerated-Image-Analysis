@@ -1,23 +1,22 @@
 # Clesperanto
 
-This regroup a collections of introduction notebook on how to use the py-Clesperanto librairy for image processing.
+This regroup a collections of introduction notebook for the cours on the py-Clesperanto librairy for image processing.
 
-## Installation
+## Installation instruction for pyclesperanto-prototype
 
 First create a virtual environment:
     
 ```bash
-conda create -n myenv python=3.9
-conda activate myenv
+mamba create -n myenv python=3.9
+mamba activate myenv
 ```
 Note:
 - You can replace `myenv` by the name of your choice.
-- You can replace `python=3.9` by the version of python you want to use (`>= 3.8`)
-- You can replace `conda` by `mamba` if you have it installed.
+- You can replace `python=3.9` by the version of python you want to use.
 
 Then install the packages:
 ```bash 
-conda install -c conda-forge pyclesperanto-prototype
+mamba install -c conda-forge pyclesperanto-prototype
 ```
 or using pip:
 ```bash
@@ -26,8 +25,48 @@ pip install pyclesperanto-prototype
 
 ### Troubleshooting
 
-- see [pyclesperanto_prototype repository](https://github.com/clEsperanto/pyclesperanto_prototype/tree/master) readme for more information.
+#### MacOs
+```bash
+mamba install -c conda-forge ocl_icd_wrapper_apple
+```
+#### Linux
+```bash
+mamba install -c conda-forge ocl-icd-system
+```
+#### No OpenCL device compatible (no GPUs found)
+```bash
+mamba install  oclgrind -c conda-forge
+```
+OR
+```bash
+mamba install  oclgrind -c conda-forge
+```
+#### Other issues? 
+Please go have a look [here](https://github.com/clEsperanto/pyclesperanto_prototype/issues) and call for help if possible.
 
-### No Device available
 
-- see [enable OpenCL on google colab](https://github.com/clEsperanto/pyclesperanto_prototype/issues/300#issuecomment-1682266653).
+
+## Installation instruction for pyclesperanto
+
+__WARNING__: this is still under development, but we are looking for testers and people to start using it for improvement and feedbacks.
+
+First create a virtual environment:
+    
+```bash
+mamba create -n myenv
+mamba activate myenv
+```
+
+Then install the packages:
+```bash
+pip install pyclesperanto
+```
+
+Note: no mamba recipe is available yet.
+
+### Notebook update
+
+If you want to try the ongoing development version of the librairy with these notebooks, you will have to update the `import` line of the library and remove the `_prototype` to:
+```python
+import pyclesperanto as cle
+```
