@@ -438,19 +438,16 @@ document.write(`
 </section>
 <section id="what-is-the-point-spread-function-psf">
 <h2>What is the Point Spread Function (PSF) ?<a class="headerlink" href="#what-is-the-point-spread-function-psf" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
+<ul>
 <li><p>Describes response of imaging system to a point like object.</p></li>
 <li><p>PSF is the basic unit of Image Formation.</p></li>
 <li><p>A lens does not focus light as a point but rather as a difraction pattern in the lateral plane.</p></li>
 <li><p>The 3D PSF of widefield instruments are hour glass when viewed in the z plane.</p></li>
-<li><p>The 3D PSF of confocal instruments are football shaped when viewed in the z plane.</p></li>
+<li><p>The 3D PSF of confocal instruments are football shaped when viewed in the z plane.</p>
+<p><img alt="" src="../_images/PSF_xy.jpg" />
+<img alt="" src="../_images/PSF_xz.jpg" /></p>
+</li>
 </ul>
-<div>
-  <!-- Your HTML code goes here -->
-  <img src="images/PSF_xy.jpg" alt="Image" />
-  <img src="images/5_open_terminal.png" width="500" />
-  <img src="images/PSF_xz.jpg" alt="Image" />
-</div>
 </section>
 <section id="imaging-process">
 <h2>Imaging Process<a class="headerlink" href="#imaging-process" title="Permalink to this heading">#</a></h2>
@@ -462,18 +459,12 @@ document.write(`
 <li><p>Creating simulations to test deconvolution</p></li>
 <li><p>Creating simulations to train deep learning restoration systems.</p></li>
 </ol>
-<div>
-  <!-- Your HTML code goes here -->
-  <img src="images/sphere_xy.jpg" alt="Image" />
-  <img src="images/sphere_convolved_xy.jpg" alt="Image" />
-  <img src="images/sphere_convolved_noise_xy.jpg" alt="Image" />
-</div>
-<div>
-  <!-- Your HTML code goes here -->
-  <img src="images/sphere_xz.jpg" alt="Image" />
-  <img src="images/sphere_convolved_xz.jpg" alt="Image" />
-  <img src="images/sphere_convolved_noise_xz.jpg" alt="Image" />
-</div>
+<p><img alt="" src="../_images/sphere_xy.jpg" />
+<img alt="" src="../_images/sphere_convolved_xy.jpg" />
+<img alt="" src="../_images/sphere_convolved_noise_xy.jpg" /></p>
+<p><img alt="" src="../_images/sphere_xz.jpg" />
+<img alt="" src="../_images/sphere_convolved_xz.jpg" />
+<img alt="" src="../_images/sphere_convolved_noise_xz.jpg" /></p>
 </section>
 <section id="deconvolution">
 <h2>Deconvolution<a class="headerlink" href="#deconvolution" title="Permalink to this heading">#</a></h2>
@@ -498,34 +489,22 @@ document.write(`
 <section id="richardson-lucy-iterations">
 <h2>Richardson Lucy Iterations<a class="headerlink" href="#richardson-lucy-iterations" title="Permalink to this heading">#</a></h2>
 <p>The images below show left to right the blurred sphere and the result of 10, 20 and 30 accelerated Richardson Lucy iterations.</p>
-<div>
-  <!-- Your HTML code goes here -->
-  <img src="images/rl_iterations/xy.jpg" alt="Image" />
-  <img src="images/rl_iterations/rl10xy.jpg" alt="Image" />
-  <img src="images/rl_iterations/rl20xy.jpg" alt="Image" />
-  <img src="images/rl_iterations/rl30xy.jpg" alt="Image" />
-</div>
-<div>
-  <!-- Your HTML code goes here -->
-  <img src="images/rl_iterations/xz.jpg" alt="Image" />
-  <img src="images/rl_iterations/rl10xz.jpg" alt="Image" />
-  <img src="images/rl_iterations/rl20xz.jpg" alt="Image" />
-  <img src="images/rl_iterations/rl30xz.jpg" alt="Image" />
-</div>
+<p><img alt="" src="../_images/xy.jpg" />
+<img alt="" src="../_images/rl10xy.jpg" />
+<img alt="" src="../_images/rl20xy.jpg" />
+<img alt="" src="../_images/rl30xy.jpg" /></p>
+<p><img alt="" src="../_images/xz.jpg" />
+<img alt="" src="../_images/rl10xz.jpg" />
+<img alt="" src="../_images/rl20xz.jpg" />
+<img alt="" src="../_images/rl30xz.jpg" /></p>
 </section>
 <section id="richardson-lucy-with-total-variation-regularization-noisy-image">
 <h2>Richardson Lucy with Total Variation regularization (Noisy Image)<a class="headerlink" href="#richardson-lucy-with-total-variation-regularization-noisy-image" title="Permalink to this heading">#</a></h2>
 <p>Richardson Lucy Deconvolution can amplify noise, so regularization is used to limit noise.  Once approch is the Richardson Lucy with Total Variation algorithm (Dey etc. al. 2006).  The image on the left was deconvolved with 50 iterations of accelerated Richardson Lucy Deconvolution, the Image on the right with 50 iterations of accelerated Richardson Lucy with Total Variation regularization (regularization factor = 0.002).</p>
-<div>
-  <!-- Your HTML code goes here -->
-  <img src="images/rl_rltv/sphere_deconvolved_rla50_xy.jpg" alt="Image" />
-  <img src="images/rl_rltv/sphere_deconvolved_rltv0.002_a50_xy.jpg" alt="Image" />
-</div>
-<div>
-  <!-- Your HTML code goes here -->
-  <img src="images/rl_rltv/sphere_deconvolved_rla50_xz.jpg" alt="Image" />
-  <img src="images/rl_rltv/sphere_deconvolved_rltv0.002_a50_xz.jpg" alt="Image" />
-</div>
+<p><img alt="" src="../_images/sphere_deconvolved_rla50_xy.jpg" />
+<img alt="" src="../_images/sphere_deconvolved_rltv0.002_a50_xy.jpg" /></p>
+<p><img alt="" src="../_images/sphere_deconvolved_rla50_xz.jpg" />
+<img alt="" src="../_images/sphere_deconvolved_rltv0.002_a50_xz.jpg" /></p>
 </section>
 <section id="edge-handling">
 <h2>Edge Handling<a class="headerlink" href="#edge-handling" title="Permalink to this heading">#</a></h2>
