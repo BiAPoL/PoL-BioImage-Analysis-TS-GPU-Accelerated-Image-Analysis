@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Executing clesperanto on the TU Dresden HPC &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>List and select devices &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -61,11 +61,9 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '50_Clesperanto_on_HPC/login_taurus';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '10_Clesperanto/10_select_devices';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Loading ‘blobs’" href="modified_generated_notebook.html" />
-    <link rel="prev" title="Using Clesperanto on Taurus" href="readme.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -156,9 +154,9 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../00_course_preparation/Readme.html">Course preparation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../10_Clesperanto/readme.html">Clesperanto</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+<li class="toctree-l1 has-children"><a class="reference internal" href="readme.html">Clesperanto</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../30_Deconvolution/0_intro_to_decon.html">Intro to Deconvolution and Restoration</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -206,9 +204,9 @@ const thebe_selector_output = ".output, .cell_output"
 
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="readme.html">Using Clesperanto on Taurus</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Executing clesperanto on the TU Dresden HPC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modified_generated_notebook.html">Loading ‘blobs’</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50_Clesperanto_on_HPC/readme.html">Using Clesperanto on Taurus</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/login_taurus.html">Executing clesperanto on the TU Dresden HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/modified_generated_notebook.html">Loading ‘blobs’</a></li>
 
 
 
@@ -285,7 +283,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues/new?title=Issue%20on%20page%20%2F50_Clesperanto_on_HPC/login_taurus.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues/new?title=Issue%20on%20page%20%2F10_Clesperanto/10_select_devices.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -315,7 +313,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/50_Clesperanto_on_HPC/login_taurus.md" target="_blank"
+      <li><a href="../_sources/10_Clesperanto/10_select_devices.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -325,7 +323,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -384,7 +382,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -395,11 +395,20 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Executing clesperanto on the TU Dresden HPC</h1>
+    <h1>List and select devices</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercice-1-list-devices-and-select-a-device">Exercice 1: List devices and select a device</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercice-2-which-device-to-choose">Exercice 2: Which device to choose?</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -409,38 +418,70 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="executing-clesperanto-on-the-tu-dresden-hpc">
-<h1>Executing clesperanto on the TU Dresden HPC<a class="headerlink" href="#executing-clesperanto-on-the-tu-dresden-hpc" title="Permalink to this heading">#</a></h1>
-<p>To execute Python Jupyter notebooks on TU Dresden’s HPC cluster, navigate to this URL:
-<a class="reference external" href="https://taurus.hrsk.tu-dresden.de/jupyter/hub/home">https://taurus.hrsk.tu-dresden.de/jupyter/hub/home</a></p>
-<p>Note: If you’re outside the university network, you need to connect via <a class="reference external" href="https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn">VPN</a>.</p>
-<p>After loggin in, a Jupyter Hub login screen will open. Click on <code class="docutils literal notranslate"><span class="pre">Start</span> <span class="pre">My</span> <span class="pre">Server</span></code>.</p>
-<p><img alt="img.png" src="../_images/taurus_login.png" /></p>
-<p>Select the entries as shown below in the <code class="docutils literal notranslate"><span class="pre">Advanced</span></code> tab and click on <code class="docutils literal notranslate"><span class="pre">Spawn</span></code>.</p>
-<p><img alt="img_1.png" src="../_images/taurus_login_1.png" /></p>
-<p>This will take a moment.</p>
-<p><img alt="img_2.png" src="../_images/taurus_login_2.png" /></p>
-<p>You will be redirected to a Jupyter Lab environment.</p>
-<p>Now you need to activate the install a singularity container on the HPC cluster as explained <a class="reference external" href="https://gitlab.mn.tu-dresden.de/bia-pol/singularity-devbio-napari#quick-start">in detail here</a>. In short:</p>
-<p>Open a terminal by clicking on <code class="docutils literal notranslate"><span class="pre">File</span></code> (1 in the image below) -&gt; <code class="docutils literal notranslate"><span class="pre">New</span></code> (2) -&gt; <code class="docutils literal notranslate"><span class="pre">Terminal</span></code> (3)</p>
-<img src="images/5_open_terminal.png" width="500" />
-<p>Install a custom jupyter kernel for your user</p>
-<p>To install a devbio-napari python environment, execute the following code in the terminal:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.mn.tu-dresden.de/bia-pol/singularity-devbio-napari.git
-<span class="nb">cd</span><span class="w"> </span>singularity-devbio-napari
-./install.sh<span class="w"> </span>v0.2.9
+  <section class="tex2jax_ignore mathjax_ignore" id="list-and-select-devices">
+<h1>List and select devices<a class="headerlink" href="#list-and-select-devices" title="Permalink to this heading">#</a></h1>
+<p>pyclesperanto relies on sending computing instructions to compute devices. Here, devices are Computational Units (CUs) compatible with <code class="docutils literal notranslate"><span class="pre">OpenCL</span></code>. This can be GPUs and CPUs although we would prefer to use GPUs for their speed capacities.</p>
+<p>Before starting to use pyclesperanto, it is important to know which devices are available on your system and which one you want to use based on their performances.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyclesperanto_prototype</span> <span class="k">as</span> <span class="nn">cle</span>
 </pre></div>
 </div>
-<p>Wait 2-15 min until the image is downloaded and verified (the time depends on how much network and disk load is on the cluster). The output should look something like this:</p>
-<img src="images/6_terminal_output.png" width="600" />
-<p>Now reload the browser tab.</p>
-<p>Use the upload button to upload your assistant-generated notebook. You can also use this <a class="reference internal" href="napari_assistant_generated_notebook.html"><span class="doc std std-doc">example notebook</span></a>.</p>
-<p><img alt="img_4.png" src="../_images/taurus_login_4.png" /></p>
-<p>Double-click the uploaded notebook to open it. Select a kernel, e.g. the devbio-napari kernel.</p>
-<p><img alt="img_6.png" src="../_images/taurus_login_6.png" /></p>
-<p>In this notebook, you need to change how files are opened.</p>
-<p><img alt="img_5.png" src="../_images/taurus_login_7.png" /></p>
-<p>You find a potential modification on the following page.</p>
+</div>
+</div>
+<section id="exercice-1-list-devices-and-select-a-device">
+<h2>Exercice 1: List devices and select a device<a class="headerlink" href="#exercice-1-list-devices-and-select-a-device" title="Permalink to this heading">#</a></h2>
+<p>Using the method <code class="docutils literal notranslate"><span class="pre">available_device_names()</span></code> and <code class="docutils literal notranslate"><span class="pre">select_device()</span></code> from the <code class="docutils literal notranslate"><span class="pre">pyclesperanto_prototype</span></code> package, list the available devices on your machine and select one.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2 devices found:
+[&#39;pthread-Intel(R) Core(TM) i7-7820X CPU @ 3.60GHz&#39;, &#39;NVIDIA GeForce RTX 2080 SUPER&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pthread-Intel(R) Core(TM) i7-7820X CPU @ 3.60GHz on Platform: Portable Computing Language (2 refs)&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Tips:</strong> Devices are defined by a <code class="docutils literal notranslate"><span class="pre">name</span></code> and a <code class="docutils literal notranslate"><span class="pre">dev_type</span></code> (gpu, cpu, all). You can use the <code class="docutils literal notranslate"><span class="pre">select_device</span></code> arguments to precisely select the device you want to use. This can be useful if you have multiple devices of the same type but not the same type (Hello Macbook Pro with M1 and M2 chips !).</p>
+</section>
+<section id="exercice-2-which-device-to-choose">
+<h2>Exercice 2: Which device to choose?<a class="headerlink" href="#exercice-2-which-device-to-choose" title="Permalink to this heading">#</a></h2>
+<p>For the lucky of you who have access to multiple devices, you might wonder which one to choose. Here are some hints:</p>
+<ul class="simple">
+<li><p>Prefer GPU over CPU for speed</p></li>
+<li><p>Prefer GPU with more memory over GPU with less memory (<em><code class="docutils literal notranslate"><span class="pre">GLOBAL_MEM_SIZE</span></code></em>, <em><code class="docutils literal notranslate"><span class="pre">MAX_MEM_ALLOC_SIZE</span></code></em>)</p></li>
+<li><p>Prefer GPU with more or faster compute units (<em><code class="docutils literal notranslate"><span class="pre">MAX_COMPUTE_UNITS</span></code></em>, <em><code class="docutils literal notranslate"><span class="pre">MAX_CLOCK_FREQUENCY</span></code></em>)</p></li>
+</ul>
+<p>Those information can be retrieve using the <code class="docutils literal notranslate"><span class="pre">cl_info</span></code> method to print the <strong>full</strong> information of all the devices available.</p>
+<p>Print them and tell us which one, in your opinion, is the most adapted.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Tips:</strong> you may want to save this into a text file</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;cl_info.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="o">...</span> <span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -456,7 +497,7 @@ document.write(`
         },
         kernelOptions: {
             name: "python3",
-            path: "./50_Clesperanto_on_HPC"
+            path: "./10_Clesperanto"
         },
         predefinedOutput: true
     }
@@ -474,24 +515,6 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="readme.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Using Clesperanto on Taurus</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="modified_generated_notebook.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Loading ‘blobs’</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div></div>
   
 </div>
@@ -501,6 +524,21 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercice-1-list-devices-and-select-a-device">Exercice 1: List devices and select a device</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercice-2-which-device-to-choose">Exercice 2: Which device to choose?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

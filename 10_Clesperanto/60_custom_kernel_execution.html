@@ -1,0 +1,727 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Custom kernel execution &#8212; Image data science with Python and Napari @EPFL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '10_Clesperanto/60_custom_kernel_execution';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/biapol_logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/biapol_logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_course_preparation/Readme.html">Course preparation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="readme.html">Clesperanto</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../30_Deconvolution/0_intro_to_decon.html">Intro to Deconvolution and Restoration</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/1_test_libs.html">Setup environment</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/2_cupy_forward.html">Implementing the forward model (Convolution) with cupy</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/3_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/4_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/5_edges.html">Edge handling</a></li>
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/6_decon_bead_edge_handling.html">Edge handling experiments</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/7_decon_regularization.html">Deconvolve microtubules phantom</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/8_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/9_Dask_Deconvolution.html">Dask deconvolution</a></li>
+
+
+
+
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50_Clesperanto_on_HPC/readme.html">Using Clesperanto on Taurus</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/login_taurus.html">Executing clesperanto on the TU Dresden HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/modified_generated_notebook.html">Loading ‘blobs’</a></li>
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues/new?title=Issue%20on%20page%20%2F10_Clesperanto/60_custom_kernel_execution.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/10_Clesperanto/60_custom_kernel_execution.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Custom kernel execution</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="custom-kernel-execution">
+<h1>Custom kernel execution<a class="headerlink" href="#custom-kernel-execution" title="Permalink to this heading">#</a></h1>
+<p>The library clesperanto contains a function <code class="docutils literal notranslate"><span class="pre">execute</span></code> which is the method that is used to execute a kernel code on the GPU. If we look at its signature, it takes the following inputs:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">anchor</span></code>: a reference starting path</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">opencl_kernel_filename</span></code>: an OpenCL kernel file which will be loaded</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kernel_name</span></code>: the name of the kernel function to be executed inside the kernel file (usually the same as the filename)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">global_size</span></code>: the working space of the kernel, usually the size of the image to be processed BUT not always</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parameters</span></code>: a <code class="docutils literal notranslate"><span class="pre">dict</span></code> of parameters as <code class="docutils literal notranslate"><span class="pre">{key,</span> <span class="pre">variable}</span></code> to be passed to the kernel function</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyclesperanto_prototype</span> <span class="k">as</span> <span class="nn">cle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">cle</span><span class="o">.</span><span class="n">select_device</span><span class="p">(</span><span class="s1">&#39;TX&#39;</span><span class="p">)</span>  <span class="c1"># TODO: change to your GPU</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;NVIDIA GeForce RTX 2080 SUPER on Platform: NVIDIA CUDA (1 refs)&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cle.execute<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Red">Signature:</span>
+cle<span class=" -Color -Color-Blue">.</span>execute<span class=" -Color -Color-Blue">(</span>
+    anchor<span class=" -Color -Color-Blue">,</span>
+    opencl_kernel_filename<span class=" -Color -Color-Blue">:</span> str<span class=" -Color -Color-Blue">,</span>
+    kernel_name<span class=" -Color -Color-Blue">:</span> str<span class=" -Color -Color-Blue">,</span>
+    global_size<span class=" -Color -Color-Blue">,</span>
+    parameters<span class=" -Color -Color-Blue">,</span>
+    prog<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    constants<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    image_size_independent_kernel_compilation<span class=" -Color -Color-Blue">:</span> bool <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    device<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+<span class=" -Color -Color-Blue">)</span>
+<span class=" -Color -Color-Red">Docstring:</span>
+Call opencl kernels (.cl files)
+
+Parameters
+----------
+anchor: str
+        Enter __file__ when calling this method and the corresponding open.cl
+        file lies in the same folder as the python file calling it.
+opencl_kernel_filename: str
+    Filename of the open.cl file to be called
+kernel_name: str
+    kernel method inside the open.cl file to be called
+    most clij/clesperanto kernel functions have the same name as the file they are in
+global_size: list(int)
+    global_size according to OpenCL definition (usually shape of the destination image).
+parameters: dict(str, any), optional
+    dictionary containing parameters. Take care: They must be of the
+    right type and in the right order as specified in the open.cl file.
+constants: dict(str, any), optional
+    dictionary with names/values which will be added to the define
+    statements. They are necessary, e.g. to create arrays of a given
+    maximum size in OpenCL as variable array lengths are not supported.
+image_size_independent_kernel_compilation: bool, optional
+    if set to true, the kernel can handle images of different size and
+    is a bit slower. If set to false, it can handle only images of a
+    specific size and is a bit faster
+
+See Also
+--------
+https://github.com/clij/clij-clearcl/blob/master/src/main/java/net/haesleinhuepf/clij/clearcl/util/CLKernelExecutor.java
+<span class=" -Color -Color-Red">File:</span>      ~/Libraries/miniconda3/envs/proto/lib/python3.11/site-packages/pyclesperanto_prototype/_tier0/_execute.py
+<span class=" -Color -Color-Red">Type:</span>      function
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we get the maximum_z_projection.cl file from the repository, we can execute it using the following code.</p>
+<p>First, as always, we need some input data:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">z</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">x</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">512</span>
+<span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="n">z</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>From there, we will need first to push the data to the GPU, create an output data object, defined the function parameters, and finally execute the kernel.</p>
+<p>Before we run this cell, let’s look at the kernel code itself to understand what it does, and why we need to define these parameters as we do.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// maximum_z_projection.cl</span>
+
+<span class="c1">// the sample define the GPU behaviour when accessing pixels outside of the image</span>
+<span class="n">__constant</span><span class="w"> </span><span class="n">sampler_t</span><span class="w"> </span><span class="n">sampler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CLK_NORMALIZED_COORDS_FALSE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CLK_ADDRESS_CLAMP_TO_EDGE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CLK_FILTER_NEAREST</span><span class="p">;</span>
+
+<span class="c1">// the kernel function itself, with the parameters. The order of the parameters is important.</span>
+<span class="n">__kernel</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">maximum_z_projection</span><span class="p">(</span>
+<span class="w">    </span><span class="n">IMAGE_src_TYPE</span><span class="w">  </span><span class="n">src</span><span class="p">,</span><span class="w">            </span><span class="c1">// the input image, named &#39;src&#39; </span>
+<span class="w">    </span><span class="n">IMAGE_dst_TYPE</span><span class="w">  </span><span class="n">dst</span><span class="w">             </span><span class="c1">// the output image, named &#39;dst&#39;</span>
+<span class="p">)</span><span class="w"> </span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_global_id</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// the x coordinate of the current pixel, provided by the GPU thread</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_global_id</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w">  </span><span class="c1">// the y coordinate of the current pixel, provided by the GPU thread</span>
+
+<span class="w">  </span><span class="n">IMAGE_src_PIXEL_TYPE</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">GET_IMAGE_DEPTH</span><span class="p">(</span><span class="n">src</span><span class="p">);</span><span class="w"> </span><span class="o">++</span><span class="n">z</span><span class="p">)</span><span class="w">  </span><span class="c1">// loop over all z-axis range of the image</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// read the pixel value at the current position (x,y,z) from the input image &#39;src&#39;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">IMAGE_src_PIXEL_TYPE</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">READ_IMAGE</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="n">sampler</span><span class="p">,</span><span class="w"> </span><span class="n">POS_src_INSTANCE</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="mi">0</span><span class="p">)).</span><span class="n">x</span><span class="p">;</span><span class="w">  </span>
+
+<span class="w">    </span><span class="c1">// conditional statement to find the maximum value</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span>
+<span class="w">      </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// write the pixel value at the current position (x,y,z) of the output image &#39;dst&#39;</span>
+<span class="w">  </span><span class="n">WRITE_IMAGE</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="n">POS_dst_INSTANCE</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">CONVERT_dst_PIXEL_TYPE</span><span class="p">(</span><span class="n">max</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare the input and output memory</span>
+<span class="n">input_arg</span> <span class="o">=</span> <span class="n">cle</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+<span class="n">output_arg</span> <span class="o">=</span> <span class="n">cle</span><span class="o">.</span><span class="n">create_like</span><span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">))</span> <span class="c1"># the z dimension is 1 because we will project into 2D along the z axis</span>
+
+<span class="c1"># build the dictionary of parameters of the kernel</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="n">input_arg</span><span class="p">,</span> <span class="s1">&#39;dst&#39;</span><span class="p">:</span> <span class="n">output_arg</span><span class="p">}</span> <span class="c1"># the key (e.g. &#39;src&#39;, &#39;dst&#39;) is the name of the variable in the kernel code</span>
+                                                   <span class="c1"># the order of the parameters is the same as in the kernel code</span>
+
+<span class="c1"># define the path and name of the kernel file to run</span>
+<span class="n">opencl_kernel_filename</span> <span class="o">=</span> <span class="s1">&#39;maximum_z_projection.cl&#39;</span> <span class="c1"># the name of the file</span>
+<span class="n">kernel_name</span> <span class="o">=</span> <span class="s1">&#39;maximum_z_projection&#39;</span>               <span class="c1"># the name of the kernel function in the kernel file</span>
+
+<span class="c1"># define the working range of GPU</span>
+<span class="n">working_range</span> <span class="o">=</span> <span class="n">output_arg</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The working range is the most abstract parameter to understand. One way to see it is, if we could associate 1 pixel with 1 thread, the working range would be the number of threads we would need to execute the process. Here, we are projecting along the z-axis, hence in an ideal world, we would have 1 thread per pixel (x,y). We do not need to cover the z dimension. The working range is then the number of pixels in the x and y dimensions which here is the same as the output image shape.</p>
+<p>Let’s run the <code class="docutils literal notranslate"><span class="pre">execute</span></code> method now</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cle</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;__file__&quot;</span><span class="p">,</span><span class="n">opencl_kernel_filename</span><span class="p">,</span> <span class="n">kernel_name</span><span class="p">,</span> <span class="n">working_range</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4 warnings generated.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyclesperanto_prototype._tier0._program.OCLProgram at 0x7f8fcd872450&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that we do not return an output. Here the GPU reads the input <code class="docutils literal notranslate"><span class="pre">src</span></code> and saves the results in the <code class="docutils literal notranslate"><span class="pre">dst</span></code> data, which correspond to our <code class="docutils literal notranslate"><span class="pre">output_arg</span></code> variable.</p>
+<p>All we have to do to read it now is to <code class="docutils literal notranslate"><span class="pre">pull</span></code> it back to the CPU:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">projected</span> <span class="o">=</span> <span class="n">cle</span><span class="o">.</span><span class="n">pull</span><span class="p">(</span><span class="n">output_arg</span><span class="p">)</span>
+<span class="n">projected</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(512, 512)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Last step, let’s check that what we did is actually correct, by comparing it to the same process but on the CPU.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cpu_projected</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cpu_projected</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">projected</span><span class="p">,</span> <span class="n">cpu_projected</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s compare to the actual implementation of the <code class="docutils literal notranslate"><span class="pre">maximum_z_projection</span></code> kernel in the library:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.._tier0</span> <span class="kn">import</span> <span class="n">execute</span>
+<span class="kn">from</span> <span class="nn">.._tier0</span> <span class="kn">import</span> <span class="n">create_2d_yx</span>
+<span class="kn">from</span> <span class="nn">.._tier0</span> <span class="kn">import</span> <span class="n">plugin_function</span>
+<span class="kn">from</span> <span class="nn">.._tier0</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="nd">@plugin_function</span><span class="p">(</span><span class="n">output_creator</span><span class="o">=</span><span class="n">create_2d_yx</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;projection&#39;</span><span class="p">,</span> <span class="s1">&#39;in assistant&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">maximum_z_projection</span><span class="p">(</span><span class="n">source</span> <span class="p">:</span><span class="n">Image</span><span class="p">,</span> <span class="n">destination_max</span> <span class="p">:</span><span class="n">Image</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines the maximum intensity projection of an image along Z. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    source : Image</span>
+<span class="sd">    destination_max : Image, optional</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    destination_max</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import pyclesperanto_prototype as cle</span>
+<span class="sd">    &gt;&gt;&gt; cle.maximum_z_projection(source, destination_max)</span>
+<span class="sd">    </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] https://clij.github.io/clij2-docs/reference_maximumZProjection</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;dst_max&quot;</span><span class="p">:</span><span class="n">destination_max</span><span class="p">,</span>
+        <span class="s2">&quot;src&quot;</span><span class="p">:</span><span class="n">source</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">execute</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="s1">&#39;../clij-opencl-kernels/kernels/maximum_z_projection_x.cl&#39;</span><span class="p">,</span> <span class="s1">&#39;maximum_z_projection&#39;</span><span class="p">,</span> <span class="n">destination_max</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">destination_max</span>
+</pre></div>
+</div>
+<p>To know a bit more about the <a class="reference external" href="https://github.com/clEsperanto/clij-opencl-kernels/tree/clesperanto_kernels#why-a-custom-opencl-dialect">CLIJ’s custom OpenCL</a>, as well as look at the existing list of Kernel Operations, please refer to the <a class="reference external" href="https://github.com/clEsperanto/clij-opencl-kernels/tree/clesperanto_kernels">clEsperanto’s Kernel Repository</a></p>
+<p>You are welcome to contribute with your own kernels, and we will be happy to help you with that!</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./10_Clesperanto"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Stephane Rigaud, Brian Northan, Till Korten, Neringa Jurenaite, Peter Steinbach, Sebastian Starke, Johannes Soltwedel and Marvin Albert, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: This work can be reused under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> license unless mentioned otherwise.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
