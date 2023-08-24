@@ -7,7 +7,9 @@ root: intro
 options: # The options key will be applied to all chapters, but not sub-sections
   numbered: False
 
-chapters:
+parts:
+- caption: Monday
+  chapters:
   - file: 00_course_preparation/Readme.md
 
   - file: 10_Clesperanto/readme
@@ -41,6 +43,9 @@ chapters:
     - file: 30_Deconvolution/cluster_access.md
 
   - file: 30_Deconvolution/readme
+
+- caption: Tuesday
+  chapters:
   # - file: 40_HPC_Intro/readme
   - file: 50_Clesperanto_on_HPC/readme
     sections:
@@ -49,6 +54,8 @@ chapters:
 
   #- file: 60_Pytorch/readme
 
+- caption: Wednesday
+  chapters:
   - file: 70_AI_Segmentation_Denoising/readme
     sections:
     - file: 70_AI_Segmentation_Denoising/01_2D_unet_training
