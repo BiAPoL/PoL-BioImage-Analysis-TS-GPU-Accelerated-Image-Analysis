@@ -411,6 +411,13 @@ document.write(`
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">create</span> <span class="o">--</span><span class="n">name</span> <span class="n">cupy39</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span> <span class="n">devbio</span><span class="o">-</span><span class="n">napari</span> <span class="n">pyqt</span> <span class="n">cupy</span> <span class="n">cudatoolkit</span> <span class="n">napari</span><span class="o">-</span><span class="n">cupy</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">processing</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
 </pre></div>
 </div>
+<p>Afterwards, we can activate the environment and start jupyter lab:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>cupy39
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter<span class="w"> </span>lab
+</pre></div>
+</div>
 <p>In case your computer does not have an NVidia graphics card, you can follow the exercises on <a class="reference external" href="https://colab.research.google.com/?utm_source=scs-index">Google colab</a>, where cupy is commonly installed. Make sure to select a GPU-runtime from the menu <code class="docutils literal notranslate"><span class="pre">Runtime</span> <span class="pre">&gt;</span> <span class="pre">Change</span> <span class="pre">runtime</span> <span class="pre">type</span></code> (<a class="reference external" href="https://biapol.github.io/blog/robert_haase/cupy_cucim/readme.html">read more</a>)</p>
 <p><img alt="" src="../_images/colab_runtime.png" /></p>
 </section>
