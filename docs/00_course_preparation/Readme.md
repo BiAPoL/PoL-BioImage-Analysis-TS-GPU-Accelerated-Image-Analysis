@@ -1,5 +1,5 @@
 # Course preparation
-Before attending the course, please install mambaforge on your computer as explained in this [blog post]([https://biapol.github.io/blog/johannes_mueller/anaconda_getting_started/](https://biapol.github.io/blog/mara_lampert/getting_started_with_mambaforge_and_python/readme.html)). 
+Before attending the course, please install mambaforge on your computer as explained in this [blog post](https://biapol.github.io/blog/mara_lampert/getting_started_with_mambaforge_and_python/readme.html). 
 
 If you already have some conda or anaconda installation on your computer, ***please install mambaforge*** anyway as explained in the blog post linked above. 
 
