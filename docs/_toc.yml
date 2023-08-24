@@ -10,6 +10,10 @@ options: # The options key will be applied to all chapters, but not sub-sections
 chapters:
   - file: 00_course_preparation/Readme.md
   #- file: 10_Clesperanto/readme
+  - file: 23_clesperanto_assistant/intro
+    sections:
+    - file: 23_clesperanto_assistant/napari-assistant
+    - file: 23_clesperanto_assistant/notebook_export
   #- file: 20_Cupy/readme
   - file: 30_Deconvolution/0_intro_to_decon
     sections:
