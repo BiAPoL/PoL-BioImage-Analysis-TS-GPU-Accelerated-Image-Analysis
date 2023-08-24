@@ -19,3 +19,10 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+  extra_footer: |
+    <p>
+    Copyright: This work can be reused under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> license unless mentioned otherwise.
+    </p>
+sphinx:
+  config:
+    html_show_copyright: false
