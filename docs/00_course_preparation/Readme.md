@@ -37,8 +37,8 @@ Please use the credentials that have been provided to you, esp. the concrete log
 
 ### ssh connection (Linux, MacOS)
 Linux and MacOS users: Please check whether you can access the ZIH HPC system. Make sure you have established a VPN connection!
-1) Open a console and type the follwing (change XXX to the login name)
-ssh XXX@taurus.hrsk.tu-dresden.de
+1) Open a console and type in the following (change scadsXXX to your username)
+ssh scadsXXX@taurus.hrsk.tu-dresden.de
 
 ### ssh connection (Windows)
 Windows users need an ssh client for connecting to the ZIH HPC system.
