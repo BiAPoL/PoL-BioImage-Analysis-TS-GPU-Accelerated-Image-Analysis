@@ -23,10 +23,12 @@ All Jupyter Notebooks are executable so that attendees can reproduce all demos a
 Assuming you downloaded the repository to your Desktop, you can open the Jupyter book by opening a terminal and typing:
 
 ```bash
-cd Desktop/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis
-
+cd Desktop/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis
+```
+```bash
 conda activate devbio-napari-env
-
+```
+```bash
 jupyter lab
 ```
 
@@ -38,7 +40,7 @@ Using Jupyter lab, you can navigate to the course lessons in the `docs` folder.
 
 ## Feedback and support
 
-If you have any questions, please use the anonymous etherpad (see email) or create a [github issue](https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues).
+If you have any questions create a [github issue](https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues).
 Alternatively, open a thread on [image.sc](https://image.sc), put a link to the lesson or exercise you want to ask a question about and tag @haesleinhuepf.
 
 ## Acknowledgements
