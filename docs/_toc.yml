@@ -38,6 +38,7 @@ chapters:
     - file: 30_Deconvolution/7_decon_regularization
     - file: 30_Deconvolution/8_extract_psf
     - file: 30_Deconvolution/9_Dask_Deconvolution
+    - file: 30_Deconvolution/cluster_access.md
 
   - file: 30_Deconvolution/readme
   # - file: 40_HPC_Intro/readme
