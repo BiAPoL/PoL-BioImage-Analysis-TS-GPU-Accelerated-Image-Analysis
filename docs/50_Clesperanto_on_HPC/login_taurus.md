@@ -19,6 +19,28 @@ This will take a moment.
 
 You will be redirected to a Jupyter Lab environment. 
 
+Now you need to activate the install a singularity container on the HPC cluster as explained [in detail here](https://gitlab.mn.tu-dresden.de/bia-pol/singularity-devbio-napari#quick-start). In short:
+
+Open a terminal by clicking on `File` (1 in the image below) -> `New` (2) -> `Terminal` (3)
+
+<img src="images/5_open_terminal.png" width="500" />
+
+Install a custom jupyter kernel for your user
+
+To install a devbio-napari python environment, execute the following code in the terminal:
+
+```bash
+git clone https://gitlab.mn.tu-dresden.de/bia-pol/singularity-devbio-napari.git
+cd singularity-devbio-napari
+./install.sh v0.2.9
+```
+
+Wait 2-15 min until the image is downloaded and verified (the time depends on how much network and disk load is on the cluster). The output should look something like this:
+
+<img src="images/6_terminal_output.png" width="600" />
+
+Now reload the browser tab.
+
 Use the upload button to upload your assistant-generated notebook. You can also use this [example notebook](napari_assistant_generated_notebook.ipynb).
 
 ![img_4.png](images/taurus_login_4.png)
