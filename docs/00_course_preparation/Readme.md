@@ -20,6 +20,13 @@ After Napari opens, click the menu `File > Open Samples > clEsperanto > blobs (f
 
 ![img.png](img.png)
 
+## NVidia graphics cards
+
+If you have access to an NVidia graphics card, please also set up this conda environment:
+
+```
+mamba create --name cupy39 python=3.9 devbio-napari pyqt cupy cudatoolkit napari-cupy-image-processing -c conda-forge
+```
 
 ## Access to the ZIH HPC System
 
