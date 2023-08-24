@@ -18,6 +18,11 @@ naparia
 
 After Napari opens, click the menu `File > Open Samples > clEsperanto > blobs (from ImageJ)`. In the Panel on the right click on the `Label` button. If Napari then looks like this, you are ready to go:
 
+
+## Access to the ZIH HPC System
+
+Please follow the instructions outlined in the HPC_training_prep.pdf file to set up your access to the ZIH HPC System in advance of the training. 
+
 ![img.png](img.png)
 
 ## Troubleshooting: DLL load failed
