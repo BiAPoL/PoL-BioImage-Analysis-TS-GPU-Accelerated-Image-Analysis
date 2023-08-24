@@ -5,11 +5,11 @@ It specifically aims for students and scientists working with microscopy images 
 
 Here, we cover the *GPU-Accelerated Image Analysis* Track of the [PoL Bio-Image Analysis Symposium](https://biopol-training.eventmember.de/)
 
-* clesperanto
-* cupy
-* dask
+* [clesperanto](https://clesperanto.github.io/)
+* [cupy](https://cupy.dev/)
+* [dask](https://www.dask.org/)
 * Deconvolution
-* Pytorch
+* [Pytorch](https://pytorch.org/)
 * AI-based Denoising
 * AI-based Segmentation
 
