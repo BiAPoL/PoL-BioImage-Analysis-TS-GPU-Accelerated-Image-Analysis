@@ -1,0 +1,1064 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Processing batches of data &#8212; Image data science with Python and Napari @EPFL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '60_Pytorch/03_data_batching_and_setup_model';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/biapol_logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/biapol_logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Monday</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_course_preparation/Readme.html">Course preparation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../10_Clesperanto/readme.html">Clesperanto</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../23_clesperanto_assistant/intro.html">Using clesperanto from the Napari Assistant</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../23_clesperanto_assistant/napari-assistant.html">The Napari Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../23_clesperanto_assistant/notebook_export.html">Generating Jupyter Notebooks from the Napari Assistant</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../30_Deconvolution/0_intro_to_decon.html">Intro to Deconvolution and Restoration</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/1_test_libs.html">Setup environment</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/2_cupy_forward.html">Implementing the forward model (Convolution) with cupy</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/3_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/4_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/5_edges.html">Edge handling</a></li>
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/6_decon_bead_edge_handling.html">Edge handling experiments</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/7_decon_regularization.html">Deconvolve microtubules phantom</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/8_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/9_Dask_Deconvolution.html">Dask deconvolution</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/cluster_access.html">Running deconvolution on the ZIH cluster</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tuesday</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50_Clesperanto_on_HPC/readme.html">Using Clesperanto on Taurus</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/login_taurus.html">Executing clesperanto on the TU Dresden HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/modified_generated_notebook.html">Loading ‘blobs’</a></li>
+
+
+
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Introduction to Pytorch</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues/new?title=Issue%20on%20page%20%2F60_Pytorch/03_data_batching_and_setup_model.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/60_Pytorch/03_data_batching_and_setup_model.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Processing batches of data</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Processing batches of data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-network-architecture">Neural network architecture</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="processing-batches-of-data">
+<h1>Processing batches of data<a class="headerlink" href="#processing-batches-of-data" title="Permalink to this heading">#</a></h1>
+<p>As most deep learning workflows benefit greatly from running on machines with GPUs that can process data in parallel, during model training the data is passed in batches of samples to the network instead of processing each sample sequentially. Torch offers great support for this which builds on top of a provided dataset.
+For convenience, the dataset class introduced in the previous notebook is part of the data module and we can now easily import it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span> <span class="nn">data</span> <span class="kn">import</span> <span class="n">DSBData</span><span class="p">,</span> <span class="n">get_dsb2018_train_files</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_img_files</span><span class="p">,</span> <span class="n">train_lbl_files</span> <span class="o">=</span> <span class="n">get_dsb2018_train_files</span><span class="p">()</span>
+
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">DSBData</span><span class="p">(</span>
+    <span class="n">image_files</span><span class="o">=</span><span class="n">train_img_files</span><span class="p">,</span>
+    <span class="n">label_files</span><span class="o">=</span><span class="n">train_lbl_files</span><span class="p">,</span>
+    <span class="n">target_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_data</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████████████████████████████████| 382/382 [00:15&lt;00:00, 25.37it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>232
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_images</span><span class="p">,</span> <span class="n">batch_labels</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch&quot;</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">batch_images</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">batch_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1">#break</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch 0 torch.Size([32, 1, 256, 256]) torch.Size([32, 1, 256, 256])
+Batch 1 torch.Size([32, 1, 256, 256]) torch.Size([32, 1, 256, 256])
+Batch 2 torch.Size([32, 1, 256, 256]) torch.Size([32, 1, 256, 256])
+Batch 3 torch.Size([32, 1, 256, 256]) torch.Size([32, 1, 256, 256])
+Batch 4 torch.Size([32, 1, 256, 256]) torch.Size([32, 1, 256, 256])
+Batch 5 torch.Size([32, 1, 256, 256]) torch.Size([32, 1, 256, 256])
+Batch 6 torch.Size([32, 1, 256, 256]) torch.Size([32, 1, 256, 256])
+Batch 7 torch.Size([8, 1, 256, 256]) torch.Size([8, 1, 256, 256])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="neural-network-architecture">
+<h1>Neural network architecture<a class="headerlink" href="#neural-network-architecture" title="Permalink to this heading">#</a></h1>
+<p>For semantic segmentation problems, a specific convolutional neural network architecture, i.e. a defined sequence of operations (also called layers) involving convolutional filters, data aggregation via pooling and nonlinear activation functions, has been demonstrated to work well across a wide range of image domains. This architecture is called UNet and its basic structure is shown below. (Image taken from <a class="reference external" href="https://github.com/HarisIqbal88/PlotNeuralNet/blob/master/examples/Unet_Ushape/Unet_ushape.pdf">here</a>.)</p>
+<img src="unet.png" alt="Drawing" style="height: 400px;"/>
+<p>As this is rather cumbersome to implement directly, we will use the <a class="reference external" href="https://monai.io/">MONAI</a> library, which provides a nice torch implementation of this architecture.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">monai.networks.nets</span> <span class="kn">import</span> <span class="n">BasicUNet</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>BasicUNet<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Red">Init signature:</span>
+BasicUNet<span class=" -Color -Color-Blue">(</span>
+    spatial_dims<span class=" -Color -Color-Blue">:</span> <span class=" -Color -Color-Blue">&#39;int&#39;</span> <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Cyan">3</span><span class=" -Color -Color-Blue">,</span>
+    in_channels<span class=" -Color -Color-Blue">:</span> <span class=" -Color -Color-Blue">&#39;int&#39;</span> <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Cyan">1</span><span class=" -Color -Color-Blue">,</span>
+    out_channels<span class=" -Color -Color-Blue">:</span> <span class=" -Color -Color-Blue">&#39;int&#39;</span> <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Cyan">2</span><span class=" -Color -Color-Blue">,</span>
+    features<span class=" -Color -Color-Blue">:</span> <span class=" -Color -Color-Blue">&#39;Sequence[int]&#39;</span> <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Blue">(</span><span class=" -Color -Color-Cyan">32</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Cyan">32</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Cyan">64</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Cyan">128</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Cyan">256</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Cyan">32</span><span class=" -Color -Color-Blue">),</span>
+    act<span class=" -Color -Color-Blue">:</span> <span class=" -Color -Color-Blue">&#39;str | tuple&#39;</span> <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Blue">(&#39;LeakyReLU&#39;,</span> <span class=" -Color -Color-Blue">{&#39;negative_slope&#39;:</span> <span class=" -Color -Color-Cyan">0.1</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Blue">&#39;inplace&#39;:</span> <span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">}),</span>
+    norm<span class=" -Color -Color-Blue">:</span> <span class=" -Color -Color-Blue">&#39;str | tuple&#39;</span> <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Blue">(&#39;instance&#39;,</span> <span class=" -Color -Color-Blue">{&#39;affine&#39;:</span> <span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">}),</span>
+    bias<span class=" -Color -Color-Blue">:</span> <span class=" -Color -Color-Blue">&#39;bool&#39;</span> <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span>
+    dropout<span class=" -Color -Color-Blue">:</span> <span class=" -Color -Color-Blue">&#39;float | tuple&#39;</span> <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Cyan">0.0</span><span class=" -Color -Color-Blue">,</span>
+    upsample<span class=" -Color -Color-Blue">:</span> <span class=" -Color -Color-Blue">&#39;str&#39;</span> <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Blue">&#39;deconv&#39;,</span>
+<span class=" -Color -Color-Blue">)</span>
+<span class=" -Color -Color-Red">Docstring:</span>     
+Base class for all neural network modules.
+
+Your models should also subclass this class.
+
+Modules can also contain other Modules, allowing to nest them in
+a tree structure. You can assign the submodules as regular attributes::
+
+    import torch.nn as nn
+    import torch.nn.functional as F
+
+    class Model(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.conv1 = nn.Conv2d(1, 20, 5)
+            self.conv2 = nn.Conv2d(20, 20, 5)
+
+        def forward(self, x):
+            x = F.relu(self.conv1(x))
+            return F.relu(self.conv2(x))
+
+Submodules assigned in this way will be registered, and will have their
+parameters converted too when you call :meth:`to`, etc.
+
+.. note::
+    As per the example above, an ``__init__()`` call to the parent class
+    must be made before assignment on the child.
+
+:ivar training: Boolean represents whether this module is in training or
+                evaluation mode.
+:vartype training: bool
+<span class=" -Color -Color-Red">Init docstring:</span>
+A UNet implementation with 1D/2D/3D supports.
+
+Based on:
+
+    Falk et al. &quot;U-Net – Deep Learning for Cell Counting, Detection, and
+    Morphometry&quot;. Nature Methods 16, 67–70 (2019), DOI:
+    http://dx.doi.org/10.1038/s41592-018-0261-2
+
+Args:
+    spatial_dims: number of spatial dimensions. Defaults to 3 for spatial 3D inputs.
+    in_channels: number of input channels. Defaults to 1.
+    out_channels: number of output channels. Defaults to 2.
+    features: six integers as numbers of features.
+        Defaults to ``(32, 32, 64, 128, 256, 32)``,
+
+        - the first five values correspond to the five-level encoder feature sizes.
+        - the last value corresponds to the feature size after the last upsampling.
+
+    act: activation type and arguments. Defaults to LeakyReLU.
+    norm: feature normalization type and arguments. Defaults to instance norm.
+    bias: whether to have a bias term in convolution blocks. Defaults to True.
+        According to `Performance Tuning Guide &lt;https://pytorch.org/tutorials/recipes/recipes/tuning_guide.html&gt;`_,
+        if a conv layer is directly followed by a batch norm layer, bias should be False.
+    dropout: dropout ratio. Defaults to no dropout.
+    upsample: upsampling mode, available options are
+        ``&quot;deconv&quot;``, ``&quot;pixelshuffle&quot;``, ``&quot;nontrainable&quot;``.
+
+Examples::
+
+    # for spatial 2D
+    &gt;&gt;&gt; net = BasicUNet(spatial_dims=2, features=(64, 128, 256, 512, 1024, 128))
+
+    # for spatial 2D, with group norm
+    &gt;&gt;&gt; net = BasicUNet(spatial_dims=2, features=(64, 128, 256, 512, 1024, 128), norm=(&quot;group&quot;, {&quot;num_groups&quot;: 4}))
+
+    # for spatial 3D
+    &gt;&gt;&gt; net = BasicUNet(spatial_dims=3, features=(32, 32, 64, 128, 256, 32))
+
+See Also
+
+    - :py:class:`monai.networks.nets.DynUNet`
+    - :py:class:`monai.networks.nets.UNet`
+<span class=" -Color -Color-Red">File:</span>           ~/miniconda3/envs/torch_intro/lib/python3.10/site-packages/monai/networks/nets/basic_unet.py
+<span class=" -Color -Color-Red">Type:</span>           type
+<span class=" -Color -Color-Red">Subclasses:</span>     
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">BasicUNet</span><span class="p">(</span>
+    <span class="n">spatial_dims</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span>
+    <span class="n">act</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">,</span>
+    <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;batch&quot;</span><span class="p">,</span>
+    <span class="n">dropout</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>BasicUNet features: (16, 16, 32, 64, 128, 16).
+BasicUNet(
+  (conv_0): TwoConv(
+    (conv_0): Convolution(
+      (conv): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (adn): ADN(
+        (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (D): Dropout(p=0.25, inplace=False)
+        (A): ReLU()
+      )
+    )
+    (conv_1): Convolution(
+      (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (adn): ADN(
+        (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (D): Dropout(p=0.25, inplace=False)
+        (A): ReLU()
+      )
+    )
+  )
+  (down_1): Down(
+    (max_pooling): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (convs): TwoConv(
+      (conv_0): Convolution(
+        (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+      (conv_1): Convolution(
+        (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+    )
+  )
+  (down_2): Down(
+    (max_pooling): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (convs): TwoConv(
+      (conv_0): Convolution(
+        (conv): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+      (conv_1): Convolution(
+        (conv): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+    )
+  )
+  (down_3): Down(
+    (max_pooling): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (convs): TwoConv(
+      (conv_0): Convolution(
+        (conv): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+      (conv_1): Convolution(
+        (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+    )
+  )
+  (down_4): Down(
+    (max_pooling): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (convs): TwoConv(
+      (conv_0): Convolution(
+        (conv): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+      (conv_1): Convolution(
+        (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+    )
+  )
+  (upcat_4): UpCat(
+    (upsample): UpSample(
+      (deconv): ConvTranspose2d(128, 64, kernel_size=(2, 2), stride=(2, 2))
+    )
+    (convs): TwoConv(
+      (conv_0): Convolution(
+        (conv): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+      (conv_1): Convolution(
+        (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+    )
+  )
+  (upcat_3): UpCat(
+    (upsample): UpSample(
+      (deconv): ConvTranspose2d(64, 32, kernel_size=(2, 2), stride=(2, 2))
+    )
+    (convs): TwoConv(
+      (conv_0): Convolution(
+        (conv): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+      (conv_1): Convolution(
+        (conv): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+    )
+  )
+  (upcat_2): UpCat(
+    (upsample): UpSample(
+      (deconv): ConvTranspose2d(32, 16, kernel_size=(2, 2), stride=(2, 2))
+    )
+    (convs): TwoConv(
+      (conv_0): Convolution(
+        (conv): Conv2d(32, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+      (conv_1): Convolution(
+        (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+    )
+  )
+  (upcat_1): UpCat(
+    (upsample): UpSample(
+      (deconv): ConvTranspose2d(16, 16, kernel_size=(2, 2), stride=(2, 2))
+    )
+    (convs): TwoConv(
+      (conv_0): Convolution(
+        (conv): Conv2d(32, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+      (conv_1): Convolution(
+        (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (adn): ADN(
+          (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (D): Dropout(p=0.25, inplace=False)
+          (A): ReLU()
+        )
+      )
+    )
+  )
+  (final_conv): Conv2d(16, 1, kernel_size=(1, 1), stride=(1, 1))
+)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can now feed a batch of images directly through the model to obtain predictions. Note however, that those will likely not be usable for segmentation as the model has not been trained yet and model parameters are initialized randomly.
+Note that the model outputs are of the same shape as the model inputs. Because the UNet consists entirely of convolutional operations, it is (to a degree) shape invariant and can process arbitrary input sizes. It is however recommended to work with resolutions that are divisible by 16, as the input resolution is halved in each of the four downsampling blocks.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_preds</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">batch_images</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">batch_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([8, 1, 256, 256])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">batch_images</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Input&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">batch_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Ground truth&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">batch_preds</span><span class="o">.</span><span class="n">detach</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Predictions&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Predictions&#39;)
+</pre></div>
+</div>
+<img alt="../_images/e79cbf9bc366bf5f7880aaf1f8ac749e3ff5030c5e312879cde17d7583b4842d.png" src="../_images/e79cbf9bc366bf5f7880aaf1f8ac749e3ff5030c5e312879cde17d7583b4842d.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># different sized dummy input should be processable as well</span>
+<span class="n">dummy_batch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">)</span>
+<span class="n">dummy_preds</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">dummy_batch</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dummy_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([8, 1, 512, 512])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># different sized dummy input that is not divisible by 16, still produces output of same shape</span>
+<span class="n">dummy_batch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">87</span><span class="p">)</span>
+<span class="n">dummy_preds</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">dummy_batch</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dummy_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([8, 1, 114, 87])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Moreover, the model output range is not limited because in the output layer, no nonlinear activation was used. In order to make the output usable for segmentation purposes, we apply a sigmoid activation function per pixel</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">batch_preds</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">batch_preds</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor(-4.1844, grad_fn=&lt;MinBackward1&gt;) tensor(12.0578, grad_fn=&lt;MaxBackward1&gt;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_preds_seg</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">batch_preds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">batch_preds_seg</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">batch_preds_seg</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor(0.0150, grad_fn=&lt;MinBackward1&gt;) tensor(1.0000, grad_fn=&lt;MaxBackward1&gt;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">batch_preds_seg</span><span class="o">.</span><span class="n">detach</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fb8bcededa0&gt;
+</pre></div>
+</div>
+<img alt="../_images/f44eacfbea049e1d9ea8bf082c95151e62a062d85c0f1d56e7f24acd7e278fe7.png" src="../_images/f44eacfbea049e1d9ea8bf082c95151e62a062d85c0f1d56e7f24acd7e278fe7.png" />
+</div>
+</div>
+<p>In order to obtain binary (0/1) predictions, a straightforward approach would be to use thresholding at 0.5</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_preds_seg_binary</span> <span class="o">=</span> <span class="p">(</span><span class="n">batch_preds_seg</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">batch_preds_seg_binary</span><span class="o">.</span><span class="n">detach</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fb8a9563fa0&gt;
+</pre></div>
+</div>
+<img alt="../_images/540739316090970d213110a2aa424d2eefaef955f3b67a043fe196732b0014bb.png" src="../_images/540739316090970d213110a2aa424d2eefaef955f3b67a043fe196732b0014bb.png" />
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "torch_intro_env"
+        },
+        kernelOptions: {
+            name: "torch_intro_env",
+            path: "./60_Pytorch"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'torch_intro_env'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Processing batches of data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-network-architecture">Neural network architecture</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Stephane Rigaud, Brian Northan, Till Korten, Neringa Jurenaite, Peter Steinbach, Sebastian Starke, Johannes Soltwedel and Marvin Albert, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: This work can be reused under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> license unless mentioned otherwise.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
