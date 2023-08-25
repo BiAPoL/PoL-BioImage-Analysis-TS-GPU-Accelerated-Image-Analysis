@@ -14,7 +14,7 @@ Here, we cover the *GPU-Accelerated Image Analysis* Track of the [PoL Bio-Image 
 
 [![CC BY 4.0][cc-by-shield]][cc-by]
 
-This work is licensed by Stephane Rigaud, Robert Haase, Brian Northan, Till Korten, Neringa Jurenaite, Peter Steinbach, Sebastian Starke, Johannes Soltwedel and Marvin Albert under a
+This work is licensed by Stephane Rigaud, Brian Northan, Till Korten, Neringa Jurenaite, Peter Steinbach, Sebastian Starke, Johannes Soltwedel, Marvin Albert and Robert Haase under a
 [Creative Commons Attribution 4.0 International License][cc-by].
 
 [cc-by]: http://creativecommons.org/licenses/by/4.0/
