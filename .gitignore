@@ -9,10 +9,11 @@ __pycache__/
 # C extensions
 *.so
 
-# Data that should not be downloaded
+# Data that should not be downloaded pytorch segmentation/denoising
 docs/70_AI_Segmentation_Denoising/data/
 docs/70_AI_Segmentation_Denoising/data.zip
 **/lightning_outputs/
+docs/70_AI_Segmentation_Denoising/pn2v
 
 # Distribution / packaging
 .Python
