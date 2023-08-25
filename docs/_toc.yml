@@ -77,5 +77,6 @@ parts:
     - file: 70_AI_Segmentation_Denoising/01_2D_unet_training
     - file: 70_AI_Segmentation_Denoising/02_Noise2Void
     - file: 70_AI_Segmentation_Denoising/03_Noise2Void_3D
-  - file: 80_Dask/readme
+
+  # - file: 80_Dask/readme
 
