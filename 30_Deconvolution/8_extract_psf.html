@@ -418,7 +418,6 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flaws-and-approximations">Flaws and approximations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies-create-a-decon-conda-environment">Dependencies (create a decon conda environment)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-image-set-and-some-parameters">Define image set and some parameters</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-image">Load Image</a></li>
@@ -468,26 +467,6 @@ document.write(`
 <p>Secondly, the PSF distilling method has a disadvantage when compared to MLE parameter fitting, as the spatial extent of the extracted PSF may be limited by signal level.  The PSF distilling method has the advantage that it can capture PSFs for which a theoretical model is not available and/or accurate.</p>
 <p>Thirdly if the beads are all not the same size, or if the beads are not sub-resolution, or multiple beads stick together to form beads of different sizes, the resulting PSF will be less accurate.</p>
 <p>In addition in this notebook some preprocessing of the beads is done (such as background subtraction and filtering), which in turn effects the extracted PSF.  Extracted PSFs using reverse deconvoltuion are only an approximation which are useful for using with deconvolution to obtain better contrast in images.</p>
-</section>
-<section id="dependencies-create-a-decon-conda-environment">
-<h2>Dependencies (create a decon conda environment)<a class="headerlink" href="#dependencies-create-a-decon-conda-environment" title="Permalink to this heading">#</a></h2>
-<p>In this environment we will install some tools we need for decon, this includes Jupyter noteook, opencl, fftw, clij2fft for non-circulant Richardson Lucy, devbio version of Napari for visualization, sdeconv for theoretical PSF, tnia-python XYZ projected figures in the notebook.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda create --name decon-env python=3.9
-conda activate decon-env
-pip install devbio-napari
-pip install napari-sdeconv
-pip install git+https://github.com/True-North-Intelligent-Algorithms/tnia-python
-pip install --index-url https://test.pypi.org/simple/ --no-deps clij2-fft
-</pre></div>
-</div>
-<p>Mac-users may also need to install this:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge ocl_icd_wrapper_apple
-</pre></div>
-</div>
-<p>Linux users may also need to install this:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge ocl-icd-system
-</pre></div>
-</div>
 </section>
 <section id="imports">
 <h2>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h2>
@@ -921,7 +900,6 @@ axial stretch 10
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flaws-and-approximations">Flaws and approximations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies-create-a-decon-conda-environment">Dependencies (create a decon conda environment)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-image-set-and-some-parameters">Define image set and some parameters</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-image">Load Image</a></li>
