@@ -419,10 +419,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Processing batches of data</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-network-architecture">Neural network architecture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-network-architecture">Neural network architecture</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -433,7 +431,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="processing-batches-of-data">
+  <section class="tex2jax_ignore mathjax_ignore" id="processing-batches-of-data">
 <h1>Processing batches of data<a class="headerlink" href="#processing-batches-of-data" title="Permalink to this heading">#</a></h1>
 <p>As most deep learning workflows benefit greatly from running on machines with GPUs that can process data in parallel, during model training the data is passed in batches of samples to the network instead of processing each sample sequentially. Torch offers great support for this which builds on top of a provided dataset.
 For convenience, the dataset class introduced in the previous notebook is part of the data module and we can now easily import it.</p>
@@ -499,9 +497,8 @@ Batch 7 torch.Size([8, 1, 256, 256]) torch.Size([8, 1, 256, 256])
 </div>
 </div>
 </div>
-</section>
 <section id="neural-network-architecture">
-<h1>Neural network architecture<a class="headerlink" href="#neural-network-architecture" title="Permalink to this heading">#</a></h1>
+<h2>Neural network architecture<a class="headerlink" href="#neural-network-architecture" title="Permalink to this heading">#</a></h2>
 <p>For semantic segmentation problems, a specific convolutional neural network architecture, i.e. a defined sequence of operations (also called layers) involving convolutional filters, data aggregation via pooling and nonlinear activation functions, has been demonstrated to work well across a wide range of image domains. This architecture is called UNet and its basic structure is shown below. (Image taken from <a class="reference external" href="https://github.com/HarisIqbal88/PlotNeuralNet/blob/master/examples/Unet_Ushape/Unet_ushape.pdf">here</a>.)</p>
 <img src="unet.png" alt="Drawing" style="height: 400px;"/>
 <p>As this is rather cumbersome to implement directly, we will use the <a class="reference external" href="https://monai.io/">MONAI</a> library, which provides a convenient torch implementation of this architecture by the name of <code class="docutils literal notranslate"><span class="pre">BasicUNet</span></code>.</p>
@@ -960,6 +957,7 @@ BasicUNet(
 </div>
 </div>
 </section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1028,10 +1026,8 @@ BasicUNet(
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Processing batches of data</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-network-architecture">Neural network architecture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-network-architecture">Neural network architecture</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Look at some predictions &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>Pytorch lightning &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '60_Pytorch/08_pytorch_lightning';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="07_model_training_with_checkpoints.html" />
+    <link rel="prev" title="Training with checkpoints" href="07_model_training_with_checkpoints.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -395,7 +395,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -406,11 +408,19 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Look at some predictions</h1>
+    <h1>Pytorch lightning</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-some-predictions">Look at some predictions</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -420,7 +430,9 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <p>As you might have noticed, torch leaves many responsibilities to the user regarding choices of device, writing of the training loop, loss logging and model checkpointing. This is good and bad at the same time since it provides a lot of flexibility, but re-writing lots of boilerplate code which will be very similar across projects.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="pytorch-lightning">
+<h1>Pytorch lightning<a class="headerlink" href="#pytorch-lightning" title="Permalink to this heading">#</a></h1>
+<p>As you might have noticed, torch leaves many responsibilities to the user regarding choices of device, writing of the training loop, loss logging and model checkpointing. This is good and bad at the same time since it provides a lot of flexibility, but re-writing lots of boilerplate code which will be very similar across projects.</p>
 <p><a class="reference external" href="https://lightning.ai/docs/pytorch/stable/">Pytorch_lightning</a> aims to make many things easier by abstracting them from the user. It automatically handles devices, logs to tensorboard, offers plugins for model checkpointing, makes restoration of models from checkpointing easier and is able to manage distributed training across multiple GPUs or multiple nodes. In this notebook, we will modify the existing code using this library.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -893,7 +905,7 @@ HPU available: False, using: 0 HPUs
 </div>
 </div>
 <section id="look-at-some-predictions">
-<h1>Look at some predictions<a class="headerlink" href="#look-at-some-predictions" title="Permalink to this heading">#</a></h1>
+<h2>Look at some predictions<a class="headerlink" href="#look-at-some-predictions" title="Permalink to this heading">#</a></h2>
 <p>Now that the model has been trained for a little bit, we are looking at the predictions again. Usually model training has to be peformed longer, so don’t expect any wonders. Also keep in mind that the predictions here are based on the data the model was trained on. Those predictions might be far better than those on data not used during training. But this is a story for later.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -937,6 +949,7 @@ HPU available: False, using: 0 HPUs
 </div>
 </div>
 </section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -975,7 +988,7 @@ HPU available: False, using: 0 HPUs
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title">Training with checkpoints</p>
       </div>
     </a>
 </div></div>
@@ -987,6 +1000,20 @@ HPU available: False, using: 0 HPUs
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-some-predictions">Look at some predictions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

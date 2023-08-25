@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Getting lists of input and label files &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>Data exploration &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Creation of a dataset" href="02_dataset.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="00_versions.html" />
+    <link rel="prev" title="Versions" href="00_versions.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -409,7 +409,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Getting lists of input and label files</h1>
+    <h1>Data exploration</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -419,13 +419,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Getting lists of input and label files</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#looking-at-a-single-sample-of-the-training-data">Looking at a single sample of the training data</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-the-instance-label-to-a-binary-segmentation-mask">Convert the instance label to a binary segmentation mask</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization-of-the-raw-image">Normalization of the raw image</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#we-explore-the-image-resolutions-on-the-training-data">We explore the image resolutions on the training data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-lists-of-input-and-label-files">Getting lists of input and label files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#looking-at-a-single-sample-of-the-training-data">Looking at a single sample of the training data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-the-instance-label-to-a-binary-segmentation-mask">Convert the instance label to a binary segmentation mask</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization-of-the-raw-image">Normalization of the raw image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#we-explore-the-image-resolutions-on-the-training-data">We explore the image resolutions on the training data</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -436,7 +435,9 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="data-exploration">
+<h1>Data exploration<a class="headerlink" href="#data-exploration" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">data</span> <span class="kn">import</span> <span class="n">get_dsb2018_train_files</span><span class="p">,</span> <span class="n">get_dsb2018_validation_files</span><span class="p">,</span> <span class="n">get_dsb2018_test_files</span><span class="p">,</span> <span class="n">fill_label_holes</span><span class="p">,</span> <span class="n">quantile_normalization</span>
 <span class="kn">from</span> <span class="nn">tifffile</span> <span class="kn">import</span> <span class="n">imread</span>
@@ -448,7 +449,7 @@ document.write(`
 </div>
 </div>
 <section id="getting-lists-of-input-and-label-files">
-<h1>Getting lists of input and label files<a class="headerlink" href="#getting-lists-of-input-and-label-files" title="Permalink to this heading">#</a></h1>
+<h2>Getting lists of input and label files<a class="headerlink" href="#getting-lists-of-input-and-label-files" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">getter_fn</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">get_dsb2018_train_files</span><span class="p">,</span> <span class="n">get_dsb2018_validation_files</span><span class="p">,</span> <span class="n">get_dsb2018_test_files</span><span class="p">]):</span>
@@ -495,7 +496,7 @@ test 50 50
 </div>
 </section>
 <section id="looking-at-a-single-sample-of-the-training-data">
-<h1>Looking at a single sample of the training data<a class="headerlink" href="#looking-at-a-single-sample-of-the-training-data" title="Permalink to this heading">#</a></h1>
+<h2>Looking at a single sample of the training data<a class="headerlink" href="#looking-at-a-single-sample-of-the-training-data" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Xtrain</span><span class="p">,</span> <span class="n">ytrain</span> <span class="o">=</span> <span class="n">get_dsb2018_train_files</span><span class="p">()</span>
@@ -558,7 +559,7 @@ label uint16 (256, 256) 0 27
 </div>
 </section>
 <section id="convert-the-instance-label-to-a-binary-segmentation-mask">
-<h1>Convert the instance label to a binary segmentation mask<a class="headerlink" href="#convert-the-instance-label-to-a-binary-segmentation-mask" title="Permalink to this heading">#</a></h1>
+<h2>Convert the instance label to a binary segmentation mask<a class="headerlink" href="#convert-the-instance-label-to-a-binary-segmentation-mask" title="Permalink to this heading">#</a></h2>
 <p>As we intend to demonstrate the usage of pytorch, we are simplifying our problem from instance segmentation to semantic segmentation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -578,7 +579,7 @@ label uint16 (256, 256) 0 27
 </div>
 </section>
 <section id="normalization-of-the-raw-image">
-<h1>Normalization of the raw image<a class="headerlink" href="#normalization-of-the-raw-image" title="Permalink to this heading">#</a></h1>
+<h2>Normalization of the raw image<a class="headerlink" href="#normalization-of-the-raw-image" title="Permalink to this heading">#</a></h2>
 <p>As neural networks tend to be easier to train when input values are small, we should normalize the pixel intensities from the uint8 range of [0, 255] to floating point values closer to [0, 1].</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -650,7 +651,7 @@ label uint16 (256, 256) 0 27
 </div>
 </section>
 <section id="we-explore-the-image-resolutions-on-the-training-data">
-<h1>We explore the image resolutions on the training data<a class="headerlink" href="#we-explore-the-image-resolutions-on-the-training-data" title="Permalink to this heading">#</a></h1>
+<h2>We explore the image resolutions on the training data<a class="headerlink" href="#we-explore-the-image-resolutions-on-the-training-data" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">imread</span><span class="p">,</span> <span class="n">Xtrain</span><span class="p">))</span>
@@ -1105,6 +1106,7 @@ label uint16 (256, 256) 0 27
 </div>
 </div>
 </section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1115,16 +1117,16 @@ label uint16 (256, 256) 0 27
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "torch_intro_env"
+            mode: "python"
         },
         kernelOptions: {
-            name: "torch_intro_env",
+            name: "python3",
             path: "./60_Pytorch"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'torch_intro_env'</script>
+    <script>kernelName = 'python3'</script>
 
                 </article>
               
@@ -1143,7 +1145,7 @@ label uint16 (256, 256) 0 27
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title">Versions</p>
       </div>
     </a>
     <a class="right-next"
@@ -1173,13 +1175,12 @@ label uint16 (256, 256) 0 27
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Getting lists of input and label files</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#looking-at-a-single-sample-of-the-training-data">Looking at a single sample of the training data</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-the-instance-label-to-a-binary-segmentation-mask">Convert the instance label to a binary segmentation mask</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization-of-the-raw-image">Normalization of the raw image</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#we-explore-the-image-resolutions-on-the-training-data">We explore the image resolutions on the training data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-lists-of-input-and-label-files">Getting lists of input and label files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#looking-at-a-single-sample-of-the-training-data">Looking at a single sample of the training data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-the-instance-label-to-a-binary-segmentation-mask">Convert the instance label to a binary segmentation mask</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization-of-the-raw-image">Normalization of the raw image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#we-explore-the-image-resolutions-on-the-training-data">We explore the image resolutions on the training data</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>
