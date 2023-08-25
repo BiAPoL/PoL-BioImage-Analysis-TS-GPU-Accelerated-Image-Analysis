@@ -1,17 +1,12 @@
 # PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis
 
-This [Jupyter book](https://jupyterbook.org/) contains training resources for scientists who want to dive into image processing.
-It specifically aims for students and scientists working with microscopy images in the life sciences.
+This [Jupyter book](https://jupyterbook.org/) contains training resources for scientists who want to dive into GPU-accelerated image processing. It specifically aims for students and scientists working with microscopy images in the life sciences.
 
-Here, we cover the *GPU-Accelerated Image Analysis* Track of the [PoL Bio-Image Analysis Symposium](https://biopol-training.eventmember.de/)
+Here, we cover the *GPU-Accelerated Image Analysis* Track of the [PoL Bio-Image Analysis Symposium](https://biopol-training.eventmember.de/). We will process images using [clesperanto](https://clesperanto.github.io/), [cupy](https://cupy.dev/) and [Pytorch](https://pytorch.org/). We will denoise, deconvole and segment images with and without deep learning techniques. We will get an introduction in how to [TU Dresden HPC cluster Taurus](https://tu-dresden.de/zih/hochleistungsrechnen/hpc) and distribute tasks using [dask](https://www.dask.org/).
 
-* [clesperanto](https://clesperanto.github.io/)
-* [cupy](https://cupy.dev/)
-* [dask](https://www.dask.org/)
-* Deconvolution
-* [Pytorch](https://pytorch.org/)
-* AI-based Denoising
-* AI-based Segmentation
+## Timetable
+
+![img.png](timetable.png)
 
 ## How to use this material
 
