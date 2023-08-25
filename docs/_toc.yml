@@ -59,16 +59,17 @@ parts:
 
   - file: 60_Pytorch/readme
     sections:
-      - file: 61_Pytorch/00_versions.ipynb
-      - file: 61_Pytorch/01_data_exploration.ipynb
-      - file: 61_Pytorch/02_dataset.ipynb
-      - file: 61_Pytorch/03_data_batching_and_setup_model.ipynb
-      - file: 61_Pytorch/04_model_training.ipynb
-      - file: 61_Pytorch/05_model_training_with_device.ipynb
-      - file: 61_Pytorch/06_model_training_with_logging.ipynb
-      - file: 61_Pytorch/07_model_training_with_checkpoints.ipynb
-      - file: 61_Pytorch/08_pytorch_lightning.ipynb
-      
+
+    - file: 60_Pytorch/00_versions.ipynb
+    - file: 60_Pytorch/01_data_exploration.ipynb
+    - file: 60_Pytorch/02_dataset.ipynb
+    - file: 60_Pytorch/03_data_batching_and_setup_model.ipynb
+    - file: 60_Pytorch/04_model_training.ipynb
+    - file: 60_Pytorch/05_model_training_with_device.ipynb
+    - file: 60_Pytorch/06_model_training_with_logging.ipynb
+    - file: 60_Pytorch/07_model_training_with_checkpoints.ipynb
+    - file: 60_Pytorch/08_pytorch_lightning.ipynb
+
 - caption: Wednesday
   chapters:
   - file: 70_AI_Segmentation_Denoising/readme
