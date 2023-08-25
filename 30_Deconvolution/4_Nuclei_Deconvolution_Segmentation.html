@@ -423,7 +423,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-deconvolotion-and-make-a-deconvolver">Import Deconvolotion and make a ‘deconvolver’</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-segmenter">Make a Segmenter</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-the-segmenter-to-the-deconolved-data">Apply the segmenter to the deconolved data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#score-the-solution-using-the-stardist-matcher">Score the solution using the stardist matcher</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#score-the-solution-using-the-jaccard-index">Score the solution using the jaccard index</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-in-napari">Visualize in Napari</a></li>
 </ul>
             </nav>
@@ -467,7 +467,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(100, 258, 258) (161, 258, 258)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tnia available
+stackview available
+(100, 258, 258) (161, 258, 258)
 </pre></div>
 </div>
 </div>
@@ -570,7 +572,7 @@ Richardson Lucy Started
 Richardson Lucy Finished
 </pre></div>
 </div>
-<img alt="../_images/20ead010f317b265fc98154b9f04e8ad9eba1c875a6f2340f0f80a761db9fc80.png" src="../_images/20ead010f317b265fc98154b9f04e8ad9eba1c875a6f2340f0f80a761db9fc80.png" />
+<img alt="../_images/2f9ab7806365dd4b28ef96cc39d61472062ba16f5a53c614e60cd6aaeaf08d52.png" src="../_images/2f9ab7806365dd4b28ef96cc39d61472062ba16f5a53c614e60cd6aaeaf08d52.png" />
 </div>
 </div>
 </section>
@@ -665,18 +667,18 @@ Richardson Lucy Finished
 </div>
 </div>
 </section>
-<section id="score-the-solution-using-the-stardist-matcher">
-<h2>Score the solution using the stardist matcher<a class="headerlink" href="#score-the-solution-using-the-stardist-matcher" title="Permalink to this heading">#</a></h2>
+<section id="score-the-solution-using-the-jaccard-index">
+<h2>Score the solution using the <a class="reference external" href="https://en.wikipedia.org/wiki/Jaccard_index">jaccard index</a><a class="headerlink" href="#score-the-solution-using-the-jaccard-index" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stardist.matching</span> <span class="kn">import</span> <span class="n">matching</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">decon_helper</span> <span class="kn">import</span> <span class="n">jaccard_index_binary</span>
 
-<span class="n">matching</span><span class="p">(</span><span class="n">truth</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+<span class="n">jaccard_index_binary</span><span class="p">(</span><span class="n">truth</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matching(criterion=&#39;iou&#39;, thresh=0.5, fp=0, tp=5, fn=0, precision=1.0, recall=1.0, accuracy=1.0, f1=1.0, n_true=5, n_pred=5, mean_true_score=0.9111653327941894, mean_matched_score=0.9111653327941894, panoptic_quality=0.9111653327941894)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.91308826
 </pre></div>
 </div>
 </div>
@@ -702,7 +704,7 @@ Richardson Lucy Finished
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Labels layer &#39;labels&#39; at 0x7fb6d0b92dc0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Labels layer &#39;labels&#39; at 0x311d80cd0&gt;
 </pre></div>
 </div>
 </div>
@@ -783,7 +785,7 @@ Richardson Lucy Finished
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-deconvolotion-and-make-a-deconvolver">Import Deconvolotion and make a ‘deconvolver’</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-segmenter">Make a Segmenter</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-the-segmenter-to-the-deconolved-data">Apply the segmenter to the deconolved data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#score-the-solution-using-the-stardist-matcher">Score the solution using the stardist matcher</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#score-the-solution-using-the-jaccard-index">Score the solution using the jaccard index</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-in-napari">Visualize in Napari</a></li>
 </ul>
   </nav></div>
