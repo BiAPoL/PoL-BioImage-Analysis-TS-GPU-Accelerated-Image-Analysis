@@ -26,7 +26,7 @@ parts:
     - file: 23_clesperanto_assistant/napari-assistant
     - file: 23_clesperanto_assistant/notebook_export
     
-  - file: 20_cupy/readme
+  - file: 25_cupy/readme
     sections:
     - file: 25_cupy/10_basics
     - file: 25_cupy/20_dropin_replacement
@@ -46,8 +46,6 @@ parts:
     - file: 30_Deconvolution/8_extract_psf
     - file: 30_Deconvolution/9_Dask_Deconvolution
     - file: 30_Deconvolution/cluster_access.md
-
-  - file: 30_Deconvolution/readme
 
 - caption: Tuesday
   chapters:
@@ -72,7 +70,7 @@ parts:
 
 - caption: Wednesday
   chapters:
-  - file: 70_AI_Segmentation_Denoising/readme
+  - file: 70_AI_Segmentation_Denoising/Readme
     sections:
     - file: 70_AI_Segmentation_Denoising/01_2D_unet_training
     - file: 70_AI_Segmentation_Denoising/02_Noise2Void
