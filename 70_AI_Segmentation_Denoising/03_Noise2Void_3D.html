@@ -440,14 +440,23 @@ document.write(`
 <span class="kn">from</span> <span class="nn">n2v.utils.n2v_utils</span> <span class="kn">import</span> <span class="n">manipulate_val_data</span>
 <span class="kn">from</span> <span class="nn">n2v.internals.N2V_DataGenerator</span> <span class="kn">import</span> <span class="n">N2V_DataGenerator</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">import</span> <span class="nn">urllib</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">io</span>
 
 <span class="kn">from</span> <span class="nn">tifffile</span> <span class="kn">import</span> <span class="n">imread</span>
 <span class="kn">import</span> <span class="nn">stackview</span>
 <span class="kn">import</span> <span class="nn">ssl</span>
 <span class="n">ssl</span><span class="o">.</span><span class="n">_create_default_https_context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">_create_unverified_context</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-08-25 15:09:57.838298: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-08-25 15:09:58.541921: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2023-08-25 15:10:00.117321: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/nvidia/lib:/usr/local/nvidia/lib64:/.singularity.d/libs:/app/env/lib:/.singularity.d/libs
+2023-08-25 15:10:00.117488: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/nvidia/lib:/usr/local/nvidia/lib64:/.singularity.d/libs:/app/env/lib:/.singularity.d/libs
+2023-08-25 15:10:00.117494: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
 </pre></div>
 </div>
 </div>
@@ -457,7 +466,8 @@ document.write(`
 <p>Some example data has been stored at <code class="docutils literal notranslate"><span class="pre">/projects/p038/p_scads_trainings/BIAS/torch_segmentation_denoising_example_data/denoising_example_data/</span></code>. The data can otherwise also be downloaded <a class="reference external" href="https://download.fht.org/jug/n2v/flywing-data.zip">here</a>. Similar to the pytorch dataloader, Noise2Void provides its own <code class="docutils literal notranslate"><span class="pre">DataGenerator</span></code> class, which serves a similar purpose of iterating through the data easily,loading data and extracting patches for training and validation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;/projects/p038/p_scads_trainings/BIAS/torch_segmentation_denoising_example_data/denoising_example_data&#39;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;/projects/p038/p_scads_trainings/BIAS/torch_segmentation_denoising_example_data/denoising_example_data/n2v_3d&#39;</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;lund_i000000_oi_000000.tif&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -478,7 +488,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1, 35, 520, 692, 1)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1, 71, 1024, 512, 1)
 </pre></div>
 </div>
 </div>
@@ -492,10 +502,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x2b5105d9a610&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x2b8124489cd0&gt;
 </pre></div>
 </div>
-<img alt="../_images/780c7faed9ad805d517bd8f7a0cfc341593eb0f5668007a395aaea481a1661f8.png" src="../_images/780c7faed9ad805d517bd8f7a0cfc341593eb0f5668007a395aaea481a1661f8.png" />
+<img alt="../_images/c7d7cd957dc0f46f6126a62ac8d74e6f26b6971574e3d3f89e395834b38b5da3.png" src="../_images/c7d7cd957dc0f46f6126a62ac8d74e6f26b6971574e3d3f89e395834b38b5da3.png" />
 </div>
 </div>
 </section>
@@ -511,7 +521,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generated patches: (640, 32, 64, 64, 1)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generated patches: (2048, 32, 64, 64, 1)
 </pre></div>
 </div>
 </div>
@@ -539,7 +549,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Validation Patch&#39;)
 </pre></div>
 </div>
-<img alt="../_images/0e56e91687a60fe628b34a84eb3a1a48c80f2d6e8c3f9c08278ba59987869626.png" src="../_images/0e56e91687a60fe628b34a84eb3a1a48c80f2d6e8c3f9c08278ba59987869626.png" />
+<img alt="../_images/a58c5315fa3fb74301ae07e430b812acfce9b658f901e00c4d90cd6793724a83.png" src="../_images/a58c5315fa3fb74301ae07e430b812acfce9b658f901e00c4d90cd6793724a83.png" />
 </div>
 </div>
 <p>You can increase <code class="docutils literal notranslate"><span class="pre">train_steps_per_epoch</span></code> to get even better results at the price of longer computation.</p>
@@ -561,8 +571,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;means&#39;: [&#39;37.00911&#39;],
- &#39;stds&#39;: [&#39;5.3445377&#39;],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;means&#39;: [&#39;211.3554&#39;],
+ &#39;stds&#39;: [&#39;43.559948&#39;],
  &#39;n_dim&#39;: 3,
  &#39;axes&#39;: &#39;ZYXC&#39;,
  &#39;n_channel_in&#39;: 1,
@@ -610,8 +620,11 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/app/env/lib/python3.9/site-packages/n2v/models/n2v_standard.py:429: UserWarning: output path for model already exists, files may be overwritten: /home/h1/johamuel/models/n2v_3D
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/app/env/lib/python3.9/site-packages/n2v/models/n2v_standard.py:429: UserWarning: output path for model already exists, files may be overwritten: /home/h1/johamuel/Projects/repos/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/docs/70_AI_Segmentation_Denoising/models/n2v_3D
   warnings.warn(
+2023-08-25 15:10:05.841469: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-08-25 15:10:07.925917: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 35012 MB memory:  -&gt; device: 0, name: NVIDIA A100-SXM4-40GB, pci bus id: 0000:0b:00.0, compute capability: 8.0
 </pre></div>
 </div>
 </div>
@@ -626,85 +639,83 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>259 blind-spots will be generated per training patch of size (32, 64, 64).
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Preparing validation data: 100%|██████████| 40/40 [00:00&lt;00:00, 1659.75it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Preparing validation data: 100%|██████████| 1448/1448 [00:00&lt;00:00, 1717.83it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/20
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-08-21 19:16:53.106924: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
-2023-08-21 19:16:56.044929: I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
-2023-08-21 19:16:56.046550: I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
-2023-08-21 19:16:56.046569: W tensorflow/stream_executor/gpu/asm_compiler.cc:80] Couldn&#39;t get ptxas version string: INTERNAL: Couldn&#39;t invoke ptxas --version
-2023-08-21 19:16:56.048163: I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
-2023-08-21 19:16:56.048230: W tensorflow/stream_executor/gpu/redzone_allocator.cc:314] INTERNAL: Failed to launch ptxas
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-08-25 15:10:14.661980: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+2023-08-25 15:10:17.572895: I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+2023-08-25 15:10:17.574144: I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+2023-08-25 15:10:17.574182: W tensorflow/stream_executor/gpu/asm_compiler.cc:80] Couldn&#39;t get ptxas version string: INTERNAL: Couldn&#39;t invoke ptxas --version
+2023-08-25 15:10:17.576223: I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+2023-08-25 15:10:17.576324: W tensorflow/stream_executor/gpu/redzone_allocator.cc:314] INTERNAL: Failed to launch ptxas
 Relying on driver to perform ptx compilation. 
 Modify $PATH to customize ptxas location.
 This message will be only logged once.
-2023-08-21 19:16:58.883763: I tensorflow/stream_executor/cuda/cuda_blas.cc:1614] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+2023-08-25 15:10:20.276396: I tensorflow/stream_executor/cuda/cuda_blas.cc:1614] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3/3 [==============================] - 0s 4ms/steposs: 1.6889 - n2v_mse: 1.6889 - n2v_abs: 1.051
-4/4 [==============================] - 12s 522ms/step - loss: 2.1045 - n2v_mse: 2.1045 - n2v_abs: 1.1310 - val_loss: 1.0478 - val_n2v_mse: 1.0144 - val_n2v_abs: 0.7449 - lr: 4.0000e-04
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3/3 [==============================] - 0s 6ms/steposs: 3.5962 - n2v_mse: 3.5962 - n2v_abs: 1.550
+4/4 [==============================] - 16s 2s/step - loss: 3.2999 - n2v_mse: 3.2999 - n2v_abs: 1.5008 - val_loss: 1.0786 - val_n2v_mse: 1.0738 - val_n2v_abs: 0.9134 - lr: 4.0000e-04
 Epoch 2/20
-3/3 [==============================] - 0s 6ms/steposs: 1.6383 - n2v_mse: 1.6383 - n2v_abs: 1.05
-4/4 [==============================] - 0s 133ms/step - loss: 1.6364 - n2v_mse: 1.6364 - n2v_abs: 1.0551 - val_loss: 1.0380 - val_n2v_mse: 1.0157 - val_n2v_abs: 0.7388 - lr: 4.0000e-04
+3/3 [==============================] - 0s 5ms/steposs: 1.5706 - n2v_mse: 1.5706 - n2v_abs: 1.07
+4/4 [==============================] - 3s 961ms/step - loss: 1.7476 - n2v_mse: 1.7476 - n2v_abs: 1.1515 - val_loss: 0.9133 - val_n2v_mse: 0.9089 - val_n2v_abs: 0.8382 - lr: 4.0000e-04
 Epoch 3/20
-3/3 [==============================] - 0s 6ms/steposs: 1.7389 - n2v_mse: 1.7389 - n2v_abs: 1.02
-4/4 [==============================] - 0s 111ms/step - loss: 1.4932 - n2v_mse: 1.4932 - n2v_abs: 0.9361 - val_loss: 1.0994 - val_n2v_mse: 1.0916 - val_n2v_abs: 0.7536 - lr: 4.0000e-04
+3/3 [==============================] - 0s 4ms/steposs: 2.0997 - n2v_mse: 2.0997 - n2v_abs: 1.27
+4/4 [==============================] - 3s 960ms/step - loss: 1.9134 - n2v_mse: 1.9134 - n2v_abs: 1.2011 - val_loss: 0.8190 - val_n2v_mse: 0.8151 - val_n2v_abs: 0.7894 - lr: 4.0000e-04
 Epoch 4/20
-3/3 [==============================] - 0s 5ms/steposs: 1.3988 - n2v_mse: 1.3988 - n2v_abs: 0.92
-4/4 [==============================] - 0s 113ms/step - loss: 1.3296 - n2v_mse: 1.3296 - n2v_abs: 0.8752 - val_loss: 1.1020 - val_n2v_mse: 1.0948 - val_n2v_abs: 0.7543 - lr: 4.0000e-04
+3/3 [==============================] - 0s 5ms/steposs: 1.4163 - n2v_mse: 1.4163 - n2v_abs: 1.05
+4/4 [==============================] - 3s 946ms/step - loss: 1.3084 - n2v_mse: 1.3084 - n2v_abs: 1.0001 - val_loss: 0.8296 - val_n2v_mse: 0.8255 - val_n2v_abs: 0.8026 - lr: 4.0000e-04
 Epoch 5/20
-3/3 [==============================] - 0s 5ms/steposs: 1.4004 - n2v_mse: 1.4004 - n2v_abs: 0.79
-4/4 [==============================] - 0s 134ms/step - loss: 1.3472 - n2v_mse: 1.3472 - n2v_abs: 0.8041 - val_loss: 0.9741 - val_n2v_mse: 0.9331 - val_n2v_abs: 0.7239 - lr: 4.0000e-04
+3/3 [==============================] - 0s 5ms/steposs: 0.9380 - n2v_mse: 0.9380 - n2v_abs: 0.82
+4/4 [==============================] - 3s 960ms/step - loss: 0.8024 - n2v_mse: 0.8024 - n2v_abs: 0.7470 - val_loss: 0.7955 - val_n2v_mse: 0.7914 - val_n2v_abs: 0.7933 - lr: 4.0000e-04
 Epoch 6/20
-3/3 [==============================] - 0s 5ms/steposs: 0.9010 - n2v_mse: 0.9010 - n2v_abs: 0.75
-4/4 [==============================] - 0s 132ms/step - loss: 0.9630 - n2v_mse: 0.9630 - n2v_abs: 0.7745 - val_loss: 0.8956 - val_n2v_mse: 0.8494 - val_n2v_abs: 0.6944 - lr: 4.0000e-04
+3/3 [==============================] - 0s 5ms/steposs: 1.1156 - n2v_mse: 1.1156 - n2v_abs: 0.82
+4/4 [==============================] - 3s 959ms/step - loss: 0.9119 - n2v_mse: 0.9119 - n2v_abs: 0.7164 - val_loss: 0.7908 - val_n2v_mse: 0.7869 - val_n2v_abs: 0.7878 - lr: 4.0000e-04
 Epoch 7/20
-3/3 [==============================] - 0s 4ms/steposs: 1.1653 - n2v_mse: 1.1653 - n2v_abs: 0.81
-4/4 [==============================] - 0s 132ms/step - loss: 1.2665 - n2v_mse: 1.2665 - n2v_abs: 0.8682 - val_loss: 0.8828 - val_n2v_mse: 0.8407 - val_n2v_abs: 0.6881 - lr: 4.0000e-04
+3/3 [==============================] - 0s 6ms/steposs: 1.3766 - n2v_mse: 1.3766 - n2v_abs: 1.03
+4/4 [==============================] - 3s 960ms/step - loss: 1.1497 - n2v_mse: 1.1497 - n2v_abs: 0.9222 - val_loss: 0.6052 - val_n2v_mse: 0.6020 - val_n2v_abs: 0.6819 - lr: 4.0000e-04
 Epoch 8/20
-3/3 [==============================] - 0s 6ms/steposs: 0.9822 - n2v_mse: 0.9822 - n2v_abs: 0.77
-4/4 [==============================] - 0s 114ms/step - loss: 0.9526 - n2v_mse: 0.9526 - n2v_abs: 0.7643 - val_loss: 0.9206 - val_n2v_mse: 0.8741 - val_n2v_abs: 0.7019 - lr: 4.0000e-04
+3/3 [==============================] - 0s 7ms/steposs: 0.3226 - n2v_mse: 0.3226 - n2v_abs: 0.47
+4/4 [==============================] - 3s 972ms/step - loss: 0.3489 - n2v_mse: 0.3489 - n2v_abs: 0.4908 - val_loss: 0.5721 - val_n2v_mse: 0.5689 - val_n2v_abs: 0.6524 - lr: 4.0000e-04
 Epoch 9/20
-3/3 [==============================] - 0s 5ms/steposs: 0.7589 - n2v_mse: 0.7589 - n2v_abs: 0.68
-4/4 [==============================] - 0s 124ms/step - loss: 0.8288 - n2v_mse: 0.8288 - n2v_abs: 0.7112 - val_loss: 1.0024 - val_n2v_mse: 0.9782 - val_n2v_abs: 0.7284 - lr: 4.0000e-04
+3/3 [==============================] - 0s 5ms/steposs: 1.1096 - n2v_mse: 1.1096 - n2v_abs: 0.94
+4/4 [==============================] - 3s 943ms/step - loss: 0.8758 - n2v_mse: 0.8758 - n2v_abs: 0.7888 - val_loss: 0.6807 - val_n2v_mse: 0.6768 - val_n2v_abs: 0.6915 - lr: 4.0000e-04
 Epoch 10/20
-3/3 [==============================] - 0s 5ms/steposs: 0.8467 - n2v_mse: 0.8467 - n2v_abs: 0.75
-4/4 [==============================] - 0s 116ms/step - loss: 0.7863 - n2v_mse: 0.7863 - n2v_abs: 0.7157 - val_loss: 1.0902 - val_n2v_mse: 1.1109 - val_n2v_abs: 0.7523 - lr: 4.0000e-04
+3/3 [==============================] - 0s 5ms/steposs: 0.3309 - n2v_mse: 0.3309 - n2v_abs: 0.48
+4/4 [==============================] - 3s 944ms/step - loss: 0.3037 - n2v_mse: 0.3037 - n2v_abs: 0.4558 - val_loss: 0.7176 - val_n2v_mse: 0.7134 - val_n2v_abs: 0.6956 - lr: 4.0000e-04
 Epoch 11/20
-3/3 [==============================] - 0s 4ms/steposs: 0.7624 - n2v_mse: 0.7624 - n2v_abs: 0.68
-4/4 [==============================] - 0s 111ms/step - loss: 0.7400 - n2v_mse: 0.7400 - n2v_abs: 0.6745 - val_loss: 1.1570 - val_n2v_mse: 1.2110 - val_n2v_abs: 0.7675 - lr: 4.0000e-04
+3/3 [==============================] - 0s 7ms/steposs: 0.6576 - n2v_mse: 0.6576 - n2v_abs: 0.63
+4/4 [==============================] - 3s 963ms/step - loss: 0.5658 - n2v_mse: 0.5658 - n2v_abs: 0.5924 - val_loss: 0.4690 - val_n2v_mse: 0.4667 - val_n2v_abs: 0.5862 - lr: 4.0000e-04
 Epoch 12/20
-3/3 [==============================] - 0s 5ms/steposs: 0.9788 - n2v_mse: 0.9788 - n2v_abs: 0.78
-4/4 [==============================] - 0s 115ms/step - loss: 0.9375 - n2v_mse: 0.9375 - n2v_abs: 0.7593 - val_loss: 1.1402 - val_n2v_mse: 1.1992 - val_n2v_abs: 0.7643 - lr: 4.0000e-04
+3/3 [==============================] - 0s 11ms/stepss: 0.4597 - n2v_mse: 0.4597 - n2v_abs: 0.52
+4/4 [==============================] - 3s 955ms/step - loss: 1.1235 - n2v_mse: 1.1235 - n2v_abs: 0.8216 - val_loss: 0.3430 - val_n2v_mse: 0.3418 - val_n2v_abs: 0.5007 - lr: 4.0000e-04
 Epoch 13/20
-3/3 [==============================] - 0s 5ms/steposs: 0.9397 - n2v_mse: 0.9397 - n2v_abs: 0.77
-4/4 [==============================] - 0s 110ms/step - loss: 0.9378 - n2v_mse: 0.9378 - n2v_abs: 0.7646 - val_loss: 1.0173 - val_n2v_mse: 1.0197 - val_n2v_abs: 0.7357 - lr: 4.0000e-04
+3/3 [==============================] - 0s 4ms/steposs: 0.9861 - n2v_mse: 0.9861 - n2v_abs: 0.80
+4/4 [==============================] - 3s 955ms/step - loss: 0.8893 - n2v_mse: 0.8893 - n2v_abs: 0.7777 - val_loss: 0.2787 - val_n2v_mse: 0.2779 - val_n2v_abs: 0.4446 - lr: 4.0000e-04
 Epoch 14/20
-3/3 [==============================] - 0s 5ms/steposs: 0.7755 - n2v_mse: 0.7755 - n2v_abs: 0.69
-4/4 [==============================] - 0s 110ms/step - loss: 0.8607 - n2v_mse: 0.8607 - n2v_abs: 0.7155 - val_loss: 0.9547 - val_n2v_mse: 0.9363 - val_n2v_abs: 0.7188 - lr: 4.0000e-04
+3/3 [==============================] - 0s 5ms/steposs: 0.7548 - n2v_mse: 0.7548 - n2v_abs: 0.71
+4/4 [==============================] - 3s 942ms/step - loss: 0.6305 - n2v_mse: 0.6305 - n2v_abs: 0.6323 - val_loss: 0.3837 - val_n2v_mse: 0.3827 - val_n2v_abs: 0.5253 - lr: 4.0000e-04
 Epoch 15/20
-3/3 [==============================] - 0s 5ms/steposs: 0.8208 - n2v_mse: 0.8208 - n2v_abs: 0.70
-4/4 [==============================] - 0s 116ms/step - loss: 0.7665 - n2v_mse: 0.7665 - n2v_abs: 0.6827 - val_loss: 0.9207 - val_n2v_mse: 0.8887 - val_n2v_abs: 0.7135 - lr: 4.0000e-04
+3/3 [==============================] - 0s 7ms/steposs: 0.4684 - n2v_mse: 0.4684 - n2v_abs: 0.55
+4/4 [==============================] - 3s 939ms/step - loss: 0.7192 - n2v_mse: 0.7192 - n2v_abs: 0.7060 - val_loss: 0.5192 - val_n2v_mse: 0.5177 - val_n2v_abs: 0.6018 - lr: 4.0000e-04
 Epoch 16/20
-3/3 [==============================] - 0s 4ms/steposs: 0.9221 - n2v_mse: 0.9221 - n2v_abs: 0.78
-4/4 [==============================] - 0s 112ms/step - loss: 0.8365 - n2v_mse: 0.8365 - n2v_abs: 0.7442 - val_loss: 0.9127 - val_n2v_mse: 0.8766 - val_n2v_abs: 0.7124 - lr: 4.0000e-04
+3/3 [==============================] - 0s 5ms/steposs: 0.3171 - n2v_mse: 0.3171 - n2v_abs: 0.44
+4/4 [==============================] - 3s 939ms/step - loss: 0.3091 - n2v_mse: 0.3091 - n2v_abs: 0.4417 - val_loss: 0.4662 - val_n2v_mse: 0.4648 - val_n2v_abs: 0.5686 - lr: 4.0000e-04
 Epoch 17/20
-3/4 [=====================&gt;........] - ETA: 0s - loss: 0.8423 - n2v_mse: 0.8423 - n2v_abs: 0.7521
-Epoch 17: ReduceLROnPlateau reducing learning rate to 0.00019999999494757503.
-3/3 [==============================] - 0s 5ms/step
-4/4 [==============================] - 0s 111ms/step - loss: 0.8918 - n2v_mse: 0.8918 - n2v_abs: 0.7673 - val_loss: 0.9090 - val_n2v_mse: 0.8726 - val_n2v_abs: 0.7118 - lr: 4.0000e-04
+3/3 [==============================] - 0s 5ms/steposs: 0.4391 - n2v_mse: 0.4391 - n2v_abs: 0.56
+4/4 [==============================] - 3s 938ms/step - loss: 0.3438 - n2v_mse: 0.3438 - n2v_abs: 0.4762 - val_loss: 0.4039 - val_n2v_mse: 0.4030 - val_n2v_abs: 0.5302 - lr: 4.0000e-04
 Epoch 18/20
-3/3 [==============================] - 0s 5ms/steposs: 0.9307 - n2v_mse: 0.9307 - n2v_abs: 0.72
-4/4 [==============================] - 0s 147ms/step - loss: 0.8341 - n2v_mse: 0.8341 - n2v_abs: 0.6857 - val_loss: 0.9058 - val_n2v_mse: 0.8681 - val_n2v_abs: 0.7105 - lr: 2.0000e-04
+3/3 [==============================] - 0s 4ms/steposs: 0.4644 - n2v_mse: 0.4644 - n2v_abs: 0.58
+4/4 [==============================] - 3s 937ms/step - loss: 0.5125 - n2v_mse: 0.5125 - n2v_abs: 0.6299 - val_loss: 0.4013 - val_n2v_mse: 0.4004 - val_n2v_abs: 0.5267 - lr: 4.0000e-04
 Epoch 19/20
-3/3 [==============================] - 0s 5ms/steposs: 0.8059 - n2v_mse: 0.8059 - n2v_abs: 0.68
-4/4 [==============================] - 0s 110ms/step - loss: 0.7984 - n2v_mse: 0.7984 - n2v_abs: 0.6820 - val_loss: 0.9000 - val_n2v_mse: 0.8620 - val_n2v_abs: 0.7082 - lr: 2.0000e-04
+3/3 [==============================] - 0s 6ms/steposs: 0.2503 - n2v_mse: 0.2503 - n2v_abs: 0.42
+4/4 [==============================] - 3s 950ms/step - loss: 0.2406 - n2v_mse: 0.2406 - n2v_abs: 0.4126 - val_loss: 0.4255 - val_n2v_mse: 0.4246 - val_n2v_abs: 0.5384 - lr: 4.0000e-04
 Epoch 20/20
-3/3 [==============================] - 0s 4ms/steposs: 0.7459 - n2v_mse: 0.7459 - n2v_abs: 0.67
-4/4 [==============================] - 0s 110ms/step - loss: 0.7301 - n2v_mse: 0.7301 - n2v_abs: 0.6702 - val_loss: 0.8943 - val_n2v_mse: 0.8562 - val_n2v_abs: 0.7055 - lr: 2.0000e-04
+3/3 [==============================] - 0s 4ms/steposs: 0.1796 - n2v_mse: 0.1796 - n2v_abs: 0.32
+4/4 [==============================] - 3s 941ms/step - loss: 0.1748 - n2v_mse: 0.1748 - n2v_abs: 0.3264 - val_loss: 0.4494 - val_n2v_mse: 0.4486 - val_n2v_abs: 0.5547 - lr: 4.0000e-04
 
 Loading network weights from &#39;weights_best.h5&#39;.
 </pre></div>
@@ -717,7 +728,7 @@ Loading network weights from &#39;weights_best.h5&#39;.
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We load the data we want to process.</span>
-<span class="n">img</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;flywing.tif&#39;</span><span class="p">))</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
 
 <span class="c1"># Here we process the data.</span>
 <span class="c1"># The &#39;n_tiles&#39; parameter can be used if images are too big for the GPU memory.</span>
@@ -727,100 +738,197 @@ Loading network weights from &#39;weights_best.h5&#39;.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 22ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The input image is of type uint16 and will be casted to float32 for prediction.
+1/1 [==============================] - 1s 548ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  6%|▋         | 1/16 [00:00&lt;00:00, 149796.57it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  3%|▎         | 1/32 [00:00&lt;00:00, 135300.13it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 31ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 12%|█▎        | 2/16 [00:00&lt;00:00, 28.51it/s]    
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 23ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 19%|█▉        | 3/16 [00:00&lt;00:00, 22.17it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 22ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 4/16 [00:00&lt;00:00, 22.17it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 22ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 31%|███▏      | 5/16 [00:00&lt;00:00, 22.17it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  6%|▋         | 2/32 [00:00&lt;00:01, 18.90it/s]    
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 25ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 38%|███▊      | 6/16 [00:00&lt;00:00, 16.89it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 26ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 44%|████▍     | 7/16 [00:00&lt;00:00, 16.89it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 22ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 8/16 [00:00&lt;00:00, 15.78it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 22ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 56%|█████▋    | 9/16 [00:00&lt;00:00, 15.78it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 23ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 62%|██████▎   | 10/16 [00:00&lt;00:00, 14.99it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 23ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 69%|██████▉   | 11/16 [00:00&lt;00:00, 14.99it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  9%|▉         | 3/32 [00:00&lt;00:01, 18.90it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 12/16 [00:00&lt;00:00, 14.75it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 12%|█▎        | 4/32 [00:00&lt;00:02, 13.12it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 26ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 81%|████████▏ | 13/16 [00:00&lt;00:00, 14.75it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 16%|█▌        | 5/32 [00:00&lt;00:02, 13.12it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 27ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 19%|█▉        | 6/32 [00:00&lt;00:02, 11.59it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 28ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 88%|████████▊ | 14/16 [00:00&lt;00:00, 14.49it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 22%|██▏       | 7/32 [00:00&lt;00:02, 11.59it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 28ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 8/32 [00:00&lt;00:02, 11.44it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 27ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 28%|██▊       | 9/32 [00:00&lt;00:02, 11.44it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 29ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 31%|███▏      | 10/32 [00:00&lt;00:02, 10.74it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 94%|█████████▍| 15/16 [00:00&lt;00:00, 14.49it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 34%|███▍      | 11/32 [00:00&lt;00:01, 10.74it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 26ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 38%|███▊      | 12/32 [00:01&lt;00:01, 10.86it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 16/16 [00:01&lt;00:00, 14.82it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 41%|████      | 13/32 [00:01&lt;00:01, 10.86it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 31ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 44%|████▍     | 14/32 [00:01&lt;00:01, 10.51it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 47%|████▋     | 15/32 [00:01&lt;00:01, 10.51it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 25ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 16/32 [00:01&lt;00:01, 10.75it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 53%|█████▎    | 17/32 [00:01&lt;00:01, 10.75it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 25ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 56%|█████▋    | 18/32 [00:01&lt;00:01, 10.20it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 25ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 59%|█████▉    | 19/32 [00:01&lt;00:01, 10.20it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 62%|██████▎   | 20/32 [00:01&lt;00:01, 10.60it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 66%|██████▌   | 21/32 [00:01&lt;00:01, 10.60it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 25ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 69%|██████▉   | 22/32 [00:02&lt;00:00, 10.50it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 72%|███████▏  | 23/32 [00:02&lt;00:00, 10.50it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 24/32 [00:02&lt;00:00, 10.60it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 78%|███████▊  | 25/32 [00:02&lt;00:00, 10.60it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 25ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 81%|████████▏ | 26/32 [00:02&lt;00:00, 10.50it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 23ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 84%|████████▍ | 27/32 [00:02&lt;00:00, 10.50it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 25ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 88%|████████▊ | 28/32 [00:02&lt;00:00, 10.79it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 24ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 91%|█████████ | 29/32 [00:02&lt;00:00, 10.79it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 25ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 94%|█████████▍| 30/32 [00:02&lt;00:00, 10.62it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 25ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 97%|█████████▋| 31/32 [00:02&lt;00:00, 10.62it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 25ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 32/32 [00:03&lt;00:00, 10.66it/s]
 </pre></div>
 </div>
 </div>
@@ -840,7 +948,7 @@ Loading network weights from &#39;weights_best.h5&#39;.
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Prediction&#39;)
 </pre></div>
 </div>
-<img alt="../_images/074159599fe3af6cdb80d03a32d2522e6a5c8ea6530f8315c41f77df09a0e615.png" src="../_images/074159599fe3af6cdb80d03a32d2522e6a5c8ea6530f8315c41f77df09a0e615.png" />
+<img alt="../_images/f6ed124d73c9132ae509224a02e1742f81f09d5f1a5dd7923234c479335e6be8.png" src="../_images/f6ed124d73c9132ae509224a02e1742f81f09d5f1a5dd7923234c479335e6be8.png" />
 </div>
 </div>
 </section>
