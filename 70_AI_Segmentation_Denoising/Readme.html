@@ -392,7 +392,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -408,6 +410,15 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernels-to-use">Kernels to use</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-materials">Lecture materials</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -419,6 +430,46 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="ai-segmentation-and-denoising">
 <h1>AI segmentation and denoising<a class="headerlink" href="#ai-segmentation-and-denoising" title="Permalink to this heading">#</a></h1>
+<p>Welcome to the session on segmentation on segmentation and denoising using deep learning. This tutorial will pick up where the previous session on pytorch left off. This tutoorial will cover several topics:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="01_2D_unet_training.html"><span class="doc std std-doc">Training a Unet for segmentation</span></a>: The <a class="reference external" href="https://www.nature.com/articles/s41592-018-0261-2">Unet</a> was and is <em>the</em> working horse architecture for the segmentation of image data across all possible domains.</p></li>
+<li><p><a class="reference internal" href="02_Noise2Void.html"><span class="doc std std-doc">Denoising image data with Noise2Void</span></a>: <a class="reference external" href="https://openaccess.thecvf.com/content_CVPR_2019/html/Krull_Noise2Void_-_Learning_Denoising_From_Single_Noisy_Images_CVPR_2019_paper.html">Noise2Void</a> and its update, <a class="reference external" href="https://www.frontiersin.org/articles/10.3389/fcomp.2020.00005/full">Probabilistic Noise2Void</a> are poerful tools for denoising any image data without the need for ground truth data.</p></li>
+<li><p><a class="reference internal" href="03_Noise2Void_3D.html"><span class="doc std std-doc">Denoising 3D image datawith Noise2Void</span></a>: Noise2Void can be extended to 3D image data. This notebook will show you how to do that.</p></li>
+</ul>
+<section id="kernels-to-use">
+<h2>Kernels to use<a class="headerlink" href="#kernels-to-use" title="Permalink to this heading">#</a></h2>
+<p>In order to install the singularity containers needed for this exercise, first clone the following repository into your home directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.mn.tu-dresden.de/bia-pol/singularity-devbio-napari.git
+<span class="nb">cd</span><span class="w"> </span>singularity-devbio-napari
+</pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Notebook</p></th>
+<th class="head"><p>Installlation</p></th>
+<th class="head"><p>Kernel name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="01_2D_unet_training.html"><span class="doc std std-doc">01_2D_unet_training.ipynb</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">./install.sh</span> <span class="pre">pol-course-pytorch</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pol-course-pytorch</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="02_Noise2Void.html"><span class="doc std std-doc">02_Noise2Void.ipynb</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">./install.sh</span> <span class="pre">pol-course-pytorch</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pol-course-pytorch</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="03_Noise2Void_3D.html"><span class="doc std std-doc">03_Noise2Void_3D.ipynb</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">./install.sh</span> <span class="pre">n2v</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">n2v</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="lecture-materials">
+<h2>Lecture materials<a class="headerlink" href="#lecture-materials" title="Permalink to this heading">#</a></h2>
+<p><a class="reference download internal" download="" href="../_downloads/04b7065fbe83ab1053e415d09d837eca/CNNs_N2V.pdf"><span class="xref download myst">Link to slides</span></a></p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -461,6 +512,21 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernels-to-use">Kernels to use</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-materials">Lecture materials</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

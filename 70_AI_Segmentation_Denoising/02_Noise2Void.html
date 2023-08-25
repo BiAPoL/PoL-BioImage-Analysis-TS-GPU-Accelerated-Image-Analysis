@@ -1,0 +1,984 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>(Probabilistic) Noise2Void &#8212; Image data science with Python and Napari @EPFL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '70_AI_Segmentation_Denoising/02_Noise2Void';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/biapol_logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/biapol_logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Monday</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_course_preparation/Readme.html">Course preparation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../10_Clesperanto/readme.html">Clesperanto</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../23_clesperanto_assistant/intro.html">Using clesperanto from the Napari Assistant</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../23_clesperanto_assistant/napari-assistant.html">The Napari Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../23_clesperanto_assistant/notebook_export.html">Generating Jupyter Notebooks from the Napari Assistant</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../30_Deconvolution/0_intro_to_decon.html">Intro to Deconvolution and Restoration</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/1_test_libs.html">Setup environment</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/2_cupy_forward.html">Implementing the forward model (Convolution) with cupy</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/3_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/4_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/5_edges.html">Edge handling</a></li>
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/6_decon_bead_edge_handling.html">Edge handling experiments</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/7_decon_regularization.html">Deconvolve microtubules phantom</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/8_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/9_Dask_Deconvolution.html">Dask deconvolution</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../30_Deconvolution/cluster_access.html">Running deconvolution on the ZIH cluster</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tuesday</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50_Clesperanto_on_HPC/readme.html">Using Clesperanto on Taurus</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/login_taurus.html">Executing clesperanto on the TU Dresden HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/modified_generated_notebook.html">Loading ‘blobs’</a></li>
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues/new?title=Issue%20on%20page%20%2F70_AI_Segmentation_Denoising/02_Noise2Void.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/70_AI_Segmentation_Denoising/02_Noise2Void.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>(Probabilistic) Noise2Void</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source-code">Source code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training">Training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#process-3d-data">Process 3D data</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="probabilistic-noise2void">
+<h1>(Probabilistic) Noise2Void<a class="headerlink" href="#probabilistic-noise2void" title="Permalink to this heading">#</a></h1>
+<p>This notebook is a re-implementation of the code for denoising with <a class="reference external" href="https://openaccess.thecvf.com/content_CVPR_2019/html/Krull_Noise2Void_-_Learning_Denoising_From_Single_Noisy_Images_CVPR_2019_paper.html">noise2void</a> as proovided by the authors in this <a class="reference external" href="https://github.com/juglab/pn2v">repository</a>. Unlike the original code, this implementation uses pytorch instead of tensorflow. The key idea is to crop small tiles from image data, replace a given pixel with any other pixel in the tile and then try to predict the true intensity of the replaced pixel. Since the intensity of every pixel <span class="math notranslate nohighlight">\(i\)</span> consists of two components noise <span class="math notranslate nohighlight">\(n\)</span> and <span class="math notranslate nohighlight">\(s\)</span> (intensity <span class="math notranslate nohighlight">\(i=n+s\)</span>), the network will inevitably fail to predict the noise component <span class="math notranslate nohighlight">\(n\)</span> of the pixel - thus cleaning up the image in the process.</p>
+<section id="source-code">
+<h2>Source code<a class="headerlink" href="#source-code" title="Permalink to this heading">#</a></h2>
+<p>Since the torch-implementation of noise2void is currently not (yet) pip-installlable, we simply clone the repository and import the functions provided therein.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/juglab/pn2v.git
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fatal: destination path &#39;pn2v&#39; already exists and is not an empty directory.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;pn2v&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">stackview</span>
+
+<span class="kn">from</span> <span class="nn">unet.model</span> <span class="kn">import</span> <span class="n">UNet</span>
+<span class="kn">from</span> <span class="nn">pn2v</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">pn2v</span> <span class="kn">import</span> <span class="n">training</span><span class="p">,</span> <span class="n">prediction</span>
+<span class="kn">import</span> <span class="nn">pn2v.histNoiseModel</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">io</span>
+
+<span class="n">device</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">getDevice</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CUDA available? True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="dataset">
+<h2>Dataset<a class="headerlink" href="#dataset" title="Permalink to this heading">#</a></h2>
+<p>As a training dataset, we’ll use <a class="reference external" href="https://zenodo.org/record/5837363">this data</a> of a developing tribolium embryo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="s1">&#39;/projects/p038/p_scads_trainings/BIAS/torch_segmentation_denoising_example_data/denoising_example_data&#39;</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;lund_i000000_oi_000000.tif&#39;</span><span class="p">))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;https://zenodo.org/record/5837363/files/lund_i000000_oi_000000.tif&#39;</span> 
+    <span class="n">data</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="training">
+<h2>Training<a class="headerlink" href="#training" title="Permalink to this heading">#</a></h2>
+<p>We next create the model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The N2V network requires only a single output unit per pixel</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">UNet</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>e:\BiAPoL\Projects\PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis\docs\70_AI_Segmentation_Denoising\pn2v\unet\model.py:215: UserWarning: nn.init.xavier_normal is now deprecated in favor of nn.init.xavier_normal_.
+  init.xavier_normal(m.weight)
+e:\BiAPoL\Projects\PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis\docs\70_AI_Segmentation_Denoising\pn2v\unet\model.py:216: UserWarning: nn.init.constant is now deprecated in favor of nn.init.constant_.
+  init.constant(m.bias, 0)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Noise2void provides the <code class="docutils literal notranslate"><span class="pre">training.trainNetwork</span></code> function to run the training. The essential parameters here are the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numOfEpochs</span></code>: number of epochs to train</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numOfIterations</span></code>: number of steps in each epochs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">patchSize</span></code>: size of the patches to extract from the images</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">batchSize</span></code>: number of patches to use in each iteration</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_directory</span> <span class="o">=</span> <span class="s1">&#39;./model&#39;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">model_directory</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start training.</span>
+<span class="n">trainHist</span><span class="p">,</span> <span class="n">valHist</span> <span class="o">=</span> <span class="n">training</span><span class="o">.</span><span class="n">trainNetwork</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="n">net</span><span class="p">,</span> <span class="n">trainData</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">valData</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                                           <span class="n">postfix</span><span class="o">=</span><span class="s1">&#39;conv_N2V&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">model_directory</span><span class="p">,</span> <span class="n">noiseModel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                           <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">numOfEpochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">stepsPerEpoch</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+                                           <span class="n">virtualBatchSize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">learningRate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 0 finished      
+avg. loss: 0.10178166944533587+-(2SEM)0.009077229520687513      
+Epoch 1 finished      
+avg. loss: 0.05427669202908873+-(2SEM)0.007266653925900008      
+Epoch 2 finished      
+avg. loss: 0.055269555933773515+-(2SEM)0.005832183151891591      
+Epoch 3 finished      
+avg. loss: 0.04591562105342746+-(2SEM)0.006076027517975671      
+Epoch 4 finished      
+avg. loss: 0.04633328560739756+-(2SEM)0.004488948674173996      
+Epoch 5 finished      
+avg. loss: 0.04821818303316831+-(2SEM)0.006612222493312421      
+Epoch 6 finished      
+avg. loss: 0.03981889635324478+-(2SEM)0.00640618087838512      
+Epoch 7 finished      
+avg. loss: 0.04316314794123173+-(2SEM)0.006777747177791484      
+Epoch 8 finished      
+avg. loss: 0.045798633620142935+-(2SEM)0.005792215109114235      
+Epoch 9 finished      
+avg. loss: 0.04436514610424638+-(2SEM)0.005698760310098421      
+Epoch 10 finished      
+avg. loss: 0.044780786521732806+-(2SEM)0.007313865793629464      
+Epoch 11 finished      
+avg. loss: 0.047139573749154805+-(2SEM)0.005759925556380698      
+Epoch 12 finished      
+avg. loss: 0.04369191830046475+-(2SEM)0.006609085326874401      
+Epoch 13 finished      
+avg. loss: 0.045928052812814715+-(2SEM)0.0065331123376728435      
+Epoch 14 finished      
+avg. loss: 0.04362007100135088+-(2SEM)0.007935947744369176      
+Epoch 15 finished      
+avg. loss: 0.04174562208354473+-(2SEM)0.00475543255114929      
+Epoch 16 finished      
+avg. loss: 0.039203992253169416+-(2SEM)0.007568600340917847      
+Epoch 17 finished      
+avg. loss: 0.04140983475372195+-(2SEM)0.006439224011138418      
+Epoch 18 finished      
+avg. loss: 0.04592922097072005+-(2SEM)0.005571635786675316      
+Epoch 19 finished      
+avg. loss: 0.04437931962311268+-(2SEM)0.006779587419723807      
+Epoch 20 finished      
+avg. loss: 0.041647424828261136+-(2SEM)0.006423169975764224      
+Epoch 21 finished      
+avg. loss: 0.04091609609313309+-(2SEM)0.007112896989248551      
+Epoch 22 finished      
+avg. loss: 0.04907223330810666+-(2SEM)0.004876989673748978      
+Epoch 23 finished      
+avg. loss: 0.042483238503336906+-(2SEM)0.006685022368362668      
+Epoch 24 finished      
+avg. loss: 0.03913976456969977+-(2SEM)0.006420561565350121      
+Epoch 25 finished      
+avg. loss: 0.04611594593152404+-(2SEM)0.005731960438791866      
+Epoch 26 finished      
+avg. loss: 0.04909990672022104+-(2SEM)0.005137232244266683      
+Epoch 27 finished      
+avg. loss: 0.05076508838683367+-(2SEM)0.0056115905522444165      
+Epoch 28 finished      
+avg. loss: 0.047043940238654616+-(2SEM)0.006740140376121641      
+Epoch 00029: reducing learning rate of group 0 to 5.0000e-04.
+Epoch 29 finished      
+avg. loss: 0.04937937129288912+-(2SEM)0.004905173133733937      
+Epoch 30 finished      
+avg. loss: 0.046335109136998655+-(2SEM)0.005039511929620558      
+Epoch 31 finished      
+avg. loss: 0.040534171368926765+-(2SEM)0.005969258589700079      
+Epoch 32 finished      
+avg. loss: 0.03725863182917237+-(2SEM)0.006433044938868639      
+Epoch 33 finished      
+avg. loss: 0.04431425067596138+-(2SEM)0.00700278889818332      
+Epoch 34 finished      
+avg. loss: 0.04041782943531871+-(2SEM)0.00687605244750712      
+Epoch 35 finished      
+avg. loss: 0.04372498169541359+-(2SEM)0.004999052074222511      
+Epoch 36 finished      
+avg. loss: 0.04234641371294856+-(2SEM)0.006564293470524206      
+Epoch 37 finished      
+avg. loss: 0.041979265632107854+-(2SEM)0.006712790206310522      
+Epoch 38 finished      
+avg. loss: 0.035188204562291506+-(2SEM)0.006678502981792587      
+Epoch 39 finished      
+avg. loss: 0.04729064991697669+-(2SEM)0.005301883881477926      
+Epoch 00040: reducing learning rate of group 0 to 2.5000e-04.
+Epoch 40 finished      
+avg. loss: 0.04481269912794232+-(2SEM)0.0070035802919174795      
+Epoch 41 finished      
+avg. loss: 0.04334399094805121+-(2SEM)0.0065818061509852555      
+Epoch 42 finished      
+avg. loss: 0.04022352760657668+-(2SEM)0.007001873849551768      
+Epoch 43 finished      
+avg. loss: 0.03804888427257538+-(2SEM)0.0069549621613248375      
+Epoch 44 finished      
+avg. loss: 0.043846991192549464+-(2SEM)0.006249811925022753      
+Epoch 45 finished      
+avg. loss: 0.04081621174700558+-(2SEM)0.005919984328389423      
+Epoch 46 finished      
+avg. loss: 0.04260242274031043+-(2SEM)0.005907255031461907      
+Epoch 47 finished      
+avg. loss: 0.041470065526664254+-(2SEM)0.006645003888142023      
+Epoch 48 finished      
+avg. loss: 0.04125365111976862+-(2SEM)0.007328649804313889      
+Epoch 49 finished      
+avg. loss: 0.04821671089157462+-(2SEM)0.006154261488216741      
+Epoch 50 finished      
+avg. loss: 0.048023512773215773+-(2SEM)0.005477094038259855      
+Epoch 00051: reducing learning rate of group 0 to 1.2500e-04.
+Epoch 51 finished      
+avg. loss: 0.043405919522047046+-(2SEM)0.0059107446660929324      
+Epoch 52 finished      
+avg. loss: 0.043305708933621644+-(2SEM)0.00740224676849642      
+Epoch 53 finished      
+avg. loss: 0.04011166328564286+-(2SEM)0.007495220414289764      
+Epoch 54 finished      
+avg. loss: 0.04852671246044338+-(2SEM)0.005648190955135285      
+Epoch 55 finished      
+avg. loss: 0.03874785983934999+-(2SEM)0.005779148472062347      
+Epoch 56 finished      
+avg. loss: 0.0441366508603096+-(2SEM)0.006564015305555172      
+Epoch 57 finished      
+avg. loss: 0.042121673468500376+-(2SEM)0.0071233331464323575      
+Epoch 58 finished      
+avg. loss: 0.03806096650660038+-(2SEM)0.006044413129634278      
+Epoch 59 finished      
+avg. loss: 0.03719640485942364+-(2SEM)0.0070245277557681556      
+Epoch 60 finished      
+avg. loss: 0.0429799628444016+-(2SEM)0.006945942285695917      
+Epoch 61 finished      
+avg. loss: 0.044231025502085686+-(2SEM)0.0056916703772439264      
+Epoch 62 finished      
+avg. loss: 0.042287174984812735+-(2SEM)0.006143567795002128      
+Epoch 63 finished      
+avg. loss: 0.04139210991561413+-(2SEM)0.005672932111899681      
+Epoch 64 finished      
+avg. loss: 0.03832529461942613+-(2SEM)0.006425448680687999      
+Epoch 65 finished      
+avg. loss: 0.040286355279386045+-(2SEM)0.007967226133725273      
+Epoch 66 finished      
+avg. loss: 0.038243168778717515+-(2SEM)0.005700296548826843      
+Epoch 67 finished      
+avg. loss: 0.03971881624311209+-(2SEM)0.0062493994314876435      
+Epoch 68 finished      
+avg. loss: 0.04172368622384966+-(2SEM)0.007329884270761698      
+Epoch 00069: reducing learning rate of group 0 to 6.2500e-05.
+Epoch 69 finished      
+avg. loss: 0.036776128131896256+-(2SEM)0.006176919503669225      
+Epoch 70 finished      
+avg. loss: 0.03971074838191271+-(2SEM)0.0060923024585870745      
+Epoch 71 finished      
+avg. loss: 0.03949075266718864+-(2SEM)0.007126978962352925      
+Epoch 72 finished      
+avg. loss: 0.045639749197289345+-(2SEM)0.0065983083884609516      
+Epoch 73 finished      
+avg. loss: 0.04462313009425998+-(2SEM)0.005139550473131363      
+Epoch 74 finished      
+avg. loss: 0.043529010843485594+-(2SEM)0.005607257078550517      
+Epoch 75 finished      
+avg. loss: 0.04819752778857946+-(2SEM)0.0056383300566060154      
+Epoch 76 finished      
+avg. loss: 0.048204353731125596+-(2SEM)0.005447687217225682      
+Epoch 77 finished      
+avg. loss: 0.04410949968732893+-(2SEM)0.006304145923870104      
+Epoch 78 finished      
+avg. loss: 0.037351023172959685+-(2SEM)0.006505325913752245      
+Epoch 79 finished      
+avg. loss: 0.04170952839776874+-(2SEM)0.0062644993574431235      
+Epoch 00080: reducing learning rate of group 0 to 3.1250e-05.
+Epoch 80 finished      
+avg. loss: 0.04277459057047963+-(2SEM)0.0050462500281863954      
+Epoch 81 finished      
+avg. loss: 0.04415525356307626+-(2SEM)0.00551631552475758      
+Epoch 82 finished      
+avg. loss: 0.04192919535562396+-(2SEM)0.005620521640978457      
+Epoch 83 finished      
+avg. loss: 0.042811789503321054+-(2SEM)0.0075912449706114216      
+Epoch 84 finished      
+avg. loss: 0.04605915108695626+-(2SEM)0.005697281426537171      
+Epoch 85 finished      
+avg. loss: 0.046607552003115414+-(2SEM)0.0047433293953312765      
+Epoch 86 finished      
+avg. loss: 0.04055935386568308+-(2SEM)0.006224248694632747      
+Epoch 87 finished      
+avg. loss: 0.04178554150275886+-(2SEM)0.0070500603486819535      
+Epoch 88 finished      
+avg. loss: 0.04133336069062352+-(2SEM)0.0064431886006172875      
+Epoch 89 finished      
+avg. loss: 0.03832123405300081+-(2SEM)0.00727184321424489      
+Epoch 90 finished      
+avg. loss: 0.0411384760402143+-(2SEM)0.00600986629769931      
+Epoch 00091: reducing learning rate of group 0 to 1.5625e-05.
+Epoch 91 finished      
+avg. loss: 0.04702711529098451+-(2SEM)0.00641903050039735      
+Epoch 92 finished      
+avg. loss: 0.047278660256415604+-(2SEM)0.006261854995779307      
+Epoch 93 finished      
+avg. loss: 0.04357477910816669+-(2SEM)0.006954080502301092      
+Epoch 94 finished      
+avg. loss: 0.03689509206451476+-(2SEM)0.007523161479869554      
+Epoch 95 finished      
+avg. loss: 0.041525264736264944+-(2SEM)0.005577297814961488      
+Epoch 96 finished      
+avg. loss: 0.04468223862349987+-(2SEM)0.006428705830263541      
+Epoch 97 finished      
+avg. loss: 0.05089892018586397+-(2SEM)0.004182146103024159      
+Epoch 98 finished      
+avg. loss: 0.03829586040228605+-(2SEM)0.007441270375082025      
+Epoch 99 finished      
+avg. loss: 0.04074067701585591+-(2SEM)0.007291790986700284      
+Finished Training      
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n2vResult</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">tiledPredict</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">40</span><span class="p">],</span> <span class="n">net</span> <span class="p">,</span><span class="n">ps</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span>
+                                        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">noiseModel</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vmin</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="n">vmax</span> <span class="o">=</span> <span class="mi">280</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">40</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Original image&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">n2vResult</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Noise2Void result&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Noise2Void result&#39;)
+</pre></div>
+</div>
+<img alt="../_images/044a00298ebcf021db2633b02c3c3b096ef376cbe25713dc4c4efa0a84aea1d5.png" src="../_images/044a00298ebcf021db2633b02c3c3b096ef376cbe25713dc4c4efa0a84aea1d5.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">40</span><span class="p">][</span><span class="mi">800</span><span class="p">:</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Original image&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">n2vResult</span><span class="p">[</span><span class="mi">800</span><span class="p">:</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Noise2Void result&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Noise2Void result&#39;)
+</pre></div>
+</div>
+<img alt="../_images/f11f56e626f25d8782b5b5df5919698d57e49162383d18d2982ad84c4cbd8e0b.png" src="../_images/f11f56e626f25d8782b5b5df5919698d57e49162383d18d2982ad84c4cbd8e0b.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stackview</span><span class="o">.</span><span class="n">curtain</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">40</span><span class="p">][</span><span class="mi">800</span><span class="p">:</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">],</span> <span class="n">n2vResult</span><span class="p">[</span><span class="mi">800</span><span class="p">:</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">],</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "78cb2985201c43d592b59df74b0c78c8", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="process-3d-data">
+<h2>Process 3D data<a class="headerlink" href="#process-3d-data" title="Permalink to this heading">#</a></h2>
+<p>Noise2Void generally runs under the assumption, that the noise between neighboring pixels is un-correlated. This assumption is valid in both 3D and 2D. While the performance is probably worse than using a real 3D convolutional network, it is still legitimate too apply noise2void slice by slice to the data stack:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">denoised_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">denoised_image</span><span class="p">[</span><span class="n">z</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">tiledPredict</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">z</span><span class="p">],</span> <span class="n">net</span> <span class="p">,</span><span class="n">ps</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span>
+                                        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">noiseModel</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Original image&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">denoised_image</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Noise2Void result&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Noise2Void result&#39;)
+</pre></div>
+</div>
+<img alt="../_images/dd86fcbccce8641de69f459422e55d30b87d4cb728c6210892a9a464ba37b7ab.png" src="../_images/dd86fcbccce8641de69f459422e55d30b87d4cb728c6210892a9a464ba37b7ab.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">800</span><span class="p">:</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Original image&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">denoised_image</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">800</span><span class="p">:</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Noise2Void result&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Noise2Void result&#39;)
+</pre></div>
+</div>
+<img alt="../_images/910aa7b8f06f38124a3df69a2c464e66adad604ff398e640b457ad2d922fc84a.png" src="../_images/910aa7b8f06f38124a3df69a2c464e66adad604ff398e640b457ad2d922fc84a.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stackview</span><span class="o">.</span><span class="n">curtain</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">40</span><span class="p">],</span> <span class="n">denoised_image</span><span class="p">[</span><span class="mi">40</span><span class="p">],</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c98297d6947340d194ef853952407495", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./70_AI_Segmentation_Denoising"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source-code">Source code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training">Training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#process-3d-data">Process 3D data</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Stephane Rigaud, Brian Northan, Till Korten, Neringa Jurenaite, Peter Steinbach, Sebastian Starke, Johannes Soltwedel and Marvin Albert, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: This work can be reused under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> license unless mentioned otherwise.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
