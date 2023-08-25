@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Look at some predictions &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>Going for the GPU &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -64,6 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '60_Pytorch/05_model_training_with_device';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="06_model_training_with_logging.html" />
+    <link rel="prev" title="Training a Unet" href="04_model_training.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -213,7 +215,7 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tuesday</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../50_Clesperanto_on_HPC/readme.html">Using Clesperanto on Taurus</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/login_taurus.html">Executing clesperanto on the TU Dresden HPC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/modified_generated_notebook.html">Loading ‘blobs’</a></li>
@@ -394,7 +396,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -405,11 +409,19 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Look at some predictions</h1>
+    <h1>Going for the GPU</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-some-predictions">Look at some predictions</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -419,7 +431,9 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <p>Training of the model in the previous notebook was rather slow, you might have thought. This was the case even if your machine has a GPU available. But don’t be disappointed yet. The truth is that we have not made use of the GPU at all just yet. Usage of devices has to be handled manually by the user in torch. First we will check if torch recognizes any devices it could use for accelerating training.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="going-for-the-gpu">
+<h1>Going for the GPU<a class="headerlink" href="#going-for-the-gpu" title="Permalink to this heading">#</a></h1>
+<p>Training of the model in the previous notebook was rather slow, you might have thought. This was the case even if your machine has a GPU available. But don’t be disappointed yet. The truth is that we have not made use of the GPU at all just yet. Usage of devices has to be handled manually by the user in torch. First we will check if torch recognizes any devices it could use for accelerating training.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
@@ -498,7 +512,7 @@ document.write(`
     <span class="n">dropout</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1"># transfer the model to the chosen device</span>
+<span class="c1"># Important: transfer the model to the chosen device</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -525,9 +539,9 @@ document.write(`
 <span class="n">log_interval</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># expects raw unnormalized scores and combines sigmoid + BCELoss for better</span>
-<span class="c1"># numerical stability.</span>
-<span class="c1"># expects B x C x W x D</span>
+<span class="c1"># BCEWithLogitsLoss combines sigmoid + BCELoss for better</span>
+<span class="c1"># numerical stability. It expects raw unnormalized scores as input which are shaped like </span>
+<span class="c1"># B x C x W x D</span>
 <span class="n">loss_function</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">BCEWithLogitsLoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nepochs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
@@ -581,7 +595,7 @@ Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.4821679890155792
 </div>
 </div>
 <section id="look-at-some-predictions">
-<h1>Look at some predictions<a class="headerlink" href="#look-at-some-predictions" title="Permalink to this heading">#</a></h1>
+<h2>Look at some predictions<a class="headerlink" href="#look-at-some-predictions" title="Permalink to this heading">#</a></h2>
 <p>Now that the model has been trained for a little bit, we are looking at the predictions again. Usually model training has to be peformed longer, so don’t expect any wonders. Also keep in mind that the predictions here are based on the data the model was trained on. Those predictions might be far better than those on data not used during training. But this is a story for later.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -619,6 +633,7 @@ Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.4821679890155792
 </div>
 </div>
 </section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -629,16 +644,16 @@ Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.4821679890155792
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "torch_intro_env"
+            mode: "python"
         },
         kernelOptions: {
-            name: "torch_intro_env",
+            name: "python3",
             path: "./60_Pytorch"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'torch_intro_env'</script>
+    <script>kernelName = 'python3'</script>
 
                 </article>
               
@@ -651,6 +666,24 @@ Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.4821679890155792
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="04_model_training.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Training a Unet</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="06_model_training_with_logging.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
@@ -660,6 +693,20 @@ Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.4821679890155792
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-some-predictions">Look at some predictions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

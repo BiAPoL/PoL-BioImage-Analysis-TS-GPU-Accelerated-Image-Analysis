@@ -64,6 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '60_Pytorch/03_data_batching_and_setup_model';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Training a Unet" href="04_model_training.html" />
+    <link rel="prev" title="Creation of a dataset" href="02_dataset.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -213,7 +215,7 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tuesday</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../50_Clesperanto_on_HPC/readme.html">Using Clesperanto on Taurus</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/login_taurus.html">Executing clesperanto on the TU Dresden HPC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/modified_generated_notebook.html">Loading ‘blobs’</a></li>
@@ -502,7 +504,8 @@ Batch 7 torch.Size([8, 1, 256, 256]) torch.Size([8, 1, 256, 256])
 <h1>Neural network architecture<a class="headerlink" href="#neural-network-architecture" title="Permalink to this heading">#</a></h1>
 <p>For semantic segmentation problems, a specific convolutional neural network architecture, i.e. a defined sequence of operations (also called layers) involving convolutional filters, data aggregation via pooling and nonlinear activation functions, has been demonstrated to work well across a wide range of image domains. This architecture is called UNet and its basic structure is shown below. (Image taken from <a class="reference external" href="https://github.com/HarisIqbal88/PlotNeuralNet/blob/master/examples/Unet_Ushape/Unet_ushape.pdf">here</a>.)</p>
 <img src="unet.png" alt="Drawing" style="height: 400px;"/>
-<p>As this is rather cumbersome to implement directly, we will use the <a class="reference external" href="https://monai.io/">MONAI</a> library, which provides a nice torch implementation of this architecture.</p>
+<p>As this is rather cumbersome to implement directly, we will use the <a class="reference external" href="https://monai.io/">MONAI</a> library, which provides a convenient torch implementation of this architecture by the name of <code class="docutils literal notranslate"><span class="pre">BasicUNet</span></code>.</p>
+<p>If you are interested, the <a class="reference external" href="https://monai.io/">MONAI</a> library offers many more architectures in their <a class="reference external" href="https://docs.monai.io/en/stable/networks.html">network architectures</a> documentation section.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -831,8 +834,8 @@ BasicUNet(
 </div>
 </div>
 </div>
-<p>We can now feed a batch of images directly through the model to obtain predictions. Note however, that those will likely not be usable for segmentation as the model has not been trained yet and model parameters are initialized randomly.
-Note that the model outputs are of the same shape as the model inputs. Because the UNet consists entirely of convolutional operations, it is (to a degree) shape invariant and can process arbitrary input sizes. It is however recommended to work with resolutions that are divisible by 16, as the input resolution is halved in each of the four downsampling blocks.</p>
+<p>We can now feed a batch of images directly through the model to obtain predictions. Note however, that those will likely not be usable for segmentation as the model has not been trained yet and model parameters are initialized randomly.</p>
+<p>Very importantly, the model outputs are of the same shape as the model inputs. Because the UNet consists entirely of convolutional operations, it is (to a degree) shape invariant and can process arbitrary input sizes. It is however recommended to work with resolutions that are divisible by 16, as the input resolution is halved in each of the four downsampling blocks.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_preds</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">batch_images</span><span class="p">)</span>
@@ -899,7 +902,8 @@ Note that the model outputs are of the same shape as the model inputs. Because t
 </div>
 </div>
 </div>
-<p>Moreover, the model output range is not limited because in the output layer, no nonlinear activation was used. In order to make the output usable for segmentation purposes, we apply a sigmoid activation function per pixel</p>
+<p>The model output range is not limited to <code class="docutils literal notranslate"><span class="pre">[0,1.)</span></code> because in the output layer, no nonlinear activation was used which could have transformed the output pixel values as such.</p>
+<p>To fix this and make the output usable for segmentation purposes, we apply a <a class="reference external" href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid activation</a> function per pixel.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">batch_preds</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">batch_preds</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
@@ -966,16 +970,16 @@ Note that the model outputs are of the same shape as the model inputs. Because t
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "torch_intro_env"
+            mode: "python"
         },
         kernelOptions: {
-            name: "torch_intro_env",
+            name: "python3",
             path: "./60_Pytorch"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'torch_intro_env'</script>
+    <script>kernelName = 'python3'</script>
 
                 </article>
               
@@ -988,6 +992,24 @@ Note that the model outputs are of the same shape as the model inputs. Because t
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="02_dataset.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Creation of a dataset</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04_model_training.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Training a Unet</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
