@@ -1,17 +1,12 @@
 # PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis
 
-This [Jupyter book](https://jupyterbook.org/) contains training resources for scientists who want to dive into image processing.
-It specifically aims for students and scientists working with microscopy images in the life sciences.
+This [Jupyter book](https://jupyterbook.org/) contains training resources for scientists who want to dive into GPU-accelerated image processing. It specifically aims for students and scientists working with microscopy images in the life sciences.
 
-Here, we cover the *GPU-Accelerated Image Analysis* Track of the [PoL Bio-Image Analysis Symposium](https://biopol-training.eventmember.de/)
+Here, we cover the *GPU-Accelerated Image Analysis* Track of the [PoL Bio-Image Analysis Symposium](https://biopol-training.eventmember.de/). We will process images using [clesperanto](https://clesperanto.github.io/), [cupy](https://cupy.dev/) and [Pytorch](https://pytorch.org/). We will denoise, deconvole and segment images with and without deep learning techniques. We will get an introduction in how to [TU Dresden HPC cluster Taurus](https://tu-dresden.de/zih/hochleistungsrechnen/hpc) and distribute tasks using [dask](https://www.dask.org/).
 
-* clesperanto
-* cupy
-* dask
-* Deconvolution
-* Pytorch
-* AI-based Denoising
-* AI-based Segmentation
+## Timetable
+
+![img.png](timetable.png)
 
 ## How to use this material
 
@@ -23,10 +18,12 @@ All Jupyter Notebooks are executable so that attendees can reproduce all demos a
 Assuming you downloaded the repository to your Desktop, you can open the Jupyter book by opening a terminal and typing:
 
 ```bash
-cd Desktop/Pasteur-NEUBIAS-training-school-on-Bioimage-Analysis
-
+cd Desktop/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis
+```
+```bash
 conda activate devbio-napari-env
-
+```
+```bash
 jupyter lab
 ```
 
@@ -38,7 +35,7 @@ Using Jupyter lab, you can navigate to the course lessons in the `docs` folder.
 
 ## Feedback and support
 
-If you have any questions, please use the anonymous etherpad (see email) or create a [github issue](https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues).
+If you have any questions create a [github issue](https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues).
 Alternatively, open a thread on [image.sc](https://image.sc), put a link to the lesson or exercise you want to ask a question about and tag @haesleinhuepf.
 
 ## Acknowledgements
