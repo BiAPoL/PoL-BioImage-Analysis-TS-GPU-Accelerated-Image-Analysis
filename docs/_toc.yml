@@ -59,6 +59,7 @@ parts:
 
   - file: 60_Pytorch/readme
     sections:
+
     - file: 60_Pytorch/00_versions.ipynb
     - file: 60_Pytorch/01_data_exploration.ipynb
     - file: 60_Pytorch/02_dataset.ipynb
