@@ -13,13 +13,13 @@ parts:
   - file: 00_course_preparation/Readme.md
   - file: 10_Clesperanto/readme
     sections:
-    - file: docs/10_Clesperanto/10_select_devices.ipynb
-    - file: docs/10_Clesperanto/20_gpu_arrays_and_memory_managment.ipynb
-    - file: docs/10_Clesperanto/30_apply_operations_on_data.ipynb
-    - file: docs/10_Clesperanto/40_nuclei_segmentation.ipynb
-    - file: docs/10_Clesperanto/50_measurement_and_quantifications.ipynb
-    - file: docs/10_Clesperanto/60_custom_kernel_execution.ipynb
-    - file: docs/10_Clesperanto/70_benchmarking.ipynb
+    - file: 10_Clesperanto/10_select_devices.ipynb
+    - file: 10_Clesperanto/20_gpu_arrays_and_memory_managment.ipynb
+    - file: 10_Clesperanto/30_apply_operations_on_data.ipynb
+    - file: 10_Clesperanto/40_nuclei_segmentation.ipynb
+    - file: 10_Clesperanto/50_measurement_and_quantifications.ipynb
+    - file: 10_Clesperanto/60_custom_kernel_execution.ipynb
+    - file: 10_Clesperanto/70_benchmarking.ipynb
 
   - file: 23_clesperanto_assistant/intro
     sections:
@@ -57,16 +57,15 @@ parts:
 
   - file: 60_Pytorch/readme
     sections:
-
-    - file: 60_Pytorch/00_versions.ipynb
-    - file: 60_Pytorch/01_data_exploration.ipynb
-    - file: 60_Pytorch/02_dataset.ipynb
-    - file: 60_Pytorch/03_data_batching_and_setup_model.ipynb
-    - file: 60_Pytorch/04_model_training.ipynb
-    - file: 60_Pytorch/05_model_training_with_device.ipynb
-    - file: 60_Pytorch/06_model_training_with_logging.ipynb
-    - file: 60_Pytorch/07_model_training_with_checkpoints.ipynb
-    - file: 60_Pytorch/08_pytorch_lightning.ipynb
+    - file: 60_Pytorch/00_versions
+    - file: 60_Pytorch/01_data_exploration
+    - file: 60_Pytorch/02_dataset
+    - file: 60_Pytorch/03_data_batching_and_setup_model
+    - file: 60_Pytorch/04_model_training
+    - file: 60_Pytorch/05_model_training_with_device
+    - file: 60_Pytorch/06_model_training_with_logging
+    - file: 60_Pytorch/07_model_training_with_checkpoints
+    - file: 60_Pytorch/08_pytorch_lightning
 
 - caption: Wednesday
   chapters:
