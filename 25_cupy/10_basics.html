@@ -183,6 +183,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="30_filtering.html">Image filtering using cupy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="40_custom_kernels.html">Custom kernels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="50_napari-cupy-image-processing.html">napari integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="60_benchmark_affine_transforms.html">Benchmarking affine transforms using numpy, cupy and clesperanto.</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../30_Deconvolution/0_intro_to_decon.html">Intro to Deconvolution and Restoration</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -468,6 +469,14 @@ document.write(`
 <ul class="simple">
 <li><p><a class="reference external" href="https://docs.cupy.dev/en/stable/user_guide/basic.html">cupy basics tutorial</a></p></li>
 </ul>
+<p>In case you run this notebook from Google Coolab, switch to a GPU-runtime and uncomment this line:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># !pip install stackview ipycanvas==0.11</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -483,6 +492,9 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="s2">&quot;../../data/blobs.tif&quot;</span><span class="p">)</span>
+
+<span class="c1"># in case you run this notebook on Google colab, use this line instead:</span>
+<span class="c1"># image = imread(&#39;https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/raw/main/data/blobs.tif&#39;)</span>
 </pre></div>
 </div>
 </div>
@@ -507,6 +519,13 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cp_labels</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cdi</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">cp_binary</span><span class="p">)</span>
+
+<span class="nb">type</span><span class="p">(</span><span class="n">cp_labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cupy.ndarray
 </pre></div>
 </div>
 </div>
