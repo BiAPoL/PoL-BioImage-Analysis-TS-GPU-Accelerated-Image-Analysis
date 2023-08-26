@@ -204,6 +204,9 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="3_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="4_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Edge handling</a></li>
@@ -692,7 +695,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0 0.0060154707
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_14570/2834657628.py:44: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5279/2834657628.py:44: ComplexWarning: Casting complex values to real discards the imaginary part
   psf = fftshift(ifftn(ifftshift(otf)).astype(np.float32))
 </pre></div>
 </div>
@@ -728,7 +731,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_14570/4177033410.py:10: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5279/4177033410.py:10: ComplexWarning: Casting complex values to real discards the imaginary part
   im = forward(truth, psf).astype(&#39;float32&#39;)
 </pre></div>
 </div>
@@ -754,21 +757,21 @@ document.write(`
 <span class="n">normal</span><span class="o">=</span><span class="p">(</span><span class="n">ifftn</span><span class="p">(</span><span class="n">fftn</span><span class="p">(</span><span class="n">flat</span><span class="p">)</span> <span class="o">*</span> <span class="n">otf_</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
 <span class="n">delta</span><span class="o">=</span><span class="mf">.00001</span>
-<span class="n">normal</span><span class="p">[</span><span class="n">normal</span><span class="o">&lt;</span><span class="n">delta</span><span class="p">]</span><span class="o">=</span><span class="n">delta</span>
+<span class="n">normal</span><span class="p">[</span><span class="n">normal</span><span class="o">&lt;</span><span class="n">delta</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">imshow2d</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Normalization factor&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_14570/1798348474.py:7: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5279/3135814947.py:7: ComplexWarning: Casting complex values to real discards the imaginary part
   normal=(ifftn(fftn(flat) * otf_)).astype(float)
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;Normalization factor&#39;)
 </pre></div>
 </div>
-<img alt="../_images/386ddffd3ec1cb94bd8e4100a9e35df2ebc32f28e91ced2c5dca7f91cd09c890.png" src="../_images/386ddffd3ec1cb94bd8e4100a9e35df2ebc32f28e91ced2c5dca7f91cd09c890.png" />
+<img alt="../_images/73cbb04f1f9ea8f2e493d45ab24f5698b3e35ea45487f70af8be74aabadfc6fe.png" src="../_images/73cbb04f1f9ea8f2e493d45ab24f5698b3e35ea45487f70af8be74aabadfc6fe.png" />
 </div>
 </div>
 </section>
@@ -787,7 +790,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;deconvolved&#39;)
 </pre></div>
 </div>
-<img alt="../_images/8e8d986493c1449cc09cf53df192ac9738adcc34a551c78bb3f033093698fb0d.png" src="../_images/8e8d986493c1449cc09cf53df192ac9738adcc34a551c78bb3f033093698fb0d.png" />
+<img alt="../_images/e6f5fd8665d3dcb8a78ab871b0452389ff372b1fa02f66e7353a8d848d628f85.png" src="../_images/e6f5fd8665d3dcb8a78ab871b0452389ff372b1fa02f66e7353a8d848d628f85.png" />
 </div>
 </div>
 </section>
@@ -803,11 +806,16 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;im&#39; at 0x7f4b99c9eb50&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;im&#39; at 0x7fab1cb22b50&gt;
 </pre></div>
 </div>
 </div>
 </div>
+<p>Discussion</p>
+<ol class="arabic simple">
+<li><p>After playing with the contrast of the images in Napari do you notice anything strange?</p></li>
+<li><p>What could be done to make this example better?</p></li>
+</ol>
 </section>
 
     <script type="text/x-thebe-config">

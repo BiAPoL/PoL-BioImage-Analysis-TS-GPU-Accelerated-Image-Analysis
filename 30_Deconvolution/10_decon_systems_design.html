@@ -1,0 +1,938 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Deconvolution Systems Design &#8212; Image data science with Python and Napari @EPFL</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '30_Deconvolution/10_decon_systems_design';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/biapol_logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/biapol_logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    PoL Bio-Image Analysis Training School on GPU-Accelerated Image Analysis
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Monday</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_course_preparation/Readme.html">Course preparation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../10_Clesperanto/readme.html">Clesperanto</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../10_Clesperanto/10_select_devices.html">List and select devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_Clesperanto/20_gpu_arrays_and_memory_managment.html">GPU arrays</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../10_Clesperanto/30_apply_operations_on_data.html">Apply operations on data</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../10_Clesperanto/40_nuclei_segmentation.html">Image Filtering and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_Clesperanto/50_measurement_and_quantifications.html">Object measurements and quantifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_Clesperanto/60_custom_kernel_execution.html">Custom kernel execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_Clesperanto/70_benchmarking.html">Benchmarking</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../23_clesperanto_assistant/intro.html">Using clesperanto from the Napari Assistant</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../23_clesperanto_assistant/napari-assistant.html">The Napari Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../23_clesperanto_assistant/notebook_export.html">Generating Jupyter Notebooks from the Napari Assistant</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../25_cupy/readme.html">cupy</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../25_cupy/10_basics.html">Basics of Cupy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../25_cupy/20_dropin_replacement.html">Cupy as drop-in replacement for numpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../25_cupy/30_filtering.html">Image filtering using cupy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../25_cupy/40_custom_kernels.html">Custom kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../25_cupy/50_napari-cupy-image-processing.html">napari integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../25_cupy/60_benchmark_affine_transforms.html">Benchmarking affine transforms using numpy, cupy and clesperanto.</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="0_intro_to_decon.html">Intro to Deconvolution and Restoration</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="1_test_libs.html">Setup environment</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2_cupy_forward.html">Implementing the forward model (Convolution) with cupy</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="3_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5_edges.html">Edge handling</a></li>
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="6_decon_bead_edge_handling.html">Edge handling experiments</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="7_decon_regularization.html">Deconvolve microtubules phantom</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="8_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9_Dask_Deconvolution.html">Dask deconvolution</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="cluster_access.html">Running deconvolution on the ZIH cluster</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tuesday</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../50_Clesperanto_on_HPC/readme.html">Using Clesperanto on Taurus</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/login_taurus.html">Executing clesperanto on the TU Dresden HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../50_Clesperanto_on_HPC/modified_generated_notebook.html">Loading ‘blobs’</a></li>
+
+
+
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../60_Pytorch/readme.html">Introduction to Pytorch</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Wednesday</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../70_AI_Segmentation_Denoising/Readme.html">AI segmentation and denoising</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../70_AI_Segmentation_Denoising/01_2D_unet_training.html">Training a 2D Unet model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70_AI_Segmentation_Denoising/02_Noise2Void.html">(Probabilistic) Noise2Void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../70_AI_Segmentation_Denoising/03_Noise2Void_3D.html">Dataset</a></li>
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/issues/new?title=Issue%20on%20page%20%2F30_Deconvolution/10_decon_systems_design.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/30_Deconvolution/10_decon_systems_design.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Deconvolution Systems Design</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Deconvolution Systems Design</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-trade-offs">Design trade-offs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation">Simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-improve-the-deconvolution-result">Exercise 1:  Improve the deconvolution result.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-change-the-parameters-of-the-simulation">Exercise 2:  Change the parameters of the simulation</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-phantom">Create the phantom</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-forward-psf-and-deconvolution-psf">Create the forward PSF and deconvolution PSF</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-the-forward-model">Apply the forward model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-number-of-chunks">Define number of chunks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-deconvolver">Define the deconvolver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-in-chunks-with-overlap-between-chunks">Deconvolve in chunks with overlap between chunks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-in-napari">Visualize in Napari</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-error">Look at error</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="deconvolution-systems-design">
+<h1>Deconvolution Systems Design<a class="headerlink" href="#deconvolution-systems-design" title="Permalink to this heading">#</a></h1>
+<p>In this example we explore how the various deconvolution parameters, which we learned about in previous notebooks combine to affect deconvolution results.</p>
+<section id="design-trade-offs">
+<h2>Design trade-offs<a class="headerlink" href="#design-trade-offs" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Iterations - more iterations provide a better result up to a point of diminishing returns.  How do we know when to stop?</p></li>
+<li><p>PSF size - Using a larger PSF may improve deconvolution quality by increasing the spatial extent of the deblurring.  However a larger PSF size requires larger borders and larger overlap between chunks.  Note that the PSF size may be ‘infinite’ in thoeory (light from an emitter can propagate forever) however PSFs used for deconvolution are finite.  Thus the size of PSF used for deconvolution becomes a design parameter.</p></li>
+<li><p>Regularization - regularization can reduce noise in the output at a cost of slightly increased speed.  How do we know what regularization factor to use?</p></li>
+<li><p>PSF - The quality of the Point Spread Function can affect final results.  If using a theoretical PSF we need to make sure the parameters used to generate the PSF match the true system parameters.</p></li>
+<li><p>Overlap - Larger overlaps will reduce artifacts, but increase processing time and memory by increasing the size of each chunk.</p></li>
+</ol>
+</section>
+<section id="simulation">
+<h2>Simulation<a class="headerlink" href="#simulation" title="Permalink to this heading">#</a></h2>
+<p>In this example we do the following.</p>
+<ol class="arabic simple">
+<li><p>Create a simulated image with a large sphere at the center and small spheres on the sides.  This sample is useful to study chunking artifacts because the chunks will subdivide the large sphere.</p></li>
+<li><p>Convolve a PSF with the simulated image and add noise.</p></li>
+<li><p>Define our deconvolution parameters including PSF parameters, dask parameters, iterations and regularization factor then deconvolve.</p></li>
+</ol>
+</section>
+<section id="exercise-1-improve-the-deconvolution-result">
+<h2>Exercise 1:  Improve the deconvolution result.<a class="headerlink" href="#exercise-1-improve-the-deconvolution-result" title="Permalink to this heading">#</a></h2>
+<p>The parameters in this notebook are sub-optimal.  First run the notebook then inspect the deconvolution result.  To improve the deconvolution try the following</p>
+<ol class="arabic simple">
+<li><p>Inspect the PSF and make sure the forward PSF and decon PSF match, if not try adjusting the decon PSF parameters.</p></li>
+<li><p>Change the number of iterations</p></li>
+<li><p>Change the regularization factor</p></li>
+<li><p>change the overlap between chunks</p></li>
+</ol>
+</section>
+<section id="exercise-2-change-the-parameters-of-the-simulation">
+<h2>Exercise 2:  Change the parameters of the simulation<a class="headerlink" href="#exercise-2-change-the-parameters-of-the-simulation" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Add more noise (hint Poisson noise is proportional to the number of photons, in this simulation try modifying the gain variable)</p></li>
+<li><p>Try different PSFs (for example very low NA, even greater levels of aberration)</p></li>
+<li><p>Try to create different types of phantom images, for example by drawing more spheres or different shapes.</p></li>
+</ol>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="imports">
+<h1>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="kn">from</span> <span class="nn">clij2fft.richardson_lucy</span> <span class="kn">import</span> <span class="n">richardson_lucy_nc</span> 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">decon_helper</span> <span class="k">as</span> <span class="nn">dh</span>
+<span class="kn">from</span> <span class="nn">tnia.deconvolution.forward</span> <span class="kn">import</span> <span class="n">forward</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xyz_slice</span><span class="p">,</span> <span class="n">show_xyz_max</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tnia available
+stackview available
+</pre></div>
+</div>
+</div>
+</div>
+<section id="create-the-phantom">
+<h2>Create the phantom<a class="headerlink" href="#create-the-phantom" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">raster_geometry</span> <span class="k">as</span> <span class="nn">rg</span>
+<span class="kn">from</span> <span class="nn">tnia.simulation.phantoms</span> <span class="kn">import</span> <span class="n">add_small_to_large</span>
+
+<span class="n">gain</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="n">background</span> <span class="o">=</span> <span class="mi">0</span> 
+
+<span class="n">zdim</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">ydim</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">xdim</span> <span class="o">=</span> <span class="mi">256</span>
+
+<span class="n">phantom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">zdim</span><span class="p">,</span><span class="n">ydim</span><span class="p">,</span><span class="n">xdim</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="n">r</span><span class="o">=</span><span class="mi">50</span>
+<span class="n">r_small</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="p">]</span>
+<span class="n">size_small</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">r_small</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">r_small</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">r_small</span><span class="p">]</span>
+<span class="n">sphere</span> <span class="o">=</span> <span class="n">rg</span><span class="o">.</span><span class="n">sphere</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">small_sphere</span> <span class="o">=</span> <span class="n">rg</span><span class="o">.</span><span class="n">sphere</span><span class="p">(</span><span class="n">size_small</span><span class="p">,</span> <span class="n">r_small</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="n">x</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">y</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">z</span><span class="o">=</span><span class="mi">50</span>
+
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">small_sphere</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">phantom</span> <span class="o">=</span> <span class="n">phantom</span><span class="p">[::</span><span class="mi">3</span><span class="p">,:,:]</span>
+<span class="n">phantom</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">*</span><span class="n">gain</span>
+<span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
+<span class="c1"># set title</span>
+<span class="c1">#fig.suptitle(&#39;Phantom with z sub-sampling=3&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d33a9964a90d0f5dd7eb9be77c84bebeda532f5f43579a75717ab9c0ba641108.png" src="../_images/d33a9964a90d0f5dd7eb9be77c84bebeda532f5f43579a75717ab9c0ba641108.png" />
+</div>
+</div>
+</section>
+<section id="create-the-forward-psf-and-deconvolution-psf">
+<h2>Create the forward PSF and deconvolution PSF<a class="headerlink" href="#create-the-forward-psf-and-deconvolution-psf" title="Permalink to this heading">#</a></h2>
+<p>Note that the forward PSF (the PSF that explains the image) is not equal to the digital PSF used for deconvolution.  Among other imperfect approximations the PSF used for deconvolution can have smaller spatial extent.  In this simulation the PSF we use for convolution (ie in the simulation) is different than the PSF used for deconvolution.  We can change the parameters of the deconvolution PSF to study how differences between the real PSF and the digital PSF we use for deconvolution affects the result.</p>
+<p>Two factors which are important but may also be only approximately known are the refractive index of the biological sample and the depth of the sample (below the cover lens).  These two factors combine to produce spherical aberration in the PSF.</p>
+<p>If there is aberration in the true PSF of the system, to get a good deconvololution result that aberration must be matched in the sample.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.deconvolution.psfs</span> <span class="kn">import</span> <span class="n">gibson_lanni_3D</span>
+
+<span class="n">x_voxel_size</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">z_voxel_size</span><span class="o">=</span><span class="mf">0.3</span>
+
+<span class="n">xy_psf_dim_forward</span><span class="o">=</span><span class="mi">128</span>
+<span class="n">z_psf_dim_forward</span><span class="o">=</span><span class="mi">128</span>
+
+<span class="n">xy_psf_dim_decon</span><span class="o">=</span><span class="mi">64</span>
+<span class="n">z_psf_dim_decon</span><span class="o">=</span><span class="mi">64</span>
+
+<span class="n">NA</span><span class="o">=</span><span class="mf">1.4</span>
+<span class="n">ni</span><span class="o">=</span><span class="mf">1.5</span>
+<span class="n">ns</span><span class="o">=</span><span class="mf">1.33</span>
+
+<span class="c1"># depth at which to calculate the PSF (note if there is a RI mismatch between the lens RI and sample RI spherical aberration will be introduced</span>
+<span class="c1"># which will be depth dependent)</span>
+<span class="n">depth_forward</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">depth_decon</span> <span class="o">=</span> <span class="mi">0</span> 
+
+<span class="n">psf_forward</span>  <span class="o">=</span> <span class="n">gibson_lanni_3D</span><span class="p">(</span><span class="n">NA</span><span class="p">,</span> <span class="n">ni</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">x_voxel_size</span><span class="p">,</span> <span class="n">z_voxel_size</span><span class="p">,</span> <span class="n">xy_psf_dim_forward</span><span class="p">,</span> <span class="n">z_psf_dim_forward</span><span class="p">,</span> <span class="n">depth_forward</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">psf_forward</span> <span class="o">=</span> <span class="n">psf_forward</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+<span class="n">psf_forward</span> <span class="o">=</span> <span class="n">psf_forward</span><span class="o">/</span><span class="n">psf_forward</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">psf_forward</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
+
+<span class="n">psf_decon</span>  <span class="o">=</span> <span class="n">gibson_lanni_3D</span><span class="p">(</span><span class="n">NA</span><span class="p">,</span> <span class="n">ni</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">x_voxel_size</span><span class="p">,</span> <span class="n">z_voxel_size</span><span class="p">,</span> <span class="n">xy_psf_dim_decon</span><span class="p">,</span> <span class="n">z_psf_dim_decon</span><span class="p">,</span> <span class="n">depth_decon</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">psf_decon</span> <span class="o">=</span> <span class="n">psf_decon</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+<span class="n">psf_decon</span> <span class="o">=</span> <span class="n">psf_decon</span><span class="o">/</span><span class="n">psf_decon</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">psf_decon</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bf0da17eaa230f58a83f7732d9f7b49d7d82cf5c5dd412823fbd685c3547290c.png" src="../_images/bf0da17eaa230f58a83f7732d9f7b49d7d82cf5c5dd412823fbd685c3547290c.png" />
+<img alt="../_images/ab66dba32d1ab06df21bb2e4852bcabd2b3d258bf17c09882aab058aa445c3ba.png" src="../_images/ab66dba32d1ab06df21bb2e4852bcabd2b3d258bf17c09882aab058aa445c3ba.png" />
+</div>
+</div>
+</section>
+<section id="apply-the-forward-model">
+<h2>Apply the forward model<a class="headerlink" href="#apply-the-forward-model" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.deconvolution.forward</span> <span class="kn">import</span> <span class="n">forward</span>
+<span class="kn">from</span> <span class="nn">tnia.nd.ndutil</span> <span class="kn">import</span> <span class="n">centercrop</span>
+
+<span class="n">im</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">psf_forward</span><span class="p">,</span> <span class="n">background</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">phantom</span><span class="o">=</span><span class="n">phantom</span><span class="o">+</span><span class="n">background</span>
+
+<span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8cc84b95260a9a434036ddc01036e5e8364f24e739c6efc49776d38a195878a7.png" src="../_images/8cc84b95260a9a434036ddc01036e5e8364f24e739c6efc49776d38a195878a7.png" />
+</div>
+</div>
+</section>
+<section id="define-number-of-chunks">
+<h2>Define number of chunks<a class="headerlink" href="#define-number-of-chunks" title="Permalink to this heading">#</a></h2>
+<p>Define the number of chunks to divide the image into.</p>
+<p>(In this example the image is relatively small so likely the image and arrays needed for FFT based calculations would fit into the GPU without chunking, in a real life example we would pre-compute the largest chunk size we could process given memory constraints and base the chunk size on that).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_x_chunks</span> <span class="o">=</span> <span class="mi">2</span> 
+<span class="n">num_y_chunks</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">num_z_chunks</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">z_chunk_size</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">y_chunk_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">num_x_chunks</span><span class="p">)</span>
+<span class="n">x_chunk_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">num_y_chunks</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;chunks&#39;</span><span class="p">,</span> <span class="n">z_chunk_size</span><span class="p">,</span> <span class="n">y_chunk_size</span><span class="p">,</span> <span class="n">x_chunk_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>chunks 86 128 128
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-the-deconvolver">
+<h2>Define the deconvolver<a class="headerlink" href="#define-the-deconvolver" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iterations</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">reg</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">clij2fft.richardson_lucy</span> <span class="kn">import</span> <span class="n">richardson_lucy_nc</span> 
+    <span class="k">def</span> <span class="nf">deconv_chunk</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;deconvolving chunk with size&#39;</span><span class="p">,</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">richardson_lucy_nc</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">psf_decon</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;/nfinished decon chunk&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+            <span class="c1">#return stack</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;clij2fft non-circulant rl imported&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;clij2fft non-circulant rl not imported&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">RedLionfishDeconv</span> <span class="k">as</span> <span class="nn">rl</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;redlionfish rl imported&#39;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">deconv_chunk</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">psf_decon</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">rl</span><span class="o">.</span><span class="n">doRLDeconvolutionFromNpArrays</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">psf_decon</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="n">resAsUint8</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finished decon chunk&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;redlionfish rl not imported&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>clij2fft non-circulant rl imported
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="deconvolve-in-chunks-with-overlap-between-chunks">
+<h2>Deconvolve in chunks with overlap between chunks<a class="headerlink" href="#deconvolve-in-chunks-with-overlap-between-chunks" title="Permalink to this heading">#</a></h2>
+<p>Here we call the dask deconvolution using an overlap factor to prevent edge artifacts between chunks.  We try all of the clij2-fft, clij2-fft non-circulant implementation of RL and the Red Lion fish implementation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iterations</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">reg</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">overlap</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">dimg</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="n">z_chunk_size</span><span class="p">,</span> <span class="n">y_chunk_size</span><span class="p">,</span> <span class="n">x_chunk_size</span><span class="p">))</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">dimg</span><span class="o">.</span><span class="n">map_overlap</span><span class="p">(</span><span class="n">deconv_chunk</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">overlap</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">overlap</span><span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">decon</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">x_v</span> <span class="o">=</span> <span class="n">decon</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span>
+<span class="n">y_v</span> <span class="o">=</span> <span class="n">decon</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span>
+<span class="n">z_v</span> <span class="o">=</span> <span class="n">decon</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">decon</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>deconvolving chunk with size (0, 0, 0)
+get lib
+
+Richardson Lucy Started
+0 10 20 30 40 50 60 70 80 90 
+Richardson Lucy Finished/nfinished decon chunk
+deconvolving chunk with size (86, 128, 128)
+get lib
+
+Richardson Lucy Started
+0 10 20 30 40 50 60 70 80 90 
+Richardson Lucy Finished/nfinished decon chunk
+deconvolving chunk with size (86, 128, 128)
+get lib
+
+Richardson Lucy Started
+0 10 20 30 40 50 60 70 80 90 
+Richardson Lucy Finished/nfinished decon chunk
+deconvolving chunk with size (86, 128, 128)
+get lib
+
+Richardson Lucy Started
+0 10 20 30 40 50 60 70 80 90 
+Richardson Lucy Finished/nfinished decon chunk
+deconvolving chunk with size (86, 128, 128)
+get lib
+
+Richardson Lucy Started
+0 10 20 30 40 50 60 70 80 90 
+Richardson Lucy Finished/nfinished decon chunk
+</pre></div>
+</div>
+<img alt="../_images/6f847ff845a74300ba1ee82c84ab57f7026fd889636d71fda3b2fd26ab70134c.png" src="../_images/6f847ff845a74300ba1ee82c84ab57f7026fd889636d71fda3b2fd26ab70134c.png" />
+</div>
+</div>
+</section>
+<section id="visualize-in-napari">
+<h2>Visualize in Napari<a class="headerlink" href="#visualize-in-napari" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">napari</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;phantom&#39;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;im&#39;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">decon</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;decon&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;decon&#39; at 0x7fd1ec298a00&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="look-at-error">
+<h2>Look at error<a class="headerlink" href="#look-at-error" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.metrics.errors</span> <span class="kn">import</span> <span class="n">RMSE</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, phantom)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">phantom</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, im)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">im</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, decon)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">decon</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RMSE (phantom, phantom) 0.0
+RMSE (phantom, im) 56.637035
+RMSE (phantom, decon) 50.67823
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./30_Deconvolution"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Deconvolution Systems Design</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-trade-offs">Design trade-offs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation">Simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-improve-the-deconvolution-result">Exercise 1:  Improve the deconvolution result.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-change-the-parameters-of-the-simulation">Exercise 2:  Change the parameters of the simulation</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-phantom">Create the phantom</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-forward-psf-and-deconvolution-psf">Create the forward PSF and deconvolution PSF</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-the-forward-model">Apply the forward model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-number-of-chunks">Define number of chunks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-deconvolver">Define the deconvolver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-in-chunks-with-overlap-between-chunks">Deconvolve in chunks with overlap between chunks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-in-napari">Visualize in Napari</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-error">Look at error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Stephane Rigaud, Brian Northan, Till Korten, Neringa Jurenaite, Peter Steinbach, Sebastian Starke, Johannes Soltwedel and Marvin Albert, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: This work can be reused under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> license unless mentioned otherwise.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

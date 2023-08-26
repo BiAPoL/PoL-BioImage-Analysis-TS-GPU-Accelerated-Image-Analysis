@@ -202,6 +202,9 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="3_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="4_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="5_edges.html">Edge handling</a></li>
@@ -459,6 +462,9 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#check-memory-use">Check memory use</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#delete-memory">Delete memory</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#delete-fft-cache">Delete FFT cache</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-image-carefully">Look at image carefully</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#questions-and-exercise">Questions and exercise</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#answer">Answer</a></li>
 </ul>
 
             </nav>
@@ -511,8 +517,8 @@ document.write(`
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Available GPU memory = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">available_gpu_memory</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;At beginning, used = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mempool</span><span class="o">.</span><span class="n">used_bytes</span><span class="p">()</span><span class="o">/</span><span class="n">bpg</span><span class="p">))</span>
 
-<span class="n">xdim</span><span class="o">=</span><span class="mi">1024</span>
-<span class="n">ydim</span><span class="o">=</span><span class="mi">1024</span>
+<span class="n">xdim</span><span class="o">=</span><span class="mi">512</span>
+<span class="n">ydim</span><span class="o">=</span><span class="mi">512</span>
 <span class="n">zdim</span><span class="o">=</span><span class="mi">128</span>
 <span class="n">bytes_per_pixel</span><span class="o">=</span><span class="mi">4</span>
 
@@ -531,10 +537,10 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tnia available
 stackview available
 Total GPU memory = 7.7540283203125
-Available GPU memory = 7.5972900390625
+Available GPU memory = 7.59130859375
 At beginning, used = 0.0
-Array size = 0.5
-Problem size = 4.5 GB
+Array size = 0.125
+Problem size = 1.125 GB
 </pre></div>
 </div>
 </div>
@@ -553,6 +559,7 @@ Problem size = 4.5 GB
 
 <span class="nb">print</span><span class="p">(</span><span class="n">psf</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">psf</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">psf</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 <span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">psf</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -561,6 +568,7 @@ Problem size = 4.5 GB
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>float32 (128, 256, 256)
 </pre></div>
 </div>
+<img alt="../_images/fe26daf85c8c2c7935d3470a4bd9c45e91133a7f42c8fd1223eb7593766be163.png" src="../_images/fe26daf85c8c2c7935d3470a4bd9c45e91133a7f42c8fd1223eb7593766be163.png" />
 <img alt="../_images/fef8c91c2e83d0e5c85e3424c833dbee9ef8adb6c05aae538a7ddc18579b7389.png" src="../_images/fef8c91c2e83d0e5c85e3424c833dbee9ef8adb6c05aae538a7ddc18579b7389.png" />
 </div>
 </div>
@@ -591,13 +599,13 @@ Problem size = 4.5 GB
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/23b511a003c8c7a813d32ff45b4efdb27c7ec0999a26430baa9cc828f01b461a.png" src="../_images/23b511a003c8c7a813d32ff45b4efdb27c7ec0999a26430baa9cc828f01b461a.png" />
+<img alt="../_images/4bdf5d88dc1b089566568809bd60a147bdc73c22f8d5dfee8b5ec7b194f46a9f.png" src="../_images/4bdf5d88dc1b089566568809bd60a147bdc73c22f8d5dfee8b5ec7b194f46a9f.png" />
 </div>
 </div>
 </section>
 <section id="pad-the-psf-to-be-the-same-size-as-the-image">
 <h1>Pad the PSF to be the same size as the image<a class="headerlink" href="#pad-the-psf-to-be-the-same-size-as-the-image" title="Permalink to this heading">#</a></h1>
-<p>In order to do the point wise multiplication in the frequency domain, the PSF needs to be padded to the same size as the image.</p>
+<p>In order to do the point wise multiplication in the frequency domain, the PSF needs to be padded to the same size as the image in the spatial domain.  Then when transforming to the frequency domain both PSF and image will be the same size and pointwise multiplication will be possible.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before padding&#39;</span><span class="p">,</span><span class="n">phantom</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">psf</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">psf</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -607,8 +615,8 @@ Problem size = 4.5 GB
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>before padding float32 float32 (128, 1024, 1024) (128, 256, 256)
-after padding float32 float32 (128, 1024, 1024) (128, 1024, 1024)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>before padding float32 float32 (128, 512, 512) (128, 512, 512)
+after padding float32 float32 (128, 512, 512) (128, 512, 512)
 </pre></div>
 </div>
 </div>
@@ -686,17 +694,17 @@ after padding float32 float32 (128, 1024, 1024) (128, 1024, 1024)
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>convolution without memory management
 At beginning, used = 0.0
-After moving phantom to GPU, used = 0.5
-After moving psf to GPU, used = 1.0
-After creating psf_shift, used = 1.5
-After creating otf, used = 2.501953125
-After creating phantom_fft, used = 3.0029296875
-After creating temp, used = 3.50390625
-After creating convolved_cp, used = 4.5048828125
+After moving phantom to GPU, used = 0.125
+After moving psf to GPU, used = 0.25
+After creating psf_shift, used = 0.375
+After creating otf, used = 0.6259765625
+After creating phantom_fft, used = 0.75146484375
+After creating temp, used = 0.876953125
+After creating convolved_cp, used = 1.12744140625
 </pre></div>
 </div>
-<img alt="../_images/23b511a003c8c7a813d32ff45b4efdb27c7ec0999a26430baa9cc828f01b461a.png" src="../_images/23b511a003c8c7a813d32ff45b4efdb27c7ec0999a26430baa9cc828f01b461a.png" />
-<img alt="../_images/f0ce042557ed1c70a011ff25af11517a94810febded8165e2759b42286c8564d.png" src="../_images/f0ce042557ed1c70a011ff25af11517a94810febded8165e2759b42286c8564d.png" />
+<img alt="../_images/4bdf5d88dc1b089566568809bd60a147bdc73c22f8d5dfee8b5ec7b194f46a9f.png" src="../_images/4bdf5d88dc1b089566568809bd60a147bdc73c22f8d5dfee8b5ec7b194f46a9f.png" />
+<img alt="../_images/789ca6208cdeb3042359876e8433a8c24bf2508c3d9e3dc2e6cebf74b5883dfd.png" src="../_images/789ca6208cdeb3042359876e8433a8c24bf2508c3d9e3dc2e6cebf74b5883dfd.png" />
 </div>
 </div>
 </section>
@@ -712,8 +720,8 @@ After creating convolved_cp, used = 4.5048828125
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>After free_all_blocks, used = 4.5048828125
-After free_all_blocks, used = 4.5048828125
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>After free_all_blocks, used = 1.12744140625
+After free_all_blocks, used = 1.12744140625
 </pre></div>
 </div>
 </div>
@@ -781,33 +789,33 @@ After free_all_blocks, used = 4.5048828125
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>before psf_cp deleted, used = 4.5048828125
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>before psf_cp deleted, used = 1.12744140625
 psf_cp exists, deleting it
-psf_cp deleted, used = 4.0048828125
+psf_cp deleted, used = 1.00244140625
 
-before phantom_cp deleted, used = 4.0048828125
+before phantom_cp deleted, used = 1.00244140625
 phantom_cp exists, deleting it
-phantom_cp deleted, used = 3.5048828125
+phantom_cp deleted, used = 0.87744140625
 
-before psf_cp_shift deleted, used = 3.5048828125
+before psf_cp_shift deleted, used = 0.87744140625
 psf_cp_shift exists, deleting it
-psf_cp_shift deleted, used = 3.0048828125
+psf_cp_shift deleted, used = 0.75244140625
 
-before otf_cp deleted, used = 3.0048828125
+before otf_cp deleted, used = 0.75244140625
 otf_cp exists, deleting it
-otf_cp deleted, used = 2.50390625
+otf_cp deleted, used = 0.626953125
 
-before phantom_cp_fft deleted, used = 2.50390625
+before phantom_cp_fft deleted, used = 0.626953125
 phantom_cp_fft exists, deleting it
-phantom_cp_fft deleted, used = 2.0029296875
+phantom_cp_fft deleted, used = 0.50146484375
 
-before temp deleted, used = 2.0029296875
+before temp deleted, used = 0.50146484375
 temp exists, deleting it
-temp deleted, used = 1.501953125
+temp deleted, used = 0.3759765625
 
-before convolved_cp deleted, used = 1.501953125
+before convolved_cp deleted, used = 0.3759765625
 convolved_cp exists, deleting it
-convolved_cp deleted, used = 1.001953125
+convolved_cp deleted, used = 0.2509765625
 </pre></div>
 </div>
 </div>
@@ -832,20 +840,53 @@ convolved_cp deleted, used = 1.001953125
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Before clearing fft cache, used = 1.001953125
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Before clearing fft cache, used = 0.2509765625
 After clearing fft cache, used = 0.0
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<section id="look-at-image-carefully">
+<h1>Look at image carefully<a class="headerlink" href="#look-at-image-carefully" title="Permalink to this heading">#</a></h1>
+<p>Scale the image in the axial direction and also reduce the gamma to enhance dim detail.  Do you see anything odd?</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">convolved</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">convolved</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">convolved</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f0ce042557ed1c70a011ff25af11517a94810febded8165e2759b42286c8564d.png" src="../_images/f0ce042557ed1c70a011ff25af11517a94810febded8165e2759b42286c8564d.png" />
+<img alt="../_images/9eed2b3d137e30249f909e1543fad588f0b72cc61c7439ec9c6c97d78e956e56.png" src="../_images/9eed2b3d137e30249f909e1543fad588f0b72cc61c7439ec9c6c97d78e956e56.png" />
+<img alt="../_images/f7236e965c0d9cab954322729d106a080dd6c86eae3fe2e5a6fc0b63ef2defc2.png" src="../_images/f7236e965c0d9cab954322729d106a080dd6c86eae3fe2e5a6fc0b63ef2defc2.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="questions-and-exercise">
+<h1>Questions and exercise<a class="headerlink" href="#questions-and-exercise" title="Permalink to this heading">#</a></h1>
+<ol class="arabic simple">
+<li><p>What is odd about the above image (hint look carefully at the edges especially near the edges)</p></li>
+<li><p>Can you modify the notebook to eliminate the ‘wrap-around’ artifact seen above?  (hint you will only have to change one block)</p></li>
+<li><p>After trying for a bit see answer below</p></li>
+</ol>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="answer">
+<h1>Answer<a class="headerlink" href="#answer" title="Permalink to this heading">#</a></h1>
+<p>There is a wrap around artifact in the example (with default settings) because the ‘signal space’ we are dealing with is finite.  When implementing convolution with FFTs the image domain becomes ‘circular’ that is for pixels on the edge the ‘adjacent’ pixels are considered to be the pixel on the other side.</p>
+<p>For Python numpy arrays this is also true in the spatial domain.  For example for array a of size n, <code class="docutils literal notranslate"><span class="pre">a[-1]=a[n-1]</span></code>, thus (in python) an implementation of convolution in the spatial domain would also have wrap around artifacts.</p>
+<p>After thinking about this problem for a bit, you may realize there is an obvious solution.  Simply assign the values outside the boundaries a default value.  That is correct, however practically speaking we have to implement this solution somehow.</p>
+<p>One approach is to simply pad all our arrays, do the calculations, then at the end unpad to the original size.  See the below code which uses the image and psf size to compute a extended size which will be large enough to avoid wrap around.</p>
+<p>In this case the final size of the convolved array will be bigger than the original and we likely will also want to crop out only the ‘same’ version.  You may have heard the terms ‘valid’, ‘same’ and ‘full’ in the context of convolutional neural networks.  The ‘valid’ region is the region that is not affected by wrap around convolution calculations, the ‘same’ region is the region the same size as the image, and the ‘full’ region is the size needed (after zero padding) to perform calculations without wrap around.</p>
+<p>The code below extends the image using the ‘full’ strategy to avoid wrap around.  Try copying it and replacing the code within the cell that extends the PSF, (instead of extending just the PSF, we will extend image and PSF) then re-run the notebook.  Note this will also change the memory requirements.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#extended_size=[phantom.shape[0]+psf.shape[0], phantom.shape[1]+psf.shape[1], phantom.shape[2]+psf.shape[2]]</span>
+<span class="c1">#psf, _ = pad(psf, extended_size, &#39;constant&#39;)</span>
+<span class="c1">#phantom, _ = pad(phantom, extended_size, &#39;constant&#39;)</span>
+<span class="c1">#print(&#39;after padding&#39;,phantom.dtype, psf.dtype, phantom.shape, psf.shape)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </section>
@@ -926,6 +967,9 @@ After clearing fft cache, used = 0.0
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#check-memory-use">Check memory use</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#delete-memory">Delete memory</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#delete-fft-cache">Delete FFT cache</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-image-carefully">Look at image carefully</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#questions-and-exercise">Questions and exercise</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#answer">Answer</a></li>
 </ul>
 
   </nav></div>
