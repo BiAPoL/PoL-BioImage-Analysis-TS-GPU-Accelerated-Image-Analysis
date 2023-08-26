@@ -1,6 +1,8 @@
 # cupy
 In this session we will focus on image processing using [cupy](https://docs.cupy.dev/) a library that makes processing of images on [CUDA](https://developer.nvidia.com/cuda-toolkit)-compatible NVidia graphics cards available from Python.
 
+[Download slides](https://github.com/BiAPoL/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/tree/main/docs/25_cupy/cupy.pdf)
+
 To get started, we need to install cupy, e.g. like this:
 ```
 mamba create --name cupy39 python=3.9 devbio-napari pyqt cupy cudatoolkit napari-cupy-image-processing -c conda-forge
