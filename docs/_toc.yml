@@ -33,6 +33,7 @@ parts:
     - file: 25_cupy/30_filtering
     - file: 25_cupy/40_custom_kernels
     - file: 25_cupy/50_napari-cupy-image-processing
+    - file: 25_cupy/60_benchmark_affine_transforms
 
   - file: 30_Deconvolution/0_intro_to_decon
     sections:
