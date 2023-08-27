@@ -13,26 +13,27 @@ parts:
   - file: 00_course_preparation/Readme.md
   - file: 10_Clesperanto/readme
     sections:
-    - file: docs/10_Clesperanto/10_select_devices.ipynb
-    - file: docs/10_Clesperanto/20_gpu_arrays_and_memory_managment.ipynb
-    - file: docs/10_Clesperanto/30_apply_operations_on_data.ipynb
-    - file: docs/10_Clesperanto/40_nuclei_segmentation.ipynb
-    - file: docs/10_Clesperanto/50_measurement_and_quantifications.ipynb
-    - file: docs/10_Clesperanto/60_custom_kernel_execution.ipynb
-    - file: docs/10_Clesperanto/70_benchmarking.ipynb
+    - file: 10_Clesperanto/10_select_devices.ipynb
+    - file: 10_Clesperanto/20_gpu_arrays_and_memory_managment.ipynb
+    - file: 10_Clesperanto/30_apply_operations_on_data.ipynb
+    - file: 10_Clesperanto/40_nuclei_segmentation.ipynb
+    - file: 10_Clesperanto/50_measurement_and_quantifications.ipynb
+    - file: 10_Clesperanto/60_custom_kernel_execution.ipynb
+    - file: 10_Clesperanto/70_benchmarking.ipynb
 
   - file: 23_clesperanto_assistant/intro
     sections:
     - file: 23_clesperanto_assistant/napari-assistant
     - file: 23_clesperanto_assistant/notebook_export
     
-  - file: 20_cupy/readme
+  - file: 25_cupy/readme
     sections:
     - file: 25_cupy/10_basics
     - file: 25_cupy/20_dropin_replacement
     - file: 25_cupy/30_filtering
     - file: 25_cupy/40_custom_kernels
     - file: 25_cupy/50_napari-cupy-image-processing
+    - file: 25_cupy/60_benchmark_affine_transforms
 
   - file: 30_Deconvolution/0_intro_to_decon
     sections:
@@ -47,8 +48,6 @@ parts:
     - file: 30_Deconvolution/9_Dask_Deconvolution
     - file: 30_Deconvolution/cluster_access.md
 
-  - file: 30_Deconvolution/readme
-
 - caption: Tuesday
   chapters:
   # - file: 40_HPC_Intro/readme
@@ -57,14 +56,25 @@ parts:
     - file: 50_Clesperanto_on_HPC/login_taurus
     - file: 50_Clesperanto_on_HPC/modified_generated_notebook
 
-  #- file: 60_Pytorch/readme
+  - file: 60_Pytorch/readme
+    sections:
+    - file: 60_Pytorch/00_versions
+    - file: 60_Pytorch/01_data_exploration
+    - file: 60_Pytorch/02_dataset
+    - file: 60_Pytorch/03_data_batching_and_setup_model
+    - file: 60_Pytorch/04_model_training
+    - file: 60_Pytorch/05_model_training_with_device
+    - file: 60_Pytorch/06_model_training_with_logging
+    - file: 60_Pytorch/07_model_training_with_checkpoints
+    - file: 60_Pytorch/08_pytorch_lightning
 
 - caption: Wednesday
   chapters:
-  - file: 70_AI_Segmentation_Denoising/readme
+  - file: 70_AI_Segmentation_Denoising/Readme
     sections:
     - file: 70_AI_Segmentation_Denoising/01_2D_unet_training
     - file: 70_AI_Segmentation_Denoising/02_Noise2Void
     - file: 70_AI_Segmentation_Denoising/03_Noise2Void_3D
-  - file: 80_Dask/readme
+
+  # - file: 80_Dask/readme
 
