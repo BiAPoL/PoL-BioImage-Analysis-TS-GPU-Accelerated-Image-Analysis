@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>(Probabilistic) Noise2Void &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>(Probabilistic) Noise2Void (2D) &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -66,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '70_AI_Segmentation_Denoising/02_Noise2Void';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Dataset" href="03_Noise2Void_3D.html" />
+    <link rel="next" title="Noise2Void (3D)" href="03_Noise2Void_3D.html" />
     <link rel="prev" title="Training a 2D Unet model" href="01_2D_unet_training.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -255,11 +255,8 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="Readme.html">AI segmentation and denoising</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="01_2D_unet_training.html">Training a 2D Unet model</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">(Probabilistic) Noise2Void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_Noise2Void_3D.html">Dataset</a></li>
-
-
-
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">(Probabilistic) Noise2Void (2D)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Noise2Void_3D.html">Noise2Void (3D)</a></li>
 </ul>
 </li>
 </ul>
@@ -445,7 +442,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>(Probabilistic) Noise2Void</h1>
+    <h1>(Probabilistic) Noise2Void (2D)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -470,8 +467,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="probabilistic-noise2void">
-<h1>(Probabilistic) Noise2Void<a class="headerlink" href="#probabilistic-noise2void" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="probabilistic-noise2void-2d">
+<h1>(Probabilistic) Noise2Void (2D)<a class="headerlink" href="#probabilistic-noise2void-2d" title="Permalink to this heading">#</a></h1>
 <p>This notebook is a re-implementation of the code for denoising with <a class="reference external" href="https://openaccess.thecvf.com/content_CVPR_2019/html/Krull_Noise2Void_-_Learning_Denoising_From_Single_Noisy_Images_CVPR_2019_paper.html">noise2void</a> as proovided by the authors in this <a class="reference external" href="https://github.com/juglab/pn2v">repository</a>. Unlike the original code, this implementation uses pytorch instead of tensorflow. The key idea is to crop small tiles from image data, replace a given pixel with any other pixel in the tile and then try to predict the true intensity of the replaced pixel. Since the intensity of every pixel <span class="math notranslate nohighlight">\(i\)</span> consists of two components noise <span class="math notranslate nohighlight">\(n\)</span> and <span class="math notranslate nohighlight">\(s\)</span> (intensity <span class="math notranslate nohighlight">\(i=n+s\)</span>), the network will inevitably fail to predict the noise component <span class="math notranslate nohighlight">\(n\)</span> of the pixel - thus cleaning up the image in the process.</p>
 <section id="source-code">
 <h2>Source code<a class="headerlink" href="#source-code" title="Permalink to this heading">#</a></h2>
@@ -758,16 +755,16 @@ Finished Training
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "devbio-napari_pol-course-pytorch"
+            mode: "python"
         },
         kernelOptions: {
-            name: "devbio-napari_pol-course-pytorch",
+            name: "python3",
             path: "./70_AI_Segmentation_Denoising"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'devbio-napari_pol-course-pytorch'</script>
+    <script>kernelName = 'python3'</script>
 
                 </article>
               
@@ -794,7 +791,7 @@ Finished Training
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Dataset</p>
+        <p class="prev-next-title">Noise2Void (3D)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

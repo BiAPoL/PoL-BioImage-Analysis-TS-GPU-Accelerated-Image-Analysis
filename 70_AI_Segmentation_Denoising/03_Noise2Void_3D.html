@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Dataset &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>Noise2Void (3D) &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '70_AI_Segmentation_Denoising/03_Noise2Void_3D';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="(Probabilistic) Noise2Void" href="02_Noise2Void.html" />
+    <link rel="prev" title="(Probabilistic) Noise2Void (2D)" href="02_Noise2Void.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -252,11 +252,8 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="Readme.html">AI segmentation and denoising</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="01_2D_unet_training.html">Training a 2D Unet model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="02_Noise2Void.html">(Probabilistic) Noise2Void</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Dataset</a></li>
-
-
-
+<li class="toctree-l2"><a class="reference internal" href="02_Noise2Void.html">(Probabilistic) Noise2Void (2D)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Noise2Void (3D)</a></li>
 </ul>
 </li>
 </ul>
@@ -442,7 +439,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Dataset</h1>
+    <h1>Noise2Void (3D)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -452,12 +449,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Dataset</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#config">Config</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#model-creation">Model creation</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config">Config</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-creation">Model creation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -468,7 +464,9 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="noise2void-3d">
+<h1>Noise2Void (3D)<a class="headerlink" href="#noise2void-3d" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We import all our dependencies.</span>
 <span class="kn">from</span> <span class="nn">n2v.models</span> <span class="kn">import</span> <span class="n">N2VConfig</span><span class="p">,</span> <span class="n">N2V</span>
@@ -487,19 +485,9 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-08-25 15:09:57.838298: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
-To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2023-08-25 15:09:58.541921: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-2023-08-25 15:10:00.117321: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/nvidia/lib:/usr/local/nvidia/lib64:/.singularity.d/libs:/app/env/lib:/.singularity.d/libs
-2023-08-25 15:10:00.117488: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/nvidia/lib:/usr/local/nvidia/lib64:/.singularity.d/libs:/app/env/lib:/.singularity.d/libs
-2023-08-25 15:10:00.117494: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
-</pre></div>
-</div>
-</div>
 </div>
 <section id="dataset">
-<h1>Dataset<a class="headerlink" href="#dataset" title="Permalink to this heading">#</a></h1>
+<h2>Dataset<a class="headerlink" href="#dataset" title="Permalink to this heading">#</a></h2>
 <p>Some example data has been stored at <code class="docutils literal notranslate"><span class="pre">/projects/p038/p_scads_trainings/BIAS/torch_segmentation_denoising_example_data/denoising_example_data/</span></code>. The data can otherwise also be downloaded <a class="reference external" href="https://download.fht.org/jug/n2v/flywing-data.zip">here</a>. Similar to the pytorch dataloader, Noise2Void provides its own <code class="docutils literal notranslate"><span class="pre">DataGenerator</span></code> class, which serves a similar purpose of iterating through the data easily,loading data and extracting patches for training and validation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -547,7 +535,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </section>
 <section id="config">
-<h1>Config<a class="headerlink" href="#config" title="Permalink to this heading">#</a></h1>
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this heading">#</a></h2>
 <p>We have to provide a few settings for the training, such as the shape of patches to be extracted from the image. This is necessary, as pushing the whole image data to the device (even on an HPC) would probably use up all available memory at hand. Notice the changed shape along the first axis (the batch dimension).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -644,7 +632,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </section>
 <section id="model-creation">
-<h1>Model creation<a class="headerlink" href="#model-creation" title="Permalink to this heading">#</a></h1>
+<h2>Model creation<a class="headerlink" href="#model-creation" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># a name used to identify the model</span>
@@ -761,7 +749,7 @@ Loading network weights from &#39;weights_best.h5&#39;.
 </div>
 </section>
 <section id="inference">
-<h1>Inference<a class="headerlink" href="#inference" title="Permalink to this heading">#</a></h1>
+<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We load the data we want to process.</span>
@@ -989,6 +977,7 @@ Loading network weights from &#39;weights_best.h5&#39;.
 </div>
 </div>
 </section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1027,7 +1016,7 @@ Loading network weights from &#39;weights_best.h5&#39;.
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">(Probabilistic) Noise2Void</p>
+        <p class="prev-next-title">(Probabilistic) Noise2Void (2D)</p>
       </div>
     </a>
 </div></div>
@@ -1048,12 +1037,11 @@ Loading network weights from &#39;weights_best.h5&#39;.
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Dataset</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#config">Config</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#model-creation">Model creation</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config">Config</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-creation">Model creation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>
