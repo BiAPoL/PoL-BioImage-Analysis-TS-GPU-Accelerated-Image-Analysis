@@ -25,6 +25,6 @@ The data required to execute the notebooks is located at `/projects/p_scads_trai
 - Create a directory named `data` in the top level of this repo (i.e. on the same level the `*.ipynb*` notebook files and this README are located). Then copy the data to the freshly created directory using `cp -r /projects/p_scads_trainings/BIAS/dsb2018 $PWD/data/`
 
 
-# Questions, concerns or feedback?
+## Questions, concerns or feedback?
 
 Please file an issue through the issue tab.
