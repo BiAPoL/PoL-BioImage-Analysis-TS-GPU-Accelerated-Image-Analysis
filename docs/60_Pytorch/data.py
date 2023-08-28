@@ -9,15 +9,15 @@ from tifffile import imread
 from torchvision import transforms
 from tqdm import tqdm
 
-SRC_DIR = Path("./data/dsb2018")
+SRC_DIR = Path("./data")
 
-def get_dsb2018_files(subset):
+def get_dsb2018_files(subset, rootdir=SRC_DIR):
     assert subset in ["train", "validation", "test"]
-    src_dir = SRC_DIR / subset
+    src_dir = rootdir / subset
 
     X = sorted(src_dir.rglob('**/images/*.tif'))
     Y = sorted(src_dir.rglob('**/masks/*.tif'))
-    assert len(X) > 0
+    assert len(X) > 0, f"error finding the right structure in {src_dir}\n{list(src_dir.glob('*'))}"
     assert len(X) == len(Y), print(f"X has length {len(X)} and Y has length {len(Y)}")
     assert all(x.name==y.name for x,y in zip(X,Y))
 

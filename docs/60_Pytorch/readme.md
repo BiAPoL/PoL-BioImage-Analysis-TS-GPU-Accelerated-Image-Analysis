@@ -21,9 +21,12 @@ Afterwards, once the notebook has opened:
 - execute the first cell, with SHIFT+ENTER
 - this will link the conda environment we prepared for you to your user folder. Follow any instructions in the notebook.
 
-The data required to execute the notebooks is located at `/projects/p_scads_trainings/BIAS/dsb2018` and has to be integrated into your clone of this repository (which should reside in your home directory after clicking the above link to launch jupyter Hub). Alternatively, the data can be downloaded as a zip file from [the stardist github repository]('https://github.com/stardist/stardist/releases/download/0.1.0/dsb2018.zip').
-- Create a directory named `data` in the top level of this repo (i.e. on the same level the `*.ipynb*` notebook files and this README are located). Then copy the data to the freshly created directory using `cp -r /projects/p_scads_trainings/BIAS/dsb2018 $PWD/data/`
+The data required to execute the notebooks is located at `/projects/p_scads_trainings/BIAS/dsb2018` and has to be integrated into your clone of this repository (which should reside in your home directory after clicking the above link to launch jupyter Hub). 
 
+1. Create a directory named `data` in the top level of this repo (i.e. on the same level the `*.ipynb*` notebook files and this README are located). 
+2. Copy the data to the freshly created directory using `cp -r /projects/p_scads_trainings/BIAS/dsb2018 $PWD/data`
+
+As a backup solution, the data can be downloaded as a zip file from [the stardist github repository]('https://github.com/stardist/stardist/releases/download/0.1.0/dsb2018.zip').
 
 ## Questions, concerns or feedback?
 
