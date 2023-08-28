@@ -50,7 +50,7 @@ parts:
 
 - caption: Tuesday
   chapters:
-  # - file: 40_HPC_Intro/readme
+  - file: 40_HPC_Intro/readme
   - file: 50_Clesperanto_on_HPC/readme
     sections:
     - file: 50_Clesperanto_on_HPC/login_taurus
