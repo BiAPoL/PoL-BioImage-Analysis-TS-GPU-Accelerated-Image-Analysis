@@ -1,6 +1,6 @@
 # In _config.yml
 title: Image data science with Python and Napari @EPFL
-author: Stephane Rigaud, Brian Northan, Till Korten, Neringa Jurenaite, Peter Steinbach, Sebastian Starke, Johannes Soltwedel and Marvin Albert, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
+author: Stephane Rigaud, Brian Northan, Till Korten, Neringa Jurenaite, Apurv Deepak Kulkarni, Peter Steinbach, Sebastian Starke, Johannes Soltwedel and Marvin Albert, Robert Haase, DFG Cluster of Excellence "Physics of Life", TU Dresden
 logo: biapol_logo.png
 execute:
   execute_notebooks: off
