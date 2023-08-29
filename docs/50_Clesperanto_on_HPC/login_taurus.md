@@ -23,7 +23,7 @@ Now you need to activate the install a singularity container on the HPC cluster 
 
 Open a terminal by clicking on `File` (1 in the image below) -> `New` (2) -> `Terminal` (3)
 
-<img src="images/5_open_terminal.png" width="500" />
+![](images/5_open_terminal.png)
 
 Install a custom jupyter kernel for your user
 
@@ -37,7 +37,7 @@ cd singularity-devbio-napari
 
 Wait 2-15 min until the image is downloaded and verified (the time depends on how much network and disk load is on the cluster). The output should look something like this:
 
-<img src="images/6_terminal_output.png" width="600" />
+![](images/6_terminal_output.png)
 
 Now reload the browser tab.
 
