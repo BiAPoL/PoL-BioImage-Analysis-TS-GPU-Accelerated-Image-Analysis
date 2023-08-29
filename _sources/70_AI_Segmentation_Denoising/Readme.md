@@ -21,6 +21,12 @@ git clone https://gitlab.mn.tu-dresden.de/bia-pol/singularity-devbio-napari.git
 cd singularity-devbio-napari
 ```
 
+Then, install the correct container. The following table shows which container to install for which notebook. You can install a container by running this command:
+
+```bash
+./install.sh <name-of-container>
+```
+
 | Notebook | Installlation | Kernel name |
 | --- | --- | --- |
 | [01_2D_unet_training.ipynb](./01_2D_unet_training.ipynb) | `./install.sh pol-course-pytorch` | `pol-course-pytorch`
