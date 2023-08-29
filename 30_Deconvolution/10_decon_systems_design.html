@@ -492,6 +492,11 @@ document.write(`
   <section id="deconvolution-systems-design">
 <h1>Deconvolution Systems Design<a class="headerlink" href="#deconvolution-systems-design" title="Permalink to this heading">#</a></h1>
 <p>In this example we explore how the various deconvolution parameters, which we learned about in previous notebooks combine to affect deconvolution results.</p>
+<p>Note for Mac users: There was a bug where the code for apply the ‘forward’ model did not default to numpy if no cupy was found.  To get the bug fix try</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">uninstall</span> <span class="n">tnia</span><span class="o">-</span><span class="n">python</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="kc">True</span><span class="o">-</span><span class="n">North</span><span class="o">-</span><span class="n">Intelligent</span><span class="o">-</span><span class="n">Algorithms</span><span class="o">/</span><span class="n">tnia</span><span class="o">-</span><span class="n">python</span>
+</pre></div>
+</div>
 <section id="design-trade-offs">
 <h2>Design trade-offs<a class="headerlink" href="#design-trade-offs" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
@@ -657,7 +662,7 @@ stackview available
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8cc84b95260a9a434036ddc01036e5e8364f24e739c6efc49776d38a195878a7.png" src="../_images/8cc84b95260a9a434036ddc01036e5e8364f24e739c6efc49776d38a195878a7.png" />
+<img alt="../_images/7eb6e0c0759e3248fe13186ee8f6e625fa2439525c0808764afb2ccb2d68c774.png" src="../_images/7eb6e0c0759e3248fe13186ee8f6e625fa2439525c0808764afb2ccb2d68c774.png" />
 </div>
 </div>
 </section>
@@ -777,7 +782,7 @@ Richardson Lucy Started
 Richardson Lucy Finished/nfinished decon chunk
 </pre></div>
 </div>
-<img alt="../_images/6f847ff845a74300ba1ee82c84ab57f7026fd889636d71fda3b2fd26ab70134c.png" src="../_images/6f847ff845a74300ba1ee82c84ab57f7026fd889636d71fda3b2fd26ab70134c.png" />
+<img alt="../_images/028385b7a1747036bda1768fc9f08f25cf1b9303ba3543e944dc387adadc36f9.png" src="../_images/028385b7a1747036bda1768fc9f08f25cf1b9303ba3543e944dc387adadc36f9.png" />
 </div>
 </div>
 </section>
@@ -794,7 +799,16 @@ Richardson Lucy Finished/nfinished decon chunk
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;decon&#39; at 0x7fd1ec298a00&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;decon&#39; at 0x7f98907f2f70&gt;
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Green">2023-08-28 08:36:53.297</span> | <span class=" -Color -Color-Bold">INFO    </span> | <span class=" -Color -Color-Cyan">napari_assistant._gui._category_widget</span>:<span class=" -Color -Color-Cyan">call_op</span>:<span class=" -Color -Color-Cyan">178</span> - <span class=" -Color -Color-Bold">threshold_otsu (clesperanto)(..., )</span>
+4 warnings generated.
+4 warnings generated.
+4 warnings generated.
+4 warnings generated.
+4 warnings generated.
+<span class=" -Color -Color-Green">2023-08-28 08:37:23.842</span> | <span class=" -Color -Color-Bold">INFO    </span> | <span class=" -Color -Color-Cyan">napari_assistant._gui._category_widget</span>:<span class=" -Color -Color-Cyan">call_op</span>:<span class=" -Color -Color-Cyan">178</span> - <span class=" -Color -Color-Bold">threshold_otsu (clesperanto)(..., )</span>
 </pre></div>
 </div>
 </div>

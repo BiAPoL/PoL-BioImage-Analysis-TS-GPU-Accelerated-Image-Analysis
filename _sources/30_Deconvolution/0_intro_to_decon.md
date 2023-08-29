@@ -21,6 +21,15 @@ The problem is ill-poised (information is lost thus cannot restore original comp
   ![](images/PSF_xy.jpg)
   ![](images/PSF_xz.jpg)
 
+### Variable Point Spread Function
+
+* The PSF varies both axially and laterally because of aberrations.
+* Examples in this session use a stationary PSF (approximation)
+* Good idea to image a field of beads to evaluate how much the PSF varies
+* If varying too much can process in blocks and interpolate (approximation)
+* Can modify deconvolution equations to consider variable PSF (Preza, C. and Conchello, J-A., "Depth-variant maximum-likelihood restoration for three-dimensional fluorescence microscopy") software available [here]( https://www.memphis.edu/cirl/cosmos/index.php)
+
+
 ## Imaging Process
 
 * Image = Truth convolved with PSF + Noise
@@ -88,7 +97,7 @@ Non-circulant deconvolution (BIG Lab technical note 2014, M. Bertero, P. Boccaci
 * Algorithm acceleration
     * Take a bigger step at each iteration
     * Vector Acceleration (Biggs)
-Hardware acceleration
+* Hardware acceleration
     * Fast math libraries
     * Multi-threading
     * GPU

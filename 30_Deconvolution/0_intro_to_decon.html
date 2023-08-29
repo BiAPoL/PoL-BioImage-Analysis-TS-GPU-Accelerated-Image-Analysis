@@ -462,7 +462,10 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-deconvolution">What is Deconvolution?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-point-spread-function-psf">What is the Point Spread Function (PSF) ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-point-spread-function-psf">What is the Point Spread Function (PSF) ?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-point-spread-function">Variable Point Spread Function</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imaging-process">Imaging Process</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolution">Deconvolution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolution-approaches">Deconvolution approaches</a></li>
@@ -505,6 +508,16 @@ document.write(`
 <img alt="" src="../_images/PSF_xz.jpg" /></p>
 </li>
 </ul>
+<section id="variable-point-spread-function">
+<h3>Variable Point Spread Function<a class="headerlink" href="#variable-point-spread-function" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The PSF varies both axially and laterally because of aberrations.</p></li>
+<li><p>Examples in this session use a stationary PSF (approximation)</p></li>
+<li><p>Good idea to image a field of beads to evaluate how much the PSF varies</p></li>
+<li><p>If varying too much can process in blocks and interpolate (approximation)</p></li>
+<li><p>Can modify deconvolution equations to consider variable PSF (Preza, C. and Conchello, J-A., “Depth-variant maximum-likelihood restoration for three-dimensional fluorescence microscopy”) software available <a class="reference external" href="https://www.memphis.edu/cirl/cosmos/index.php">here</a></p></li>
+</ul>
+</section>
 </section>
 <section id="imaging-process">
 <h2>Imaging Process<a class="headerlink" href="#imaging-process" title="Permalink to this heading">#</a></h2>
@@ -573,8 +586,11 @@ document.write(`
 <li><p>Algorithm acceleration</p>
 <ul>
 <li><p>Take a bigger step at each iteration</p></li>
-<li><p>Vector Acceleration (Biggs)
-Hardware acceleration</p></li>
+<li><p>Vector Acceleration (Biggs)</p></li>
+</ul>
+</li>
+<li><p>Hardware acceleration</p>
+<ul>
 <li><p>Fast math libraries</p></li>
 <li><p>Multi-threading</p></li>
 <li><p>GPU</p></li>
@@ -654,7 +670,10 @@ Hardware acceleration</p></li>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-deconvolution">What is Deconvolution?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-point-spread-function-psf">What is the Point Spread Function (PSF) ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-point-spread-function-psf">What is the Point Spread Function (PSF) ?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-point-spread-function">Variable Point Spread Function</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imaging-process">Imaging Process</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolution">Deconvolution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolution-approaches">Deconvolution approaches</a></li>
