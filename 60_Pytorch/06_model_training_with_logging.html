@@ -563,24 +563,29 @@ document.write(`
 </div>
 </div>
 <p>Such a training is performed by iterating over the batches of the training dataset multiple times. Each full iteration over the dataset is termed an epoch.</p>
-<p>During or after training the tensorboard logs can be visualized as follows: in a terminal, type</p>
+<p><strong>During or after training</strong>, the tensorboard logs (which have been collected with the <code class="docutils literal notranslate"><span class="pre">SummaryWriter</span></code> object) can be visualized. Would you be on your laptop or workstation at home, you could do:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>tensorboard<span class="w"> </span>--logdir<span class="w"> </span><span class="s2">&quot;path/to/logs&quot;</span>,
 </pre></div>
 </div>
-<p>then open a browser on <code class="docutils literal notranslate"><span class="pre">localhost:6006</span></code> (or whichever port the tensorboard server outputted as running on).
+<p>then open a browser using the URL <code class="docutils literal notranslate"><span class="pre">localhost:6006</span></code> (or whichever port the tensorboard server outputted as running on).
 Alternatively, tensorboard can be accessed from jupyter as well:</p>
+<p>On Taurus, some special steps need to be taken to visualize the tensorboard logs.</p>
+<p>If not done already, spawn a notebook BUT this time make sure to choose <code class="docutils literal notranslate"><span class="pre">production</span></code> under software environment in the advanced spawn configuration. Then wait until the notebooks open. Run this notebook.</p>
+<p>In order to be able to view the tensorboard logs, the tensorboard jupyter lab extension always checks the same location on the computer it is running on. Hence, you need to move your logs in the right location. To do so, run the following command:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> tensorboard
-<span class="o">%</span><span class="k">tensorboard</span> --port 6006 --logdir ./logs
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/<span class="nv">$USER</span>/tf-logs<span class="w"> </span>
+<span class="o">!</span>ln<span class="w"> </span>-s<span class="w"> </span><span class="nv">$PWD</span>/logs<span class="w"> </span>/tmp/<span class="nv">$USER</span>/tf-logs<span class="w"> </span>#might<span class="w"> </span>fail<span class="w"> </span><span class="k">if</span><span class="w"> </span>the<span class="w"> </span>destination<span class="w"> </span>already<span class="w"> </span>exists
 </pre></div>
 </div>
 </div>
 </div>
+<p>Now run the following cell which performs the model training. While the training runs, you can open the Tensorboad tab from the jupyter lab main page.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_nepochs</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">log_interval</span> <span class="o">=</span> <span class="mi">1</span>
+
 <span class="n">writer</span> <span class="o">=</span> <span class="n">SummaryWriter</span><span class="p">(</span><span class="n">log_dir</span><span class="o">=</span><span class="s2">&quot;logs&quot;</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;this is the test of SummaryWriter&quot;</span><span class="p">)</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -646,16 +651,16 @@ Alternatively, tensorboard can be accessed from jupyter as well:</p>
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "torch_intro_env"
+            mode: "devbio-napari_pol-course-pytorch"
         },
         kernelOptions: {
-            name: "torch_intro_env",
+            name: "devbio-napari_pol-course-pytorch",
             path: "./60_Pytorch"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'torch_intro_env'</script>
+    <script>kernelName = 'devbio-napari_pol-course-pytorch'</script>
 
                 </article>
               
