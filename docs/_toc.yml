@@ -55,6 +55,7 @@ parts:
     sections:
     - file: 50_Clesperanto_on_HPC/login_taurus
     - file: 50_Clesperanto_on_HPC/modified_generated_notebook
+    - file: 50_Clesperanto_on_HPC/exercises
 
   - file: 60_Pytorch/readme
     sections:
