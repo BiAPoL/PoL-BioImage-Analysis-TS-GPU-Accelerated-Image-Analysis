@@ -467,6 +467,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-the-instance-label-to-a-binary-segmentation-mask">Convert the instance label to a binary segmentation mask</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization-of-the-raw-image">Normalization of the raw image</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#we-explore-the-image-resolutions-on-the-training-data">We explore the image resolutions on the training data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-a-homogenous-dataset">Exercise: A homogenous dataset?</a></li>
 </ul>
             </nav>
         </div>
@@ -480,6 +481,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="data-exploration">
 <h1>Data exploration<a class="headerlink" href="#data-exploration" title="Permalink to this heading">#</a></h1>
+<p>For this workshop, we will rely on a very simple dataset from the 2018 data science bowl. See <a class="reference external" href="https://bbbc.broadinstitute.org/BBBC038/">this page</a> for more details.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">data</span> <span class="kn">import</span> <span class="n">get_dsb2018_train_files</span><span class="p">,</span> <span class="n">get_dsb2018_validation_files</span><span class="p">,</span> <span class="n">get_dsb2018_test_files</span><span class="p">,</span> <span class="n">fill_label_holes</span><span class="p">,</span> <span class="n">quantile_normalization</span>
@@ -493,32 +495,35 @@ document.write(`
 </div>
 <section id="getting-lists-of-input-and-label-files">
 <h2>Getting lists of input and label files<a class="headerlink" href="#getting-lists-of-input-and-label-files" title="Permalink to this heading">#</a></h2>
+<p>The data required to execute the notebooks is located at <code class="docutils literal notranslate"><span class="pre">/projects/p_scads_trainings/BIAS/dsb2018</span></code> and has to be integrated into your clone of this repository (which should reside in your home directory after clicking the above link to launch jupyter Hub).</p>
+<p>To get the data:</p>
+<ol class="arabic simple">
+<li><p>create a directory named <code class="docutils literal notranslate"><span class="pre">data</span></code> in the top level of this repo (i.e. on the same level the <code class="docutils literal notranslate"><span class="pre">*.ipynb*</span></code> notebook files and this README are located).</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">data</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>copy the data to the freshly created directory using</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r /projects/p_scads_trainings/BIAS/dsb2018 $PWD/data/
+</pre></div>
+</div>
+<p>As a backup solution, the data can be downloaded as a zip file from <span class="xref myst">the stardist github repository</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">getter_fn</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">get_dsb2018_train_files</span><span class="p">,</span> <span class="n">get_dsb2018_validation_files</span><span class="p">,</span> <span class="n">get_dsb2018_test_files</span><span class="p">]):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># let&#39;s loop through the dataset and check how many samples we have</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">getter_fn</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">get_dsb2018_train_files</span><span class="p">,</span> <span class="n">get_dsb2018_validation_files</span><span class="p">,</span> <span class="n">get_dsb2018_test_files</span><span class="p">]):</span>
     <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">getter_fn</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>train 382 382
-val 65 65
-test 50 50
-</pre></div>
 </div>
-</div>
-</div>
+<p>We retain the last iteration of this loop, i.e. the test set. The variables <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> should contain paths to specific <code class="docutils literal notranslate"><span class="pre">.tif</span></code> files now.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[PosixPath(&#39;../../data/dsb2018/test/images/0bda515e370294ed94efd36bd53782288acacb040c171df2ed97fd691fc9d8fe.tif&#39;),
- PosixPath(&#39;../../data/dsb2018/test/images/0bf4b144167694b6846d584cf52c458f34f28fcae75328a2a096c8214e01c0d0.tif&#39;),
- PosixPath(&#39;../../data/dsb2018/test/images/1b6044e4858a9b7cee9b0028d8e54fbc8fb72e6c4424ab5b9f3859bfc72b33c5.tif&#39;)]
 </pre></div>
 </div>
 </div>
@@ -526,13 +531,6 @@ test 50 50
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[PosixPath(&#39;../../data/dsb2018/test/masks/0bda515e370294ed94efd36bd53782288acacb040c171df2ed97fd691fc9d8fe.tif&#39;),
- PosixPath(&#39;../../data/dsb2018/test/masks/0bf4b144167694b6846d584cf52c458f34f28fcae75328a2a096c8214e01c0d0.tif&#39;),
- PosixPath(&#39;../../data/dsb2018/test/masks/1b6044e4858a9b7cee9b0028d8e54fbc8fb72e6c4424ab5b9f3859bfc72b33c5.tif&#39;)]
 </pre></div>
 </div>
 </div>
@@ -544,10 +542,10 @@ test 50 50
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Xtrain</span><span class="p">,</span> <span class="n">ytrain</span> <span class="o">=</span> <span class="n">get_dsb2018_train_files</span><span class="p">()</span>
 
-<span class="n">sidx</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">sidx</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#selecting the first image in the lists</span>
 <span class="n">image_file</span><span class="p">,</span> <span class="n">label_file</span> <span class="o">=</span> <span class="n">Xtrain</span><span class="p">[</span><span class="n">sidx</span><span class="p">],</span> <span class="n">ytrain</span><span class="p">[</span><span class="n">sidx</span><span class="p">]</span>
 <span class="n">image</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">image_file</span><span class="p">),</span> <span class="n">imread</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
-<span class="n">label_filled</span> <span class="o">=</span> <span class="n">fill_label_holes</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+<span class="n">label_filled</span> <span class="o">=</span> <span class="n">fill_label_holes</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="c1"># some masks have holes, let&#39;s fill them</span>
 </pre></div>
 </div>
 </div>
@@ -559,12 +557,6 @@ test 50 50
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;numpy.ndarray&#39;&gt;
-&lt;class &#39;numpy.ndarray&#39;&gt;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -573,13 +565,8 @@ test 50 50
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>image uint8 (256, 256) 1 108
-label uint16 (256, 256) 0 27
-</pre></div>
 </div>
-</div>
-</div>
+<p>The loaded images are 8-bit greyscale images. The labels however are encoded as 16-bit files.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
@@ -592,12 +579,6 @@ label uint16 (256, 256) 0 27
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">label_filled</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x2b9a908f6380&gt;
-</pre></div>
-</div>
-<img alt="../_images/a0526483d6c6ff817e82cceb6f68425d98e19b71e4f4dd820698be4357d62e9f.png" src="../_images/a0526483d6c6ff817e82cceb6f68425d98e19b71e4f4dd820698be4357d62e9f.png" />
 </div>
 </div>
 </section>
@@ -613,17 +594,12 @@ label uint16 (256, 256) 0 27
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x2b9a90b1ff10&gt;
-</pre></div>
-</div>
-<img alt="../_images/3041d49c3647911694e3c00a9ef1500e9ca31509594779dc0b2ccdb3e370dbbe.png" src="../_images/3041d49c3647911694e3c00a9ef1500e9ca31509594779dc0b2ccdb3e370dbbe.png" />
-</div>
 </div>
 </section>
 <section id="normalization-of-the-raw-image">
 <h2>Normalization of the raw image<a class="headerlink" href="#normalization-of-the-raw-image" title="Permalink to this heading">#</a></h2>
 <p>As neural networks tend to be easier to train when input values are small, we should normalize the pixel intensities from the uint8 range of [0, 255] to floating point values closer to [0, 1].</p>
+<p>In the code below, we use a technique that sets the lower boundary of the normalization range to the 1% percentile. Equally, we set the upper boundary of the normalization to the 99.8%th percentile. This technique has proven to be very robust in practice. We adopted it from StarDist, see <a class="github reference external" href="https://github.com/stardist/stardist/blob/master/examples/2D/2_training.ipynb">stardist/stardist</a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># similar normalization as shown in stardist (https://github.com/stardist/stardist/blob/master/examples/2D/2_training.ipynb)</span>
@@ -644,15 +620,11 @@ label uint16 (256, 256) 0 27
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">image_normalized_noclip</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">image_normalized_noclip</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;image intensity range before normalisation&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">image_normalized_noclip</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">image_normalized_noclip</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;image intensity range after normalisation&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">image_normalized_clip</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">image_normalized_clip</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.012658227848101266 1.3417721518987342
-0.0 1.0
 </pre></div>
 </div>
 </div>
@@ -672,24 +644,19 @@ label uint16 (256, 256) 0 27
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../_images/bcf05e2a10009b8528eb7f0a4ef0b97b584f203842fb5c79586247edf7ccee59.png" src="../_images/bcf05e2a10009b8528eb7f0a4ef0b97b584f203842fb5c79586247edf7ccee59.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
 
+<span class="c1"># a convenient transform from torchvision is to cast the </span>
+<span class="c1"># np.array to a torch.Tensor</span>
 <span class="n">label_torch</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">()(</span><span class="n">label_binary</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+
+<span class="c1"># when using code that expects numpy objects, we have to cast back again</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">label_torch</span><span class="o">.</span><span class="n">numpy</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x2b9a92d506d0&gt;
-</pre></div>
-</div>
-<img alt="../_images/3041d49c3647911694e3c00a9ef1500e9ca31509594779dc0b2ccdb3e370dbbe.png" src="../_images/3041d49c3647911694e3c00a9ef1500e9ca31509594779dc0b2ccdb3e370dbbe.png" />
 </div>
 </div>
 </section>
@@ -697,19 +664,15 @@ label uint16 (256, 256) 0 27
 <h2>We explore the image resolutions on the training data<a class="headerlink" href="#we-explore-the-image-resolutions-on-the-training-data" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">imread</span><span class="p">,</span> <span class="n">Xtrain</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># let&#39;s read in all training images</span>
+<span class="n">X</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">imread</span><span class="p">,</span> <span class="n">Xtrain</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(256, 256)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -723,406 +686,17 @@ label uint16 (256, 256) 0 27
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shapes</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (360, 360),
- (360, 360),
- (260, 347),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (360, 360),
- (520, 696),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (520, 696),
- (360, 360),
- (256, 256),
- (520, 696),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (512, 640),
- (360, 360),
- (520, 696),
- (360, 360),
- (256, 256),
- (256, 256),
- (520, 696),
- (256, 256),
- (520, 696),
- (360, 360),
- (256, 256),
- (256, 256),
- (520, 696),
- (360, 360),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (256, 256),
- (512, 640),
- (512, 640),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (360, 360),
- (360, 360),
- (256, 256),
- (256, 256),
- (512, 640),
- (360, 360),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (360, 360),
- (520, 696),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (520, 696),
- (520, 696),
- (512, 640),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (520, 696),
- (520, 696),
- (256, 256),
- (256, 256),
- (520, 696),
- (520, 696),
- (360, 360),
- (256, 256),
- (256, 256),
- (360, 360),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (520, 696),
- (520, 696),
- (256, 256),
- (520, 696),
- (520, 696),
- (360, 360),
- (360, 360),
- (360, 360),
- (256, 256),
- (520, 696),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (520, 696),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (520, 696),
- (360, 360),
- (360, 360),
- (256, 256),
- (512, 640),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (520, 696),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (520, 696),
- (520, 696),
- (360, 360),
- (360, 360),
- (256, 256),
- (256, 256),
- (520, 696),
- (360, 360),
- (520, 696),
- (520, 696),
- (360, 360),
- (512, 640),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (520, 696),
- (360, 360),
- (256, 256),
- (256, 256),
- (360, 360),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (520, 696),
- (256, 256),
- (520, 696),
- (512, 640),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (360, 360),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (520, 696),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (256, 256),
- (520, 696),
- (360, 360),
- (256, 256),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (260, 347),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (520, 696),
- (360, 360),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 320),
- (256, 256),
- (520, 696),
- (520, 696),
- (256, 256),
- (520, 696),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (360, 360),
- (360, 360),
- (512, 640),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (360, 360),
- (256, 256),
- (520, 696),
- (520, 696),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (360, 360),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (360, 360),
- (520, 696),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (360, 360),
- (256, 256),
- (520, 696),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 320),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (360, 360),
- (520, 696),
- (256, 256),
- (360, 360),
- (360, 360),
- (360, 360),
- (256, 256),
- (256, 256),
- (256, 256),
- (520, 696),
- (520, 696),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256),
- (256, 256)]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># you will find many different shapes in the training data</span>
+<span class="n">shapes</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unique_shapes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">shapes</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># let&#39;s see the shapes we find</span>
+<span class="n">unique_shapes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">shapes</span><span class="p">)</span>
 <span class="n">unique_shapes</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{(256, 256), (256, 320), (260, 347), (360, 360), (512, 640), (520, 696)}
 </pre></div>
 </div>
 </div>
@@ -1137,17 +711,16 @@ label uint16 (256, 256) 0 27
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{(512, 640): 9,
- (260, 347): 2,
- (360, 360): 71,
- (520, 696): 66,
- (256, 256): 232,
- (256, 320): 2}
-</pre></div>
 </div>
-</div>
-</div>
+</section>
+<section id="exercise-a-homogenous-dataset">
+<h2>Exercise: A homogenous dataset?<a class="headerlink" href="#exercise-a-homogenous-dataset" title="Permalink to this heading">#</a></h2>
+<p>If the shapes differ, what else is different. Explore the <strong>training data</strong> set more and find out:</p>
+<ul class="simple">
+<li><p>are all images encoded the same way?</p></li>
+<li><p>are all label masks encoded the same way?
+Once done, approach you the person next to you and discuss how you would proceed with such a diverse data set in practice.</p></li>
+</ul>
 </section>
 </section>
 
@@ -1223,6 +796,7 @@ label uint16 (256, 256) 0 27
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-the-instance-label-to-a-binary-segmentation-mask">Convert the instance label to a binary segmentation mask</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization-of-the-raw-image">Normalization of the raw image</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#we-explore-the-image-resolutions-on-the-training-data">We explore the image resolutions on the training data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-a-homogenous-dataset">Exercise: A homogenous dataset?</a></li>
 </ul>
   </nav></div>
 

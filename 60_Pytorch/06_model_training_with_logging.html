@@ -439,7 +439,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -455,6 +457,14 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-let-s-do-this-locally">Exercise: Let’s do this locally</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -492,11 +502,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number of devices: 0 	chosen device: cpu 	use_cuda= False
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -529,17 +534,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████████████████████████| 382/382 [00:14&lt;00:00, 26.33it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>232
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -555,11 +549,6 @@ document.write(`
 
 <span class="c1"># transfer the model to the chosen device</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>BasicUNet features: (16, 16, 32, 64, 128, 16).
 </pre></div>
 </div>
 </div>
@@ -587,22 +576,6 @@ Alternatively, tensorboard can be accessed from jupyter as well:</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html">
-      <iframe id="tensorboard-frame-4c4f24f1457c9717" width="100%" height="800" frameborder="0">
-      </iframe>
-      <script>
-        (function() {
-          const frame = document.getElementById("tensorboard-frame-4c4f24f1457c9717");
-          const url = new URL("/", window.location);
-          const port = 6006;
-          if (port) {
-            url.port = port;
-          }
-          frame.src = url;
-        })();
-      </script>
-    </div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -648,19 +621,20 @@ Alternatively, tensorboard can be accessed from jupyter as well:</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Train Epoch: 1 Batch: 0 Total samples processed: 32 Loss: 0.789273738861084
-Train Epoch: 1 Batch: 1 Total samples processed: 64 Loss: 0.7346146106719971
-Train Epoch: 1 Batch: 2 Total samples processed: 96 Loss: 0.6947914361953735
-Train Epoch: 1 Batch: 3 Total samples processed: 128 Loss: 0.6753167510032654
-Train Epoch: 1 Batch: 4 Total samples processed: 160 Loss: 0.6629210710525513
-Train Epoch: 1 Batch: 5 Total samples processed: 192 Loss: 0.6484382152557373
-Train Epoch: 1 Batch: 6 Total samples processed: 224 Loss: 0.6535567045211792
-Train Epoch: 1 Batch: 7 Total samples processed: 256 Loss: 0.6217544078826904
+</div>
+<p>When you executed the cell above, you should see a new folder appear in the current directory. This folder is called <code class="docutils literal notranslate"><span class="pre">logs</span></code>. This is where tensorboard stores all run information.</p>
+<section id="exercise-let-s-do-this-locally">
+<h2>Exercise: Let’s do this locally<a class="headerlink" href="#exercise-let-s-do-this-locally" title="Permalink to this heading">#</a></h2>
+<p>The nice thing with having all the logs available on disk is, that you can move them around. If you like, try to download the entire <code class="docutils literal notranslate"><span class="pre">logs</span></code> folder onto your local machine (laptop). Then install <code class="docutils literal notranslate"><span class="pre">tensorboard</span></code> with pip or conda.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">tensorboard</span> <span class="c1">#can take awhile</span>
 </pre></div>
 </div>
+<p>Then run the same code as above on your local machine.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tensorboard</span> <span class="o">--</span><span class="n">port</span> <span class="mi">6006</span> <span class="o">--</span><span class="n">logdir</span> <span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">logs</span>
+</pre></div>
 </div>
-</div>
+<p>You can now open a browser window and type in <code class="docutils literal notranslate"><span class="pre">localhost:6006</span></code> as URL. This should open the tensorboard interface.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -721,6 +695,20 @@ Train Epoch: 1 Batch: 7 Total samples processed: 256 Loss: 0.6217544078826904
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-let-s-do-this-locally">Exercise: Let’s do this locally</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

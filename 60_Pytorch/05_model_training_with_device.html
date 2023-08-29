@@ -463,6 +463,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-some-predictions">Look at some predictions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises-any-differences">Exercises: Any Differences?</a></li>
 </ul>
             </nav>
         </div>
@@ -495,7 +496,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number of devices: 0 	chosen device: cpu 	use_cuda= False
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number of devices: 1 	chosen device: cuda 	use_cuda= True
 </pre></div>
 </div>
 </div>
@@ -532,13 +533,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████████████████████████████████| 382/382 [00:14&lt;00:00, 26.82it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 382/382 [00:19&lt;00:00, 19.69it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>232
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -617,14 +615,14 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Train Epoch: 1 Batch: 0 Total samples processed 32 Loss: 0.6253708004951477
-Train Epoch: 1 Batch: 1 Total samples processed 64 Loss: 0.584638774394989
-Train Epoch: 1 Batch: 2 Total samples processed 96 Loss: 0.5572016835212708
-Train Epoch: 1 Batch: 3 Total samples processed 128 Loss: 0.5338528752326965
-Train Epoch: 1 Batch: 4 Total samples processed 160 Loss: 0.5159095525741577
-Train Epoch: 1 Batch: 5 Total samples processed 192 Loss: 0.5010771751403809
-Train Epoch: 1 Batch: 6 Total samples processed 224 Loss: 0.4909608066082001
-Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.4821679890155792
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Train Epoch: 1 Batch: 0 Total samples processed: 32 Loss: 0.7781020402908325
+Train Epoch: 1 Batch: 1 Total samples processed: 64 Loss: 0.7558881044387817
+Train Epoch: 1 Batch: 2 Total samples processed: 96 Loss: 0.7125054597854614
+Train Epoch: 1 Batch: 3 Total samples processed: 128 Loss: 0.673947811126709
+Train Epoch: 1 Batch: 4 Total samples processed: 160 Loss: 0.6690397262573242
+Train Epoch: 1 Batch: 5 Total samples processed: 192 Loss: 0.6610376834869385
+Train Epoch: 1 Batch: 6 Total samples processed: 224 Loss: 0.6330360174179077
+Train Epoch: 1 Batch: 7 Total samples processed: 256 Loss: 0.6149089336395264
 </pre></div>
 </div>
 </div>
@@ -655,15 +653,15 @@ Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.4821679890155792
 
 <span class="n">sidx</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">sidx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">sidx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Input&quot;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">sidx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">sidx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Ground truth&quot;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">prediction_binary</span><span class="o">.</span><span class="n">detach</span><span class="p">()[</span><span class="n">sidx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">prediction_binary</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()[</span><span class="n">sidx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Predictions&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -672,9 +670,13 @@ Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.4821679890155792
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Predictions&#39;)
 </pre></div>
 </div>
-<img alt="../_images/d3c22fd2773e419d5419e497fdcfcbc9dedd8bb08ba8dcd96fc92f0d15045866.png" src="../_images/d3c22fd2773e419d5419e497fdcfcbc9dedd8bb08ba8dcd96fc92f0d15045866.png" />
+<img alt="../_images/ef40ac25ffa84eb1b22da19255896e87d46e47038ed762e54eb63c61473cd9db.png" src="../_images/ef40ac25ffa84eb1b22da19255896e87d46e47038ed762e54eb63c61473cd9db.png" />
 </div>
 </div>
+</section>
+<section id="exercises-any-differences">
+<h2>Exercises: Any Differences?<a class="headerlink" href="#exercises-any-differences" title="Permalink to this heading">#</a></h2>
+<p>Executing on the CPU versus the GPU should yield no differences other than a speed up in execution times. In the best of all worlds, the GPU version runs training faster at the same quality of prediction. Compare with the last notebook if this is really the case!</p>
 </section>
 </section>
 
@@ -746,6 +748,7 @@ Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.4821679890155792
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-some-predictions">Look at some predictions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises-any-differences">Exercises: Any Differences?</a></li>
 </ul>
   </nav></div>
 

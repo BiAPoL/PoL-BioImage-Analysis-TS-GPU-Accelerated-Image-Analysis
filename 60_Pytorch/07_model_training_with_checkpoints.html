@@ -492,11 +492,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number of devices: 0 	chosen device: cpu 	use_cuda= False
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -529,17 +524,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████████████████████████| 382/382 [00:14&lt;00:00, 27.27it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>232
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -555,11 +539,6 @@ document.write(`
 
 <span class="c1"># transfer the model to the chosen device</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>BasicUNet features: (16, 16, 32, 64, 128, 16).
 </pre></div>
 </div>
 </div>
@@ -587,22 +566,6 @@ Alternatively, tensorboard can be accessed from jupyter as well:</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html">
-      <iframe id="tensorboard-frame-b5fba1efcf9c9acc" width="100%" height="800" frameborder="0">
-      </iframe>
-      <script>
-        (function() {
-          const frame = document.getElementById("tensorboard-frame-b5fba1efcf9c9acc");
-          const url = new URL("/", window.location);
-          const port = 6006;
-          if (port) {
-            url.port = port;
-          }
-          frame.src = url;
-        })();
-      </script>
-    </div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -664,26 +627,6 @@ Alternatively, tensorboard can be accessed from jupyter as well:</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Train Epoch: 1 Batch: 0 Total samples processed: 32 Loss: 0.6792986392974854
-Train Epoch: 1 Batch: 1 Total samples processed: 64 Loss: 0.639143705368042
-Train Epoch: 1 Batch: 2 Total samples processed: 96 Loss: 0.6133203506469727
-Train Epoch: 1 Batch: 3 Total samples processed: 128 Loss: 0.5941408276557922
-Train Epoch: 1 Batch: 4 Total samples processed: 160 Loss: 0.5772541165351868
-Train Epoch: 1 Batch: 5 Total samples processed: 192 Loss: 0.5588562488555908
-Train Epoch: 1 Batch: 6 Total samples processed: 224 Loss: 0.5604053139686584
-Train Epoch: 1 Batch: 7 Total samples processed: 256 Loss: 0.5290923714637756
-Train Epoch: 2 Batch: 0 Total samples processed: 32 Loss: 0.5261285305023193
-Train Epoch: 2 Batch: 1 Total samples processed: 64 Loss: 0.5121616125106812
-Train Epoch: 2 Batch: 2 Total samples processed: 96 Loss: 0.4993342161178589
-Train Epoch: 2 Batch: 3 Total samples processed: 128 Loss: 0.4973333477973938
-Train Epoch: 2 Batch: 4 Total samples processed: 160 Loss: 0.47704416513442993
-Train Epoch: 2 Batch: 5 Total samples processed: 192 Loss: 0.4746968746185303
-Train Epoch: 2 Batch: 6 Total samples processed: 224 Loss: 0.463951975107193
-Train Epoch: 2 Batch: 7 Total samples processed: 256 Loss: 0.4443892538547516
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -710,11 +653,6 @@ Train Epoch: 2 Batch: 7 Total samples processed: 256 Loss: 0.4443892538547516
 <span class="c1"># continue learning/training after this</span>
 <span class="n">loaded_params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model_from_ckpt</span><span class="o">.</span><span class="n">parameters</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">loaded_params</span><span class="p">,</span> <span class="n">final_params</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>BasicUNet features: (16, 16, 32, 64, 128, 16).
 </pre></div>
 </div>
 </div>

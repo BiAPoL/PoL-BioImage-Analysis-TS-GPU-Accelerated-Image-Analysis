@@ -496,14 +496,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Global seed set to 42
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>42
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -512,11 +504,6 @@ document.write(`
 <span class="n">use_cuda</span> <span class="o">=</span> <span class="n">cuda_present</span> <span class="ow">and</span> <span class="n">ndevices</span> <span class="o">&gt;</span> <span class="mi">0</span>
 <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">use_cuda</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>  <span class="c1"># &quot;cuda:0&quot; ... default device, &quot;cuda:1&quot; would be GPU index 1, &quot;cuda:2&quot; etc</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;number of devices:&quot;</span><span class="p">,</span> <span class="n">ndevices</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">chosen device:&quot;</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">use_cuda=&quot;</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number of devices: 0 	chosen device: cpu 	use_cuda= False
 </pre></div>
 </div>
 </div>
@@ -549,17 +536,6 @@ document.write(`
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_data</span><span class="p">))</span>
 
 <span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 382/382 [00:16&lt;00:00, 22.85it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>232
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -621,212 +597,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>BasicUNet features: (16, 16, 32, 64, 128, 16).
-SegmentationNetwork(
-  (model): BasicUNet(
-    (conv_0): TwoConv(
-      (conv_0): Convolution(
-        (conv): Conv2d(1, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-        (adn): ADN(
-          (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-          (D): Dropout(p=0.25, inplace=False)
-          (A): ReLU()
-        )
-      )
-      (conv_1): Convolution(
-        (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-        (adn): ADN(
-          (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-          (D): Dropout(p=0.25, inplace=False)
-          (A): ReLU()
-        )
-      )
-    )
-    (down_1): Down(
-      (max_pooling): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-      (convs): TwoConv(
-        (conv_0): Convolution(
-          (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-        (conv_1): Convolution(
-          (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-      )
-    )
-    (down_2): Down(
-      (max_pooling): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-      (convs): TwoConv(
-        (conv_0): Convolution(
-          (conv): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-        (conv_1): Convolution(
-          (conv): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-      )
-    )
-    (down_3): Down(
-      (max_pooling): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-      (convs): TwoConv(
-        (conv_0): Convolution(
-          (conv): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-        (conv_1): Convolution(
-          (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-      )
-    )
-    (down_4): Down(
-      (max_pooling): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-      (convs): TwoConv(
-        (conv_0): Convolution(
-          (conv): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-        (conv_1): Convolution(
-          (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-      )
-    )
-    (upcat_4): UpCat(
-      (upsample): UpSample(
-        (deconv): ConvTranspose2d(128, 64, kernel_size=(2, 2), stride=(2, 2))
-      )
-      (convs): TwoConv(
-        (conv_0): Convolution(
-          (conv): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-        (conv_1): Convolution(
-          (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-      )
-    )
-    (upcat_3): UpCat(
-      (upsample): UpSample(
-        (deconv): ConvTranspose2d(64, 32, kernel_size=(2, 2), stride=(2, 2))
-      )
-      (convs): TwoConv(
-        (conv_0): Convolution(
-          (conv): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-        (conv_1): Convolution(
-          (conv): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-      )
-    )
-    (upcat_2): UpCat(
-      (upsample): UpSample(
-        (deconv): ConvTranspose2d(32, 16, kernel_size=(2, 2), stride=(2, 2))
-      )
-      (convs): TwoConv(
-        (conv_0): Convolution(
-          (conv): Conv2d(32, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-        (conv_1): Convolution(
-          (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-      )
-    )
-    (upcat_1): UpCat(
-      (upsample): UpSample(
-        (deconv): ConvTranspose2d(16, 16, kernel_size=(2, 2), stride=(2, 2))
-      )
-      (convs): TwoConv(
-        (conv_0): Convolution(
-          (conv): Conv2d(32, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-        (conv_1): Convolution(
-          (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-          (adn): ADN(
-            (N): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-            (D): Dropout(p=0.25, inplace=False)
-            (A): ReLU()
-          )
-        )
-      )
-    )
-    (final_conv): Conv2d(16, 1, kernel_size=(1, 1), stride=(1, 1))
-  )
-  (output_activation): Sigmoid()
-  (loss_function): BCEWithLogitsLoss()
-)
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -866,14 +636,6 @@ SegmentationNetwork(
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GPU available: False, used: False
-TPU available: False, using: 0 TPU cores
-IPU available: False, using: 0 IPUs
-HPU available: False, using: 0 HPUs
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -882,47 +644,10 @@ HPU available: False, using: 0 HPUs
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html">
-      <iframe id="tensorboard-frame-1c80317fa3b1799d" width="100%" height="800" frameborder="0">
-      </iframe>
-      <script>
-        (function() {
-          const frame = document.getElementById("tensorboard-frame-1c80317fa3b1799d");
-          const url = new URL("/", window.location);
-          const port = 6006;
-          if (port) {
-            url.port = port;
-          }
-          frame.src = url;
-        })();
-      </script>
-    </div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_dataloaders</span><span class="o">=</span><span class="n">train_loader</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Missing logger folder: lightning_outputs/lightning_logs
-
-  | Name              | Type              | Params
---------------------------------------------------------
-0 | model             | BasicUNet         | 495 K 
-1 | output_activation | Sigmoid           | 0     
-2 | loss_function     | BCEWithLogitsLoss | 0     
---------------------------------------------------------
-495 K     Trainable params
-0         Non-trainable params
-495 K     Total params
-1.984     Total estimated model params size (MB)
-/home/starke88/miniconda3/envs/torch_intro/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:432: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 8 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
-  rank_zero_warn(
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d796d9641a3a4337be830477b357500a", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`Trainer.fit` stopped: `max_epochs=3` reached.
 </pre></div>
 </div>
 </div>
@@ -939,11 +664,6 @@ HPU available: False, using: 0 HPUs
 <span class="p">)</span>
 <span class="n">loaded_params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model_from_ckpt</span><span class="o">.</span><span class="n">parameters</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
 <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">loaded_params</span><span class="p">,</span> <span class="n">final_params</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>BasicUNet features: (16, 16, 32, 64, 128, 16).
 </pre></div>
 </div>
 </div>
@@ -984,12 +704,6 @@ HPU available: False, using: 0 HPUs
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Predictions&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Predictions&#39;)
-</pre></div>
-</div>
-<img alt="../_images/7fd7b50305ff8acebd48103018801133704a42200245f3e2731c59e55dd70968.png" src="../_images/7fd7b50305ff8acebd48103018801133704a42200245f3e2731c59e55dd70968.png" />
 </div>
 </div>
 </section>

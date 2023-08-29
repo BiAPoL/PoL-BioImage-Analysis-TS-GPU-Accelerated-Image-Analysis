@@ -463,6 +463,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-some-predictions">Look at some predictions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-we-can-do-better">Exercise: We can do better!</a></li>
 </ul>
             </nav>
         </div>
@@ -509,14 +510,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████████████████████████████████| 382/382 [00:20&lt;00:00, 18.96it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>232
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -532,17 +525,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>BasicUNet features: (16, 16, 32, 64, 128, 16).
-</pre></div>
-</div>
-</div>
 </div>
 <p>Training of a neural network means updating its parameters (weights) in order to descrese what is called the loss function. This is performed using an optimizer (<code class="docutils literal notranslate"><span class="pre">Adam</span></code> here) which uses the gradient of this loss function ith respect to the model parameters in order to adjust model weights. This should lead to an ever descreasing loss during training.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1.e-3</span><span class="p">)</span>
-<span class="n">init_params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+<span class="n">init_params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="c1">#storing it for later use</span>
 </pre></div>
 </div>
 </div>
@@ -587,18 +575,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Train Epoch: 1 Batch: 0 Total samples processed 32 Loss: 0.7636604309082031
-Train Epoch: 1 Batch: 1 Total samples processed 64 Loss: 0.7316972017288208
-Train Epoch: 1 Batch: 2 Total samples processed 96 Loss: 0.6992580890655518
-Train Epoch: 1 Batch: 3 Total samples processed 128 Loss: 0.6787922382354736
-Train Epoch: 1 Batch: 4 Total samples processed 160 Loss: 0.6548287868499756
-Train Epoch: 1 Batch: 5 Total samples processed 192 Loss: 0.6310180425643921
-Train Epoch: 1 Batch: 6 Total samples processed 224 Loss: 0.6482836604118347
-Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.6311068534851074
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -639,13 +615,11 @@ Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.6311068534851074
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Predictions&#39;)
-</pre></div>
 </div>
-<img alt="../_images/92cf5b2710f7cd5aed259f21b5e872c3236678e6c61dc6f6084aefbd2abd5ffc.png" src="../_images/92cf5b2710f7cd5aed259f21b5e872c3236678e6c61dc6f6084aefbd2abd5ffc.png" />
-</div>
-</div>
+</section>
+<section id="exercise-we-can-do-better">
+<h2>Exercise: We can do better!<a class="headerlink" href="#exercise-we-can-do-better" title="Permalink to this heading">#</a></h2>
+<p>Take the training code from above and have the model train for longer. For example, try 10 or 20 epochs. Do you see any improvements?</p>
 </section>
 </section>
 
@@ -717,6 +691,7 @@ Train Epoch: 1 Batch: 7 Total samples processed 256 Loss: 0.6311068534851074
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-some-predictions">Look at some predictions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-we-can-do-better">Exercise: We can do better!</a></li>
 </ul>
   </nav></div>
 
