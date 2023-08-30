@@ -79,7 +79,7 @@ parts:
 
   - file: 80_image_analysis_with_dask/README.md
     sections:
-  - file: 80_image_analysis_with_dask/1_dask_basics.ipynb
-  - file: 80_image_analysis_with_dask/2_dask_image.ipynb
-  - file: 80_image_analysis_with_dask/3_lazy_image_processing.ipynb
+    - file: 80_image_analysis_with_dask/1_dask_basics.ipynb
+    - file: 80_image_analysis_with_dask/2_dask_image.ipynb
+    - file: 80_image_analysis_with_dask/3_lazy_image_processing.ipynb
 
