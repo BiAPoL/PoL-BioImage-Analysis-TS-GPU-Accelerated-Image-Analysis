@@ -77,5 +77,9 @@ parts:
     - file: 70_AI_Segmentation_Denoising/02_Noise2Void
     - file: 70_AI_Segmentation_Denoising/03_Noise2Void_3D
 
-  # - file: 80_Dask/readme
+  - file: 80_image_analysis_with_dask/README.md
+    sections:
+  - file: 80_image_analysis_with_dask/1_dask_basics.ipynb
+  - file: 80_image_analysis_with_dask/2_dask_image.ipynb
+  - file: 80_image_analysis_with_dask/3_lazy_image_processing.ipynb
 
