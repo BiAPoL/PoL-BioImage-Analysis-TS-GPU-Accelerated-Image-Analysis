@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Lazy and parallel computing using dask &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>Practical 1: Dask basics &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '80_image_analysis_with_dask/1_dask_basics';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Lazy and parallel computing using dask" href="2_dask_image.html" />
+    <link rel="next" title="Practical 2: Dask with images" href="2_dask_image.html" />
     <link rel="prev" title="Lazy and parallel bio-image processing using DASK" href="README.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -270,9 +270,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="README.html">Lazy and parallel bio-image processing using DASK</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Lazy and parallel computing using dask</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2_dask_image.html">Lazy and parallel computing using dask</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3_lazy_image_processing.html">Lazy and parallel computing using dask</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Practical 1: Dask basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_dask_image.html">Practical 2: Dask with images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_lazy_image_processing.html">Practical 3: Virtual stack visualization and explorative analysis</a></li>
 </ul>
 </li>
 </ul>
@@ -458,7 +458,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Lazy and parallel computing using dask</h1>
+    <h1>Practical 1: Dask basics</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -468,12 +468,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-1-dask-basics">Practical 1: Dask basics</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#delaying-function-execution-using-dask-delayed">Delaying function execution using dask delayed</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-delayed-functions-can-be-chained-and-combined">Calling delayed functions can be chained and combined.</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-computations-performed-within-a-delayed-object">Visualizing the computations performed within a delayed object</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#delaying-function-execution-using-dask-delayed">Delaying function execution using dask delayed</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-delayed-functions-can-be-chained-and-combined">Calling delayed functions can be chained and combined.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-computations-performed-within-a-delayed-object">Visualizing the computations performed within a delayed object</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dask-arrays">Dask arrays</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-dask-array-is-an-object-that-represents-many-tiled-numpy-arrays">A dask array is an object that represents many tiled numpy arrays.</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dask-arrays-are-lazy">Dask arrays are lazy.</a></li>
@@ -503,12 +500,10 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="lazy-and-parallel-computing-using-dask">
-<h1>Lazy and parallel computing using dask<a class="headerlink" href="#lazy-and-parallel-computing-using-dask" title="Permalink to this heading">#</a></h1>
-<section id="practical-1-dask-basics">
-<h2>Practical 1: Dask basics<a class="headerlink" href="#practical-1-dask-basics" title="Permalink to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="practical-1-dask-basics">
+<h1>Practical 1: Dask basics<a class="headerlink" href="#practical-1-dask-basics" title="Permalink to this heading">#</a></h1>
 <section id="delaying-function-execution-using-dask-delayed">
-<h3>Delaying function execution using dask delayed<a class="headerlink" href="#delaying-function-execution-using-dask-delayed" title="Permalink to this heading">#</a></h3>
+<h2>Delaying function execution using dask delayed<a class="headerlink" href="#delaying-function-execution-using-dask-delayed" title="Permalink to this heading">#</a></h2>
 <p>The core function of dask consists in organizing how and when computations are performed.</p>
 <p>One of its core functionalities consists in delaying the execution of aribtrary python functions until the result is required.</p>
 <p>How does dask achieve this in practice?</p>
@@ -554,7 +549,7 @@ document.write(`
 </div>
 </section>
 <section id="calling-delayed-functions-can-be-chained-and-combined">
-<h3>Calling delayed functions can be chained and combined.<a class="headerlink" href="#calling-delayed-functions-can-be-chained-and-combined" title="Permalink to this heading">#</a></h3>
+<h2>Calling delayed functions can be chained and combined.<a class="headerlink" href="#calling-delayed-functions-can-be-chained-and-combined" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># f(x, y) = x^2 + y^2</span>
@@ -579,7 +574,7 @@ document.write(`
 </div>
 </section>
 <section id="visualizing-the-computations-performed-within-a-delayed-object">
-<h3>Visualizing the computations performed within a delayed object<a class="headerlink" href="#visualizing-the-computations-performed-within-a-delayed-object" title="Permalink to this heading">#</a></h3>
+<h2>Visualizing the computations performed within a delayed object<a class="headerlink" href="#visualizing-the-computations-performed-within-a-delayed-object" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delayed_result</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">optimize_graph</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;cytoscape&#39;</span><span class="p">)</span>
@@ -589,7 +584,6 @@ document.write(`
 </div>
 <p>More details and examples:
 <a class="reference external" href="https://tutorial.dask.org/03_dask.delayed.html">https://tutorial.dask.org/03_dask.delayed.html</a></p>
-</section>
 </section>
 <section id="dask-arrays">
 <h2>Dask arrays<a class="headerlink" href="#dask-arrays" title="Permalink to this heading">#</a></h2>
@@ -1026,7 +1020,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Lazy and parallel computing using dask</p>
+        <p class="prev-next-title">Practical 2: Dask with images</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1048,12 +1042,9 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-1-dask-basics">Practical 1: Dask basics</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#delaying-function-execution-using-dask-delayed">Delaying function execution using dask delayed</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-delayed-functions-can-be-chained-and-combined">Calling delayed functions can be chained and combined.</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-computations-performed-within-a-delayed-object">Visualizing the computations performed within a delayed object</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#delaying-function-execution-using-dask-delayed">Delaying function execution using dask delayed</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-delayed-functions-can-be-chained-and-combined">Calling delayed functions can be chained and combined.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-computations-performed-within-a-delayed-object">Visualizing the computations performed within a delayed object</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dask-arrays">Dask arrays</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-dask-array-is-an-object-that-represents-many-tiled-numpy-arrays">A dask array is an object that represents many tiled numpy arrays.</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dask-arrays-are-lazy">Dask arrays are lazy.</a></li>

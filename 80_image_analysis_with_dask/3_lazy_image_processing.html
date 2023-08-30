@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Lazy and parallel computing using dask &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>Practical 3: Virtual stack visualization and explorative analysis &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '80_image_analysis_with_dask/3_lazy_image_processing';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Lazy and parallel computing using dask" href="2_dask_image.html" />
+    <link rel="prev" title="Practical 2: Dask with images" href="2_dask_image.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -269,9 +269,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="README.html">Lazy and parallel bio-image processing using DASK</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="1_dask_basics.html">Lazy and parallel computing using dask</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2_dask_image.html">Lazy and parallel computing using dask</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Lazy and parallel computing using dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1_dask_basics.html">Practical 1: Dask basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_dask_image.html">Practical 2: Dask with images</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Practical 3: Virtual stack visualization and explorative analysis</a></li>
 </ul>
 </li>
 </ul>
@@ -457,7 +457,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Lazy and parallel computing using dask</h1>
+    <h1>Practical 3: Virtual stack visualization and explorative analysis</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -467,18 +467,15 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-3-virtual-stack-visualization-and-explorative-analysis">Practical 3: Virtual stack visualization and explorative analysis</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-dataset-into-a-dask-array">Loading the dataset into a dask array</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-dataset">Visualize the dataset</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-tifffile">Using tifffile</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-napari">Using napari</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-ipywidgets-to-interact-with-matplotlib-plots">Using ipywidgets to interact with matplotlib plots</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-dataset-into-a-dask-array">Loading the dataset into a dask array</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-dataset">Visualize the dataset</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-tifffile">Using tifffile</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-napari">Using napari</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-ipywidgets-to-interact-with-matplotlib-plots">Using ipywidgets to interact with matplotlib plots</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#process-the-image-on-the-fly">Process the image on the fly</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obtain-properties-from-objects">Obtain properties from objects</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#process-the-image-on-the-fly">Process the image on the fly</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#obtain-properties-from-objects">Obtain properties from objects</a></li>
 </ul>
             </nav>
         </div>
@@ -490,10 +487,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="lazy-and-parallel-computing-using-dask">
-<h1>Lazy and parallel computing using dask<a class="headerlink" href="#lazy-and-parallel-computing-using-dask" title="Permalink to this heading">#</a></h1>
-<section id="practical-3-virtual-stack-visualization-and-explorative-analysis">
-<h2>Practical 3: Virtual stack visualization and explorative analysis<a class="headerlink" href="#practical-3-virtual-stack-visualization-and-explorative-analysis" title="Permalink to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="practical-3-virtual-stack-visualization-and-explorative-analysis">
+<h1>Practical 3: Virtual stack visualization and explorative analysis<a class="headerlink" href="#practical-3-virtual-stack-visualization-and-explorative-analysis" title="Permalink to this heading">#</a></h1>
 <p>When doing explorative analysis on large datasets, sometimes it’s not an option to load a full dataset into memory. Still, one would want to browse images and potentially try out processing workflows in an interactive manner.</p>
 <p>In this notebook, <strong>we’ll build a simple lazy data viewer and interactively explore a large dataset</strong>.</p>
 <p>We’ll create the “large” example dataset synthetically, but another option would be to download e.g. the following dataset: <a class="reference external" href="http://data.celltrackingchallenge.net/training-datasets/Fluo-N3DL-TRIC.zip">http://data.celltrackingchallenge.net/training-datasets/Fluo-N3DL-TRIC.zip</a>. In this case,</p>
@@ -557,7 +552,7 @@ document.write(`
 </div>
 </div>
 <section id="loading-the-dataset-into-a-dask-array">
-<h3>Loading the dataset into a dask array<a class="headerlink" href="#loading-the-dataset-into-a-dask-array" title="Permalink to this heading">#</a></h3>
+<h2>Loading the dataset into a dask array<a class="headerlink" href="#loading-the-dataset-into-a-dask-array" title="Permalink to this heading">#</a></h2>
 <p>In order to lazily access images, we construct a dask array containing chunks that are computed by reading the corresponding image data from disk.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -608,10 +603,10 @@ document.write(`
 </div>
 </section>
 <section id="visualize-the-dataset">
-<h3>Visualize the dataset<a class="headerlink" href="#visualize-the-dataset" title="Permalink to this heading">#</a></h3>
+<h2>Visualize the dataset<a class="headerlink" href="#visualize-the-dataset" title="Permalink to this heading">#</a></h2>
 <p>Since dask arrays essentially behave like numpy arrays, many viewers support the visualization of the previously constructed dask array.</p>
 <section id="using-tifffile">
-<h4>Using tifffile<a class="headerlink" href="#using-tifffile" title="Permalink to this heading">#</a></h4>
+<h3>Using tifffile<a class="headerlink" href="#using-tifffile" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># tifffile contains a multidimensional image viewer based on matplotlib</span>
@@ -623,7 +618,7 @@ document.write(`
 </div>
 </section>
 <section id="using-napari">
-<h4>Using napari<a class="headerlink" href="#using-napari" title="Permalink to this heading">#</a></h4>
+<h3>Using napari<a class="headerlink" href="#using-napari" title="Permalink to this heading">#</a></h3>
 <p>Napari supports dask arrays.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -638,7 +633,7 @@ document.write(`
 </div>
 </section>
 <section id="using-ipywidgets-to-interact-with-matplotlib-plots">
-<h4>Using ipywidgets to interact with matplotlib plots<a class="headerlink" href="#using-ipywidgets-to-interact-with-matplotlib-plots" title="Permalink to this heading">#</a></h4>
+<h3>Using ipywidgets to interact with matplotlib plots<a class="headerlink" href="#using-ipywidgets-to-interact-with-matplotlib-plots" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> notebook
@@ -673,7 +668,7 @@ document.write(`
 </section>
 </section>
 <section id="process-the-image-on-the-fly">
-<h3>Process the image on the fly<a class="headerlink" href="#process-the-image-on-the-fly" title="Permalink to this heading">#</a></h3>
+<h2>Process the image on the fly<a class="headerlink" href="#process-the-image-on-the-fly" title="Permalink to this heading">#</a></h2>
 <p>In addition to viewing the raw images, we can perform operations on the array before viewing it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -727,7 +722,7 @@ document.write(`
 </div>
 </section>
 <section id="obtain-properties-from-objects">
-<h3>Obtain properties from objects<a class="headerlink" href="#obtain-properties-from-objects" title="Permalink to this heading">#</a></h3>
+<h2>Obtain properties from objects<a class="headerlink" href="#obtain-properties-from-objects" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">ndimage</span>
@@ -757,7 +752,6 @@ document.write(`
 </div>
 </div>
 </div>
-</section>
 </section>
 </section>
 
@@ -798,7 +792,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Lazy and parallel computing using dask</p>
+        <p class="prev-next-title">Practical 2: Dask with images</p>
       </div>
     </a>
 </div></div>
@@ -819,18 +813,15 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-3-virtual-stack-visualization-and-explorative-analysis">Practical 3: Virtual stack visualization and explorative analysis</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-dataset-into-a-dask-array">Loading the dataset into a dask array</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-dataset">Visualize the dataset</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-tifffile">Using tifffile</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-napari">Using napari</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-ipywidgets-to-interact-with-matplotlib-plots">Using ipywidgets to interact with matplotlib plots</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-dataset-into-a-dask-array">Loading the dataset into a dask array</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-dataset">Visualize the dataset</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-tifffile">Using tifffile</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-napari">Using napari</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-ipywidgets-to-interact-with-matplotlib-plots">Using ipywidgets to interact with matplotlib plots</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#process-the-image-on-the-fly">Process the image on the fly</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obtain-properties-from-objects">Obtain properties from objects</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#process-the-image-on-the-fly">Process the image on the fly</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#obtain-properties-from-objects">Obtain properties from objects</a></li>
 </ul>
   </nav></div>
 

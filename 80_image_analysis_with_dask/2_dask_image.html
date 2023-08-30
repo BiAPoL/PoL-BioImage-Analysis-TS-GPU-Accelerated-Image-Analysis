@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Lazy and parallel computing using dask &#8212; Image data science with Python and Napari @EPFL</title>
+    <title>Practical 2: Dask with images &#8212; Image data science with Python and Napari @EPFL</title>
   
   
   
@@ -64,8 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '80_image_analysis_with_dask/2_dask_image';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Lazy and parallel computing using dask" href="3_lazy_image_processing.html" />
-    <link rel="prev" title="Lazy and parallel computing using dask" href="1_dask_basics.html" />
+    <link rel="next" title="Practical 3: Virtual stack visualization and explorative analysis" href="3_lazy_image_processing.html" />
+    <link rel="prev" title="Practical 1: Dask basics" href="1_dask_basics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -270,9 +270,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="README.html">Lazy and parallel bio-image processing using DASK</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="1_dask_basics.html">Lazy and parallel computing using dask</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Lazy and parallel computing using dask</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3_lazy_image_processing.html">Lazy and parallel computing using dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1_dask_basics.html">Practical 1: Dask basics</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Practical 2: Dask with images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_lazy_image_processing.html">Practical 3: Virtual stack visualization and explorative analysis</a></li>
 </ul>
 </li>
 </ul>
@@ -458,7 +458,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Lazy and parallel computing using dask</h1>
+    <h1>Practical 2: Dask with images</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -468,10 +468,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-2-dask-with-images">Practical 2: Dask with images</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#map-blocks"><code class="docutils literal notranslate"><span class="pre">map_blocks</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#map-blocks"><code class="docutils literal notranslate"><span class="pre">map_blocks</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dask-image">dask-image</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-dask-image-features">More dask-image features</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connected-components">Connected components</a></li>
@@ -490,10 +487,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="lazy-and-parallel-computing-using-dask">
-<h1>Lazy and parallel computing using dask<a class="headerlink" href="#lazy-and-parallel-computing-using-dask" title="Permalink to this heading">#</a></h1>
-<section id="practical-2-dask-with-images">
-<h2>Practical 2: Dask with images<a class="headerlink" href="#practical-2-dask-with-images" title="Permalink to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="practical-2-dask-with-images">
+<h1>Practical 2: Dask with images<a class="headerlink" href="#practical-2-dask-with-images" title="Permalink to this heading">#</a></h1>
 <p>In the previous practical, we’ve seen that dask can help us parallelise computations on arrays. This can be useful for many operations typically performed on arrays like filtering.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -538,7 +533,7 @@ document.write(`
 </div>
 </div>
 <section id="map-blocks">
-<h3><code class="docutils literal notranslate"><span class="pre">map_blocks</span></code><a class="headerlink" href="#map-blocks" title="Permalink to this heading">#</a></h3>
+<h2><code class="docutils literal notranslate"><span class="pre">map_blocks</span></code><a class="headerlink" href="#map-blocks" title="Permalink to this heading">#</a></h2>
 <p>We can use <code class="docutils literal notranslate"><span class="pre">dask.array.map_blocks</span></code> to apply a function to each chunk (or block) of the dask array.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -622,7 +617,6 @@ document.write(`
 </div>
 </div>
 </div>
-</section>
 </section>
 <section id="dask-image">
 <h2>dask-image<a class="headerlink" href="#dask-image" title="Permalink to this heading">#</a></h2>
@@ -850,7 +844,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Lazy and parallel computing using dask</p>
+        <p class="prev-next-title">Practical 1: Dask basics</p>
       </div>
     </a>
     <a class="right-next"
@@ -858,7 +852,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Lazy and parallel computing using dask</p>
+        <p class="prev-next-title">Practical 3: Virtual stack visualization and explorative analysis</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -880,10 +874,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-2-dask-with-images">Practical 2: Dask with images</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#map-blocks"><code class="docutils literal notranslate"><span class="pre">map_blocks</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#map-blocks"><code class="docutils literal notranslate"><span class="pre">map_blocks</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dask-image">dask-image</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-dask-image-features">More dask-image features</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connected-components">Connected components</a></li>
