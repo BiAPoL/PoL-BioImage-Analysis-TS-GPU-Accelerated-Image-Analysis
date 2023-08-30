@@ -1,0 +1,26 @@
+name: neubias_dask_course
+channels:
+    - conda-forge
+dependencies:
+    - python=3.10
+    - jupyter
+    - ipywidgets
+    - ipympl
+    - pip
+    - requests
+    - scikit-image
+    - xarray
+    - zarr >= 2.4.0
+    - dask
+    - dask-image
+    - distributed
+    - bokeh
+    - graphviz
+    - python-graphviz
+    - matplotlib
+    - seaborn
+    - pandas
+    - scipy
+    - aicsimageio
+    - pip:
+        - ome-zarr
