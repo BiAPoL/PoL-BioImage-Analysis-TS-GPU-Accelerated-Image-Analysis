@@ -507,17 +507,17 @@ document.write(`
 \[
     {o}_{k+1} = \frac{{o}_{k}\left[\frac{i}{o_{k}*h}*h^*\right]}{n}
 \]</div>
-<p>In practice we only image a window <span class="math notranslate nohighlight">\(w\)</span> of a larger solution space.</p>
+<p>To avoid the convolutions wrapping we extend the image by zeros by a factor of <code class="docutils literal notranslate"><span class="pre">psf_size/2+1</span></code> in each dimension.  We can alternatively express this as a window function <span class="math notranslate nohighlight">\(w\)</span> times the image in a larger solution space.</p>
 <div class="math notranslate nohighlight">
 \[
     {o}_{k+1} = \frac{o_{k}\left[\frac{wi}{o_{k}*h}*h^*\right]}{n}
 \]</div>
-<p>Now let’s assume we have estimated the object <span class="math notranslate nohighlight">\(o\)</span> perfectly, in that case the term <span class="math notranslate nohighlight">\(o_{k}*h=i^`\)</span> will be <span class="math notranslate nohighlight">\(i\)</span> within the window (remember we are assuming no noise).  And if we have a perfect estimate, we no nonger want to change it, so the update term of the Richardson Lucy equation should be 1 everywhere.</p>
+<p>Now let’s assume we have estimated the object <span class="math notranslate nohighlight">\(o\)</span> and PSF <span class="math notranslate nohighlight">\(h\)</span> perfectly, that assumption is never practically satisfied, but if it was we want the algorithm to stop updating.  In that idealized case the term <span class="math notranslate nohighlight">\(o_{k}*h=i^`\)</span> will be <span class="math notranslate nohighlight">\(i\)</span> within the window (remember we are assuming no noise).  And if we have a perfect estimate, we no longer want to change it, so the update term of the Richardson Lucy equation should be 1 everywhere.</p>
 <div class="math notranslate nohighlight">
 \[
     \frac{\left[\frac{wi}{i^`}*h^*\right]}{n}=1
 \]</div>
-<p>Solving the above equation gives us an expression for the normalization factor <span class="math notranslate nohighlight">\(n\)</span> which will lead to an update term of all 1s when the true solution is found.  In practical cases I have found this normalization factor is needed for proper edge handling.</p>
+<p>Solving the above equation gives us an expression for the normalization factor <span class="math notranslate nohighlight">\(n\)</span> which will lead to an update term of all 1s when the estimate <span class="math notranslate nohighlight">\(o_k\)</span> equals the true solution in an ideal simulation.  In practical cases I have found this normalization factor is needed for proper edge handling.</p>
 <div class="math notranslate nohighlight">
 \[
     n=\frac{wi}{i^`}*h^*=w*h^*
@@ -710,7 +710,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0 0.0060154707
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5279/2834657628.py:44: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_28548/2834657628.py:44: ComplexWarning: Casting complex values to real discards the imaginary part
   psf = fftshift(ifftn(ifftshift(otf)).astype(np.float32))
 </pre></div>
 </div>
@@ -746,7 +746,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5279/4177033410.py:10: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_28548/4177033410.py:10: ComplexWarning: Casting complex values to real discards the imaginary part
   im = forward(truth, psf).astype(&#39;float32&#39;)
 </pre></div>
 </div>
@@ -779,7 +779,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5279/3135814947.py:7: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_28548/3135814947.py:7: ComplexWarning: Casting complex values to real discards the imaginary part
   normal=(ifftn(fftn(flat) * otf_)).astype(float)
 </pre></div>
 </div>
@@ -821,7 +821,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;im&#39; at 0x7fab1cb22b50&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;im&#39; at 0x7f00fdc11e50&gt;
 </pre></div>
 </div>
 </div>

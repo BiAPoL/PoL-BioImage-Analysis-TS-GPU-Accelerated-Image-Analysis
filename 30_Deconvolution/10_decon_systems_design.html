@@ -467,10 +467,13 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Deconvolution Systems Design</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#libraries-needed-to-run-this-example">Libraries needed to run this example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-trade-offs">Design trade-offs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation">Simulation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-improve-the-deconvolution-result">Exercise 1:  Improve the deconvolution result.</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-change-the-parameters-of-the-simulation">Exercise 2:  Change the parameters of the simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-improve-the-deconvolution-result">Exercise 1: Improve the deconvolution result.</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-change-the-parameters-of-the-simulation">Exercise 2: Change the parameters of the simulation</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a><ul class="visible nav section-nav flex-column">
@@ -479,11 +482,14 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-the-forward-model">Apply the forward model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-number-of-chunks">Define number of chunks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-deconvolver">Define the deconvolver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-in-chunks-with-overlap-between-chunks">Deconvolve in chunks with overlap between chunks</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-in-napari">Visualize in Napari</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-in-chunks">Deconvolve in chunks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-error">Look at error</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#segment-the-spheres">Segment the spheres</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figures-of-segmentations">Make figures of segmentations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#segmentation-results">Segmentation results</a></li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#view-in-napari">View in Napari</a></li>
 </ul>
 
             </nav>
@@ -499,17 +505,40 @@ document.write(`
   <section id="deconvolution-systems-design">
 <h1>Deconvolution Systems Design<a class="headerlink" href="#deconvolution-systems-design" title="Permalink to this heading">#</a></h1>
 <p>In this example we explore how the various deconvolution parameters, which we learned about in previous notebooks combine to affect deconvolution results.</p>
-<p>Note for Mac users: There was a bug where the code for apply the ‘forward’ model did not default to numpy if no cupy was found.  To get the bug fix try</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">uninstall</span> <span class="n">tnia</span><span class="o">-</span><span class="n">python</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="kc">True</span><span class="o">-</span><span class="n">North</span><span class="o">-</span><span class="n">Intelligent</span><span class="o">-</span><span class="n">Algorithms</span><span class="o">/</span><span class="n">tnia</span><span class="o">-</span><span class="n">python</span>
+<section id="libraries-needed-to-run-this-example">
+<h2>Libraries needed to run this example<a class="headerlink" href="#libraries-needed-to-run-this-example" title="Permalink to this heading">#</a></h2>
+<p>First create a new environment with devbio-napari installed (this will give us Napari, Jupyter Notebooks, and OpenCl among other tools)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">create</span> <span class="o">--</span><span class="n">name</span> <span class="n">deconvolution</span><span class="o">-</span><span class="n">napari</span><span class="o">-</span><span class="n">env</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span> <span class="n">devbio</span><span class="o">-</span><span class="n">napari</span> <span class="n">pyqt</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="o">-</span><span class="n">c</span> <span class="n">pytorch</span>
 </pre></div>
 </div>
+<p>Now if you hava an NVIDIA card install cuda and cupy (cuda and cupy are not required but will speed up the forward simulation).</p>
+<p>Note: You can probably use a version different than 11, just make sure cudatookkit and cupy versions are compatible.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">11.2</span> <span class="n">cudnn</span><span class="o">=</span><span class="mf">8.1.0</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda11x</span>
+</pre></div>
+</div>
+<p>Now let’s install the tnia-python library (for projections and some helper functions), clij2-fft (for deconvolution), psfmodels (for diffractions based PSF) and raster-geometry to create simulated objects.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="kc">True</span><span class="o">-</span><span class="n">North</span><span class="o">-</span><span class="n">Intelligent</span><span class="o">-</span><span class="n">Algorithms</span><span class="o">/</span><span class="n">tnia</span><span class="o">-</span><span class="n">python</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">index</span><span class="o">-</span><span class="n">url</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">.</span><span class="n">pypi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span> <span class="n">clij2</span><span class="o">-</span><span class="n">fft</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">psfmodels</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">raster</span><span class="o">-</span><span class="n">geometry</span>
+</pre></div>
+</div>
+<p>Mac-users may also need to install this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge ocl_icd_wrapper_apple
+</pre></div>
+</div>
+<p>Linux users may also need to install this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge ocl-icd-system
+</pre></div>
+</div>
+</section>
 <section id="design-trade-offs">
 <h2>Design trade-offs<a class="headerlink" href="#design-trade-offs" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Iterations - more iterations provide a better result up to a point of diminishing returns.  How do we know when to stop?</p></li>
 <li><p>PSF size - Using a larger PSF may improve deconvolution quality by increasing the spatial extent of the deblurring.  However a larger PSF size requires larger borders and larger overlap between chunks.  Note that the PSF size may be ‘infinite’ in thoeory (light from an emitter can propagate forever) however PSFs used for deconvolution are finite.  Thus the size of PSF used for deconvolution becomes a design parameter.</p></li>
-<li><p>Regularization - regularization can reduce noise in the output at a cost of slightly increased speed.  How do we know what regularization factor to use?</p></li>
+<li><p>Regularization - regularization can reduce noise in the output at a cost of slightly increased speed.  How do we know what regularization factor to use?  For the total variation regularization it is recommended to use values between 0.0001 and 0.005 <a class="reference external" href="https://pubmed.ncbi.nlm.nih.gov/16586486/">see this paper</a> but the exact value can depend on the SNR of the image.</p></li>
 <li><p>PSF - The quality of the Point Spread Function can affect final results.  If using a theoretical PSF we need to make sure the parameters used to generate the PSF match the true system parameters.</p></li>
 <li><p>Overlap - Larger overlaps will reduce artifacts, but increase processing time and memory by increasing the size of each chunk.</p></li>
 </ol>
@@ -518,35 +547,35 @@ document.write(`
 <h2>Simulation<a class="headerlink" href="#simulation" title="Permalink to this heading">#</a></h2>
 <p>In this example we do the following.</p>
 <ol class="arabic simple">
-<li><p>Create a simulated image with a large sphere at the center and small spheres on the sides.  This sample is useful to study chunking artifacts because the chunks will subdivide the large sphere.</p></li>
+<li><p>Create a simulated image with a large sphere at the center and small spheres on the sides.  This sample is useful to study chunking artifacts because the chunks will subdivide the spheres.</p></li>
 <li><p>Convolve a PSF with the simulated image and add noise.</p></li>
-<li><p>Define our deconvolution parameters including PSF parameters, dask parameters, iterations and regularization factor then deconvolve.</p></li>
+<li><p>Define our deconvolution parameters including PSF parameters, dask parameters, iterations and regularization factor then deconvolve. We generate 2 deconvolutions.  One with poor parameters (deconvolution PSF different than forward PSF, low iterations, no regularization, no overlap between subvolumes) and one with better parameters (deconvolution PSF = forward PSF, high iterations, overlap between sub-volumes and regularization used).</p></li>
 </ol>
 </section>
 <section id="exercise-1-improve-the-deconvolution-result">
-<h2>Exercise 1:  Improve the deconvolution result.<a class="headerlink" href="#exercise-1-improve-the-deconvolution-result" title="Permalink to this heading">#</a></h2>
-<p>The parameters in this notebook are sub-optimal.  First run the notebook then inspect the deconvolution result.  To improve the deconvolution try the following</p>
-<ol class="arabic simple">
-<li><p>Inspect the PSF and make sure the forward PSF and decon PSF match, if not try adjusting the decon PSF parameters.</p></li>
-<li><p>Change the number of iterations</p></li>
-<li><p>Change the regularization factor</p></li>
-<li><p>change the overlap between chunks</p></li>
-</ol>
-</section>
+<h2>Exercise 1: Improve the deconvolution result.<a class="headerlink" href="#exercise-1-improve-the-deconvolution-result" title="Permalink to this heading">#</a></h2>
+<p>(if running this exercise with students, hide the ‘good parameter’ deconvolution and let the students figure out how to generate it)
+The parameters in this notebook are sub-optimal. First run the notebook then inspect the deconvolution result. To improve the deconvolution try the following</p>
+<p>Inspect the PSF and make sure the forward PSF and decon PSF match, if not try adjusting the decon PSF parameters.
+Change the number of iterations
+Change the regularization factor
+change the overlap between chunks</p>
 <section id="exercise-2-change-the-parameters-of-the-simulation">
-<h2>Exercise 2:  Change the parameters of the simulation<a class="headerlink" href="#exercise-2-change-the-parameters-of-the-simulation" title="Permalink to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Add more noise (hint Poisson noise is proportional to the number of photons, in this simulation try modifying the gain variable)</p></li>
-<li><p>Try different PSFs (for example very low NA, even greater levels of aberration)</p></li>
-<li><p>Try to create different types of phantom images, for example by drawing more spheres or different shapes.</p></li>
-</ol>
+<h3>Exercise 2: Change the parameters of the simulation<a class="headerlink" href="#exercise-2-change-the-parameters-of-the-simulation" title="Permalink to this heading">#</a></h3>
+<p>Add more noise (hint Poisson noise is proportional to the number of photons, in this simulation try modifying the gain variable)
+Try different PSFs (for example very low NA, even greater levels of aberration)
+Try to create different types of phantom images, for example by drawing more spheres or different shapes.</p>
+</section>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="imports">
 <h1>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+
+<span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
 <span class="kn">from</span> <span class="nn">clij2fft.richardson_lucy</span> <span class="kn">import</span> <span class="n">richardson_lucy_nc</span> 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">decon_helper</span> <span class="k">as</span> <span class="nn">dh</span>
@@ -620,6 +649,9 @@ stackview available
 <span class="n">x_voxel_size</span> <span class="o">=</span> <span class="mf">0.1</span>
 <span class="n">z_voxel_size</span><span class="o">=</span><span class="mf">0.3</span>
 
+<span class="n">sxy</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">sz</span> <span class="o">=</span> <span class="n">z_voxel_size</span><span class="o">/</span><span class="n">x_voxel_size</span>
+
 <span class="n">xy_psf_dim_forward</span><span class="o">=</span><span class="mi">128</span>
 <span class="n">z_psf_dim_forward</span><span class="o">=</span><span class="mi">128</span>
 
@@ -627,7 +659,10 @@ stackview available
 <span class="n">z_psf_dim_decon</span><span class="o">=</span><span class="mi">64</span>
 
 <span class="n">NA</span><span class="o">=</span><span class="mf">1.4</span>
+
+<span class="c1"># ni is the refractive index of the immersion medium of the lens</span>
 <span class="n">ni</span><span class="o">=</span><span class="mf">1.5</span>
+<span class="c1"># ns is the refractive index of the sample</span>
 <span class="n">ns</span><span class="o">=</span><span class="mf">1.33</span>
 
 <span class="c1"># depth at which to calculate the PSF (note if there is a RI mismatch between the lens RI and sample RI spherical aberration will be introduced</span>
@@ -655,6 +690,8 @@ stackview available
 </section>
 <section id="apply-the-forward-model">
 <h2>Apply the forward model<a class="headerlink" href="#apply-the-forward-model" title="Permalink to this heading">#</a></h2>
+<p>In this case the forward model is convolution with the PSF and the addition of Poisson noise.</p>
+<p>What other factors will cause error between the true shape of the sample and the acquired image?</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.deconvolution.forward</span> <span class="kn">import</span> <span class="n">forward</span>
@@ -662,14 +699,18 @@ stackview available
 
 <span class="n">im</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">psf_forward</span><span class="p">,</span> <span class="n">background</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
+<span class="n">x_v</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span>
+<span class="n">y_v</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span>
+<span class="n">z_v</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span>
+
 <span class="n">phantom</span><span class="o">=</span><span class="n">phantom</span><span class="o">+</span><span class="n">background</span>
 
-<span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7eb6e0c0759e3248fe13186ee8f6e625fa2439525c0808764afb2ccb2d68c774.png" src="../_images/7eb6e0c0759e3248fe13186ee8f6e625fa2439525c0808764afb2ccb2d68c774.png" />
+<img alt="../_images/53310bbf0a34b5dc483af2549360922b50c1ee5987d34143e7250f60705e6d92.png" src="../_images/53310bbf0a34b5dc483af2549360922b50c1ee5987d34143e7250f60705e6d92.png" />
 </div>
 </div>
 </section>
@@ -699,15 +740,15 @@ stackview available
 </section>
 <section id="define-the-deconvolver">
 <h2>Define the deconvolver<a class="headerlink" href="#define-the-deconvolver" title="Permalink to this heading">#</a></h2>
+<p>Define either a clij2fft based, or if clij2fft is not installed a redlionfish based Richardson Lucy deconvolution function.  We map both libraries to the same deconvolution interface to make it easier to call either version in the dask step.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iterations</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">reg</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">try</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">clij2fft.richardson_lucy</span> <span class="kn">import</span> <span class="n">richardson_lucy_nc</span> 
-    <span class="k">def</span> <span class="nf">deconv_chunk</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">deconv_chunk</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">reg</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;iterations+reg&#39;</span><span class="p">,</span><span class="n">iterations</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;deconvolving chunk with size&#39;</span><span class="p">,</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">richardson_lucy_nc</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">psf_decon</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">richardson_lucy_nc</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;/nfinished decon chunk&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">result</span>
             <span class="c1">#return stack</span>
@@ -717,9 +758,9 @@ stackview available
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">RedLionfishDeconv</span> <span class="k">as</span> <span class="nn">rl</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;redlionfish rl imported&#39;</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">deconv_chunk</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">deconv_chunk</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">reg</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">psf_decon</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">rl</span><span class="o">.</span><span class="n">doRLDeconvolutionFromNpArrays</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">psf_decon</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="n">resAsUint8</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">rl</span><span class="o">.</span><span class="n">doRLDeconvolutionFromNpArrays</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="n">resAsUint8</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finished decon chunk&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">result</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -734,90 +775,92 @@ stackview available
 </div>
 </div>
 </section>
-<section id="deconvolve-in-chunks-with-overlap-between-chunks">
-<h2>Deconvolve in chunks with overlap between chunks<a class="headerlink" href="#deconvolve-in-chunks-with-overlap-between-chunks" title="Permalink to this heading">#</a></h2>
-<p>Here we call the dask deconvolution using an overlap factor to prevent edge artifacts between chunks.  We try all of the clij2-fft, clij2-fft non-circulant implementation of RL and the Red Lion fish implementation.</p>
+<section id="deconvolve-in-chunks">
+<h2>Deconvolve in chunks<a class="headerlink" href="#deconvolve-in-chunks" title="Permalink to this heading">#</a></h2>
+<p>Here we call the dask deconvolution using an overlap factor to prevent edge artifacts between chunks.  We try both of a set of sub-optimal parameters, and a set of better parameters to study how different settings affect deconvolution quality.</p>
+<p>Note:  Depending on the GPU memory available you may or may not need to process using Chunks.  However the purpose of the notebook is to examine how various settings (including chunking settings) affect the deconvolution result, so that when we do have very large image sizes, and have to use chunking, we understand how to use chunks optimally.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iterations</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">reg</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="n">overlap</span> <span class="o">=</span> <span class="mi">0</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">overlap</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">dimg</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="n">z_chunk_size</span><span class="p">,</span> <span class="n">y_chunk_size</span><span class="p">,</span> <span class="n">x_chunk_size</span><span class="p">))</span>
+<span class="n">out1</span> <span class="o">=</span> <span class="n">dimg</span><span class="o">.</span><span class="n">map_overlap</span><span class="p">(</span><span class="n">deconv_chunk</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">overlap</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">overlap</span><span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">psf</span><span class="o">=</span><span class="n">psf_decon</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">reg</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">decon1</span> <span class="o">=</span> <span class="n">out1</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">out</span> <span class="o">=</span> <span class="n">dimg</span><span class="o">.</span><span class="n">map_overlap</span><span class="p">(</span><span class="n">deconv_chunk</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">overlap</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">overlap</span><span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-<span class="n">decon</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">x_v</span> <span class="o">=</span> <span class="n">decon</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span>
-<span class="n">y_v</span> <span class="o">=</span> <span class="n">decon</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span>
-<span class="n">z_v</span> <span class="o">=</span> <span class="n">decon</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span>
+<span class="n">overlap</span> <span class="o">=</span> <span class="mi">25</span>
+<span class="n">out2</span> <span class="o">=</span> <span class="n">dimg</span><span class="o">.</span><span class="n">map_overlap</span><span class="p">(</span><span class="n">deconv_chunk</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">overlap</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">overlap</span><span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">psf</span><span class="o">=</span><span class="n">psf_forward</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">reg</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">)</span>
+<span class="n">decon2</span> <span class="o">=</span> <span class="n">out2</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">decon</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">decon1</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">decon2</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>deconvolving chunk with size (0, 0, 0)
-get lib
-
-Richardson Lucy Started
-0 10 20 30 40 50 60 70 80 90 
-Richardson Lucy Finished/nfinished decon chunk
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>iterations+reg 50 0
+deconvolving chunk with size (0, 0, 0)
+iterations+reg 50 0
 deconvolving chunk with size (86, 128, 128)
 get lib
 
 Richardson Lucy Started
-0 10 20 30 40 50 60 70 80 90 
+0 10 20 30 40 
 Richardson Lucy Finished/nfinished decon chunk
+iterations+reg 50 0
 deconvolving chunk with size (86, 128, 128)
 get lib
 
 Richardson Lucy Started
-0 10 20 30 40 50 60 70 80 90 
+0 10 20 30 40 
 Richardson Lucy Finished/nfinished decon chunk
+iterations+reg 50 0
 deconvolving chunk with size (86, 128, 128)
 get lib
 
 Richardson Lucy Started
-0 10 20 30 40 50 60 70 80 90 
+0 10 20 30 40 
 Richardson Lucy Finished/nfinished decon chunk
+iterations+reg 50 0
 deconvolving chunk with size (86, 128, 128)
 get lib
 
 Richardson Lucy Started
-0 10 20 30 40 50 60 70 80 90 
+0 10 20 30 40 
+Richardson Lucy Finished/nfinished decon chunk
+iterations+reg 500 0.0005
+deconvolving chunk with size (0, 0, 0)
+iterations+reg 500 0.0005
+deconvolving chunk with size (86, 153, 153)
+get lib
+
+Richardson Lucy Started
+0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150 160 170 180 190 200 210 220 230 240 250 260 270 280 290 300 310 320 330 340 350 360 370 380 390 400 410 420 430 440 450 460 470 480 490 
+Richardson Lucy Finished/nfinished decon chunk
+iterations+reg 500 0.0005
+deconvolving chunk with size (86, 153, 153)
+get lib
+
+Richardson Lucy Started
+0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150 160 170 180 190 200 210 220 230 240 250 260 270 280 290 300 310 320 330 340 350 360 370 380 390 400 410 420 430 440 450 460 470 480 490 
+Richardson Lucy Finished/nfinished decon chunk
+iterations+reg 500 0.0005
+deconvolving chunk with size (86, 153, 153)
+get lib
+
+Richardson Lucy Started
+0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150 160 170 180 190 200 210 220 230 240 250 260 270 280 290 300 310 320 330 340 350 360 370 380 390 400 410 420 430 440 450 460 470 480 490 
+Richardson Lucy Finished/nfinished decon chunk
+iterations+reg 500 0.0005
+deconvolving chunk with size (86, 153, 153)
+get lib
+
+Richardson Lucy Started
+0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150 160 170 180 190 200 210 220 230 240 250 260 270 280 290 300 310 320 330 340 350 360 370 380 390 400 410 420 430 440 450 460 470 480 490 
 Richardson Lucy Finished/nfinished decon chunk
 </pre></div>
 </div>
-<img alt="../_images/028385b7a1747036bda1768fc9f08f25cf1b9303ba3543e944dc387adadc36f9.png" src="../_images/028385b7a1747036bda1768fc9f08f25cf1b9303ba3543e944dc387adadc36f9.png" />
-</div>
-</div>
-</section>
-<section id="visualize-in-napari">
-<h2>Visualize in Napari<a class="headerlink" href="#visualize-in-napari" title="Permalink to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">napari</span>
-<span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;phantom&#39;</span><span class="p">)</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;im&#39;</span><span class="p">)</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">decon</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;decon&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;decon&#39; at 0x7f98907f2f70&gt;
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Green">2023-08-28 08:36:53.297</span> | <span class=" -Color -Color-Bold">INFO    </span> | <span class=" -Color -Color-Cyan">napari_assistant._gui._category_widget</span>:<span class=" -Color -Color-Cyan">call_op</span>:<span class=" -Color -Color-Cyan">178</span> - <span class=" -Color -Color-Bold">threshold_otsu (clesperanto)(..., )</span>
-4 warnings generated.
-4 warnings generated.
-4 warnings generated.
-4 warnings generated.
-4 warnings generated.
-<span class=" -Color -Color-Green">2023-08-28 08:37:23.842</span> | <span class=" -Color -Color-Bold">INFO    </span> | <span class=" -Color -Color-Cyan">napari_assistant._gui._category_widget</span>:<span class=" -Color -Color-Cyan">call_op</span>:<span class=" -Color -Color-Cyan">178</span> - <span class=" -Color -Color-Bold">threshold_otsu (clesperanto)(..., )</span>
-</pre></div>
-</div>
+<img alt="../_images/fd603aba971914a757e92c9ddb9b44797249e30dcd74a7b9a9147acafae191a9.png" src="../_images/fd603aba971914a757e92c9ddb9b44797249e30dcd74a7b9a9147acafae191a9.png" />
+<img alt="../_images/b980bde6abfb2b4d14473c8d279724e62324777addc6334aa065e561262e93e2.png" src="../_images/b980bde6abfb2b4d14473c8d279724e62324777addc6334aa065e561262e93e2.png" />
 </div>
 </div>
 </section>
@@ -829,19 +872,195 @@ Richardson Lucy Finished/nfinished decon chunk
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, phantom)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">phantom</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, im)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">im</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, decon)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">decon</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, decon 1)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">decon1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, decon 2)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">decon2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RMSE (phantom, phantom) 0.0
-RMSE (phantom, im) 56.637035
-RMSE (phantom, decon) 50.67823
+RMSE (phantom, im) 56.636734
+RMSE (phantom, decon 1) 50.541573
+RMSE (phantom, decon 2) 18.541214
 </pre></div>
 </div>
 </div>
 </div>
 </section>
+<section id="segment-the-spheres">
+<h2>Segment the spheres<a class="headerlink" href="#segment-the-spheres" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import otsu</span>
+<span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="kn">import</span> <span class="n">threshold_otsu</span>
+<span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">label</span><span class="p">,</span> <span class="n">regionprops</span>
+
+<span class="k">def</span> <span class="nf">segmenter</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">min_area</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    
+    <span class="n">binary</span> <span class="o">=</span> <span class="n">im</span><span class="o">&gt;</span><span class="n">threshold_otsu</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="p">(</span><span class="n">binary</span><span class="p">)</span> 
+    
+    <span class="c1"># get the regions</span>
+    <span class="n">object_list</span> <span class="o">=</span> <span class="n">regionprops</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span><span class="n">im</span><span class="p">)</span>
+
+    <span class="n">filtered_objects</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">labels_filtered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">min_area</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">object_list</span><span class="p">,</span> <span class="n">labels</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">object_list</span><span class="p">:</span>
+            
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">area</span> <span class="o">&gt;</span> <span class="n">min_area</span><span class="p">:</span>
+                <span class="n">labels_filtered</span><span class="p">[</span><span class="n">labels</span><span class="o">==</span><span class="n">obj</span><span class="o">.</span><span class="n">label</span><span class="p">]</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">label</span>
+                <span class="n">filtered_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filtered_objects</span><span class="p">,</span> <span class="n">labels_filtered</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">objects_truth</span><span class="p">,</span> <span class="n">labels_truth</span> <span class="o">=</span> <span class="n">segmenter</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">objects_im</span><span class="p">,</span> <span class="n">labels_im</span> <span class="o">=</span> <span class="n">segmenter</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">objects_decon1</span><span class="p">,</span> <span class="n">labels_decon1</span> <span class="o">=</span> <span class="n">segmenter</span><span class="p">(</span><span class="n">decon1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">objects_decon2</span><span class="p">,</span> <span class="n">labels_decon2</span> <span class="o">=</span> <span class="n">segmenter</span><span class="p">(</span><span class="n">decon2</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;objects_truth&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">objects_truth</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;objects_im&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">objects_im</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;objects_decon&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">objects_decon1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;objects_decon&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">objects_decon2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>objects_truth 5
+objects_im 1
+objects_decon 9
+objects_decon 5
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="make-figures-of-segmentations">
+<h2>Make figures of segmentations<a class="headerlink" href="#make-figures-of-segmentations" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xy_xz_slice</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xy_xz</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xy_zy_slice</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.plt_helper</span> <span class="kn">import</span> <span class="n">random_label_cmap</span>
+
+<span class="k">def</span> <span class="nf">makefigs</span><span class="p">():</span>
+    <span class="n">fig1</span><span class="o">=</span><span class="n">show_xy_xz_slice</span><span class="p">(</span><span class="n">labels_im</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="n">colormap</span><span class="o">=</span><span class="n">random_label_cmap</span><span class="p">())</span>
+    <span class="n">fig1</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Segmentation of image&#39;</span><span class="p">)</span>
+    <span class="n">fig2</span><span class="o">=</span><span class="n">show_xy_xz_slice</span><span class="p">(</span><span class="n">labels_decon1</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="n">colormap</span><span class="o">=</span><span class="n">random_label_cmap</span><span class="p">())</span>
+    <span class="n">fig2</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Segmentation of mediocre decon&#39;</span><span class="p">)</span>
+    <span class="n">fig3</span><span class="o">=</span><span class="n">show_xy_xz_slice</span><span class="p">(</span><span class="n">labels_decon2</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="n">colormap</span><span class="o">=</span><span class="n">random_label_cmap</span><span class="p">())</span>
+    <span class="n">fig3</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Segmentation of better decon&#39;</span><span class="p">)</span>
+    <span class="n">fig1</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;labels_im.png&#39;</span><span class="p">)</span>
+    <span class="n">fig2</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;labels_decon1.png&#39;</span><span class="p">)</span>
+    <span class="n">fig3</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;labels_decon2.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig3</span><span class="p">)</span>
+
+<span class="n">makefigs</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="segmentation-results">
+<h2>Segmentation results<a class="headerlink" href="#segmentation-results" title="Permalink to this heading">#</a></h2>
+<p>It was a bit tricky to get side by side XY/XZ views of the results (this is the most space efficient means to view the images).  By default new images seem to be rendered below the previous one in notebooks.  So we saved the projection as .png files then used some html to render them (double click on this cell to see the html)</p>
+<div>
+    <img src="labels_im.png?version=fu" width="300">
+    <img src="labels_decon1.png?version=fu2" width="300">
+    <img src="labels_decon2.png?version=fu3" width="300">
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#  print size and intensity of each object</span>
+<span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects_truth</span><span class="p">:</span>
+    <span class="c1"># if object index is not 0</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">label</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;truth&#39;</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">mean_intensity</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects_im</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">label</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;im&#39;</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">mean_intensity</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects_decon1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">label</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;decon 1&#39;</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">mean_intensity</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects_decon2</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">label</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;decon 2&#39;</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">mean_intensity</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>truth 184.0 400.0
+truth 184.0 400.0
+truth 184.0 400.0
+truth 184.0 400.0
+
+im 430168.0 76.38091
+
+decon 1 212194.0 146.65671
+decon 1 37.0 122.94604
+decon 1 32.0 133.44385
+decon 1 44.0 128.3404
+decon 1 35.0 111.2877
+decon 1 32.0 120.96589
+decon 1 34.0 132.93124
+decon 1 34.0 121.52479
+decon 1 42.0 121.47245
+
+decon 2 151.0 359.20856
+decon 2 140.0 392.40408
+decon 2 144.0 372.72577
+decon 2 140.0 393.98108
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="view-in-napari">
+<h1>View in Napari<a class="headerlink" href="#view-in-napari" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">napari</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;phantom&#39;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;im&#39;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">decon1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;decon 1&#39;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">decon2</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;decon 2&#39;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">labels_im</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;labels_im&#39;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">labels_decon1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;labels_decon 1&#39;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">labels_decon2</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;labels_decon 2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Labels layer &#39;labels_decon 2&#39; at 0x7f89933aefd0&gt;
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -894,10 +1113,13 @@ RMSE (phantom, decon) 50.67823
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Deconvolution Systems Design</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#libraries-needed-to-run-this-example">Libraries needed to run this example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-trade-offs">Design trade-offs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation">Simulation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-improve-the-deconvolution-result">Exercise 1:  Improve the deconvolution result.</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-change-the-parameters-of-the-simulation">Exercise 2:  Change the parameters of the simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-improve-the-deconvolution-result">Exercise 1: Improve the deconvolution result.</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-change-the-parameters-of-the-simulation">Exercise 2: Change the parameters of the simulation</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a><ul class="visible nav section-nav flex-column">
@@ -906,11 +1128,14 @@ RMSE (phantom, decon) 50.67823
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-the-forward-model">Apply the forward model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-number-of-chunks">Define number of chunks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-deconvolver">Define the deconvolver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-in-chunks-with-overlap-between-chunks">Deconvolve in chunks with overlap between chunks</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-in-napari">Visualize in Napari</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-in-chunks">Deconvolve in chunks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-error">Look at error</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#segment-the-spheres">Segment the spheres</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figures-of-segmentations">Make figures of segmentations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#segmentation-results">Segmentation results</a></li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#view-in-napari">View in Napari</a></li>
 </ul>
 
   </nav></div>
