@@ -9,12 +9,14 @@ from tifffile import imread
 from torchvision import transforms
 from tqdm import tqdm
 
-SRC_DIR = Path("./data")
+SRC_DIR = Path("./data/dsb2018")
 
 def get_dsb2018_files(subset, rootdir=SRC_DIR):
     assert subset in ["train", "validation", "test"]
     src_dir = rootdir / subset
-
+    
+    assert src_dir.exists(), f"root directory with images and masks {src_dir} does not exist"
+    
     X = sorted(src_dir.rglob('**/images/*.tif'))
     Y = sorted(src_dir.rglob('**/masks/*.tif'))
     assert len(X) > 0, f"error finding the right structure in {src_dir}\n{list(src_dir.glob('*'))}"
