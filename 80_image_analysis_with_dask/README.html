@@ -468,7 +468,16 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-materials">Lecture materials</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparation">Preparation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1">Option 1:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2">Option 2:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-materials">Lecture materials</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#slides">Slides</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notebooks">Notebooks</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -482,23 +491,41 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="lazy-and-parallel-bio-image-processing-using-dask">
 <h1>Lazy and parallel bio-image processing using DASK<a class="headerlink" href="#lazy-and-parallel-bio-image-processing-using-dask" title="Permalink to this heading">#</a></h1>
-<p>When images take too long to load or process, or don’t fit into memory, they can be split up and managed in small parts. This course is about easily gaining control over which parts of an image are processed when and where in the context of interactive python workflows, napari and cluster computing.</p>
+<p>When images take too long to load or process, or don’t fit into memory, they can be split up and managed in small parts. This practical is about easily gaining control over which parts of a (bio-)image are processed when and where in the context of interactive python workflows, napari and cluster computing.</p>
+<section id="preparation">
+<h2>Preparation<a class="headerlink" href="#preparation" title="Permalink to this heading">#</a></h2>
 <p>To get started, we need to install/activate a suitable conda environment:</p>
-<p>Option 1:</p>
+<section id="option-1">
+<h3>Option 1:<a class="headerlink" href="#option-1" title="Permalink to this heading">#</a></h3>
 <p>Use the environment created in the <a class="reference external" href="https://biapol.github.io/PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis/00_course_preparation/Readme.html">course preparation</a> and install some further packages to it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">activate</span> <span class="n">devbio</span><span class="o">-</span><span class="n">napari</span><span class="o">-</span><span class="n">env</span>
 <span class="n">mamba</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">dask</span><span class="o">-</span><span class="n">image</span> <span class="n">ipycytoscape</span>
 </pre></div>
 </div>
-<p>Option 2:</p>
+</section>
+<section id="option-2">
+<h3>Option 2:<a class="headerlink" href="#option-2" title="Permalink to this heading">#</a></h3>
 <p>Create a new environment from scratch:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">create</span> <span class="o">--</span><span class="n">name</span> <span class="o">&lt;</span><span class="n">dask_course</span><span class="o">&gt;</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span> <span class="n">devbio</span><span class="o">-</span><span class="n">napari</span> <span class="n">pyqt</span> <span class="n">dask</span><span class="o">-</span><span class="n">image</span> <span class="n">ipycytoscape</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
 <span class="n">mamba</span> <span class="n">activate</span> <span class="n">dask_course</span>
 </pre></div>
 </div>
+</section>
+</section>
 <section id="lecture-materials">
 <h2>Lecture materials<a class="headerlink" href="#lecture-materials" title="Permalink to this heading">#</a></h2>
-<p>Will follow.</p>
+<section id="slides">
+<h3>Slides<a class="headerlink" href="#slides" title="Permalink to this heading">#</a></h3>
+<p>Download introductory slides <a class="reference download internal" download="" href="../_downloads/5ae4bc193fbce17dfd437124b12a43bc/202308_dask_workshop_slides.pdf"><span class="xref download myst">here</span></a>.</p>
+</section>
+<section id="notebooks">
+<h3>Notebooks<a class="headerlink" href="#notebooks" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="1_dask_basics.html"><span class="doc std std-doc">Dask basics</span></a></p></li>
+<li><p><a class="reference internal" href="2_dask_image.html"><span class="doc std std-doc">Processing images with dask</span></a></p></li>
+<li><p><a class="reference internal" href="3_lazy_image_processing.html"><span class="doc std std-doc">Lazy image processing workflows</span></a></p></li>
+</ol>
+</section>
 </section>
 <div class="toctree-wrapper compound">
 </div>
@@ -571,7 +598,16 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-materials">Lecture materials</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparation">Preparation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1">Option 1:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2">Option 2:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-materials">Lecture materials</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#slides">Slides</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notebooks">Notebooks</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
