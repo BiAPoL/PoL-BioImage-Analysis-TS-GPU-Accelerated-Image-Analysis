@@ -4,6 +4,18 @@ This [Jupyter book](https://jupyterbook.org/) contains training resources for sc
 
 Here, we cover the *GPU-Accelerated Image Analysis* Track of the [PoL Bio-Image Analysis Symposium](https://biopol-training.eventmember.de/). We will process images using [clesperanto](https://clesperanto.github.io/), [cupy](https://cupy.dev/) and [Pytorch](https://pytorch.org/). We will denoise, deconvole and segment images with and without deep learning techniques. We will get an introduction in how to [TU Dresden HPC cluster Taurus](https://tu-dresden.de/zih/hochleistungsrechnen/hpc) and distribute tasks using [dask](https://www.dask.org/).
 
+## Trainers
+
+* Stéphane Rigaud, Institut Pasteur Paris
+* Marvin Albert, Institut Pasteur Paris
+* Johannes Soltwedel, PoL TU Dresden
+* Peter Steinbach, Helmholtz AI
+* Sebastian Starke, Helmholtz AI
+* Neringa Jurenaite, ScaDS.AI, TU Dresden
+* Brian Northan, True North IA
+* Robert Haase, PoL TU Dresden
+
+
 ## Timetable
 
 ![img.png](timetable.png)
